@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Building2, Utensils, Briefcase, Quote, Star } from "lucide-react";
 import renoImg from "@/assets/service-renovation.jpg";
 import kitchenImg from "@/assets/service-kitchen.jpg";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/referanslar")({
   head: () => ({
@@ -17,43 +18,23 @@ export const Route = createFileRoute("/referanslar")({
   component: References,
 });
 
-const groups = [
-  {
-    icon: Building2,
-    title: "Oteller",
-    items: ["Grand Bosphorus Hotel", "Marina Suites", "Park Palace", "Sky View Otel", "Palmiye Resort", "Loft Hotel İstanbul"],
-  },
-  {
-    icon: Utensils,
-    title: "Restoranlar",
-    items: ["La Cucina", "Marina Bistro", "Sky Lounge", "Park Cafe", "Loft Restaurant", "Olive Garden TR"],
-  },
-  {
-    icon: Briefcase,
-    title: "Kurumsal Firmalar",
-    items: ["Mavi Gıda A.Ş.", "Anadolu Catering", "Tepe Yemek Hizmetleri", "Akdeniz Otelcilik", "Star Holding F&B", "Boğaziçi Catering"],
-  },
-];
-
-const testimonials = [
-  { name: "Mehmet Y.", role: "Grand Bosphorus Hotel — Teknik Müdür", text: "Endüstriyel mutfağımızda yaşadığımız bir arızada gece yarısı aradık, 45 dakika içinde sahadaydılar. Bu profesyonellik kurumsal işletmeler için paha biçilmez." },
-  { name: "Ayşe K.", role: "La Cucina — İşletmeci", text: "3 yıldır periyodik bakım anlaşmamız var. Aylık raporları, şeffaf fiyatlandırmaları ve disiplinli ekipleriyle gerçek bir çözüm ortağı." },
-  { name: "Can D.", role: "Mavi Gıda — Operasyon Direktörü", text: "Tek tedarikçiyle tüm teknik servisi yönetmek inanılmaz pratik. FİXATECH bizim için birden fazla firmanın yerini doldurdu." },
-];
+const groupIcons = [Building2, Utensils, Briefcase];
 
 function References() {
+  const t = useT();
+  const groups = t.refs.groups.map((g: any, i: number) => ({ icon: groupIcons[i], title: g.title, items: g.items as string[] }));
+  const testimonials = t.refs.testimonials as Array<{ name: string; role: string; text: string }>;
+  const projects = t.refs.projects as string[];
   return (
     <>
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-mesh opacity-50" />
         <div className="container mx-auto px-4 relative text-center max-w-3xl reveal">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-accent/20 text-accent-foreground text-xs font-semibold uppercase tracking-wider mb-4">Referanslar</div>
+          <div className="inline-block px-4 py-1.5 rounded-full bg-accent/20 text-accent-foreground text-xs font-semibold uppercase tracking-wider mb-4">{t.refs.label}</div>
           <h1 className="font-display text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            <span className="text-gradient-primary">500+</span> mutlu müşteri, sayısız başarı hikayesi
+            <span className="text-gradient-primary">500+</span> {t.refs.title1}
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Türkiye'nin önde gelen otel zincirleri, restoranlar ve kurumsal işletmelerinin tercih ettiği teknik servis ortağı.
-          </p>
+          <p className="text-lg text-muted-foreground">{t.refs.sub}</p>
         </div>
       </section>
 
@@ -81,23 +62,23 @@ function References() {
       {/* Before / After */}
       <section className="container mx-auto px-4 py-16">
         <div className="text-center mb-10 reveal">
-          <h2 className="font-display text-4xl font-bold">Öncesi / Sonrası</h2>
-          <p className="text-muted-foreground mt-2">Tamamlanmış proje örneklerinden bir kesit.</p>
+          <h2 className="font-display text-4xl font-bold">{t.refs.baTitle}</h2>
+          <p className="text-muted-foreground mt-2">{t.refs.baSub}</p>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {[
-            { before: kitchenImg, after: renoImg, title: "Otel Mutfak Renovasyonu" },
-            { before: renoImg, after: kitchenImg, title: "Restoran Salon Tadilat" },
+            { before: kitchenImg, after: renoImg, title: projects[0] },
+            { before: renoImg, after: kitchenImg, title: projects[1] },
           ].map((p, i) => (
             <div key={i} className="reveal" style={{ transitionDelay: `${i * 100}ms` }}>
               <div className="grid grid-cols-2 gap-2 rounded-2xl overflow-hidden card-3d">
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={p.before} alt="Öncesi" loading="lazy" className="w-full h-full object-cover grayscale" />
-                  <span className="absolute top-3 left-3 glass-dark text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">ÖNCESİ</span>
+                  <img src={p.before} alt={t.refs.before} loading="lazy" className="w-full h-full object-cover grayscale" />
+                  <span className="absolute top-3 left-3 glass-dark text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">{t.refs.before}</span>
                 </div>
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={p.after} alt="Sonrası" loading="lazy" className="w-full h-full object-cover" />
-                  <span className="absolute top-3 left-3 bg-gradient-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-glow-accent">SONRASI</span>
+                  <img src={p.after} alt={t.refs.after} loading="lazy" className="w-full h-full object-cover" />
+                  <span className="absolute top-3 left-3 bg-gradient-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow-glow-accent">{t.refs.after}</span>
                 </div>
               </div>
               <h3 className="font-display font-bold text-xl mt-4">{p.title}</h3>
@@ -111,7 +92,7 @@ function References() {
         <div className="absolute inset-0 bg-gradient-mesh opacity-30" />
         <div className="relative container mx-auto px-4">
           <div className="text-center mb-12 reveal">
-            <h2 className="font-display text-4xl font-bold">Müşteri Yorumları</h2>
+            <h2 className="font-display text-4xl font-bold">{t.refs.tTitle}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
