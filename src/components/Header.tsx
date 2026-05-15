@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { PHONE, PHONE_TEL } from "@/lib/site";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.jpeg";
 
 const links = [
   { to: "/", label: "Ana Sayfa" },
@@ -34,7 +34,7 @@ export function Header() {
           <img
             src={logo}
             alt="FİXATECH logosu"
-            className="h-20 md:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-md"
+            className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-md"
           />
         </Link>
 
