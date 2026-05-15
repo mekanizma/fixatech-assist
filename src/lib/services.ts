@@ -1,3 +1,5 @@
+import { useT } from "@/lib/i18n";
+
 import kitchenImg from "@/assets/service-kitchen.jpg";
 import electricImg from "@/assets/service-electric.jpg";
 import plumbingImg from "@/assets/service-plumbing.jpg";
@@ -62,3 +64,24 @@ export const services = [
 ] as const;
 
 export type Service = (typeof services)[number];
+
+export function useLocalizedServices() {
+  const t = useT();
+  const data = t.services_data as Array<{
+    title: string;
+    short: string;
+    description: string;
+    features: string[];
+    response: string;
+  }>;
+  return services.map((s, i) => ({
+    slug: s.slug,
+    icon: s.icon,
+    image: s.image,
+    title: data[i]?.title ?? s.title,
+    short: data[i]?.short ?? s.short,
+    description: data[i]?.description ?? s.description,
+    features: (data[i]?.features ?? s.features) as readonly string[],
+    response: data[i]?.response ?? s.response,
+  }));
+}

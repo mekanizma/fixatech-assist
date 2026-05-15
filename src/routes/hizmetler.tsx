@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CheckCircle2, Clock, MessageCircle } from "lucide-react";
-import { services } from "@/lib/services";
+import { useLocalizedServices } from "@/lib/services";
 import { ServiceIcon } from "@/components/ServiceIcon";
 import { waLink } from "@/lib/site";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/hizmetler")({
   head: () => ({
@@ -19,18 +20,18 @@ export const Route = createFileRoute("/hizmetler")({
 });
 
 function Services() {
+  const t = useT();
+  const services = useLocalizedServices();
   return (
     <>
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-mesh opacity-50" />
         <div className="container mx-auto px-4 relative text-center max-w-3xl reveal">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">Hizmetlerimiz</div>
+          <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">{t.services.label}</div>
           <h1 className="font-display text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            İşletmenize Özel <span className="text-gradient-primary">Profesyonel Çözümler</span>
+            {t.services.title1} <span className="text-gradient-primary">{t.services.titleHi}</span>
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Otel, restoran ve kurumsal işletmelerin tüm teknik servis ihtiyaçlarını tek elden, garantili ve hızlı şekilde karşılıyoruz.
-          </p>
+          <p className="text-lg text-muted-foreground">{t.services.sub}</p>
         </div>
       </section>
 
@@ -51,7 +52,7 @@ function Services() {
             <div className="p-8 lg:p-12 space-y-5">
               <div className="flex items-center gap-3">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 text-success text-xs font-semibold">
-                  <Clock className="w-3.5 h-3.5" /> Müdahale: {s.response}
+                  <Clock className="w-3.5 h-3.5" /> {t.common.response}: {s.response}
                 </span>
               </div>
               <h2 className="font-display text-3xl md:text-4xl font-bold">{s.title}</h2>
@@ -65,12 +66,12 @@ function Services() {
                 ))}
               </ul>
               <a
-                href={waLink(`Merhaba, ${s.title} hizmeti hakkında bilgi almak istiyorum.`)}
+                href={waLink(t.services.askMsg(s.title))}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-primary text-primary-foreground font-semibold btn-3d"
               >
-                <MessageCircle className="w-4 h-4" /> WhatsApp ile Teklif Al
+                <MessageCircle className="w-4 h-4" /> {t.services.ctaWa}
               </a>
             </div>
           </article>

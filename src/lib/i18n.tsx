@@ -1,0 +1,424 @@
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+
+export type Lang = "tr" | "en";
+
+type Dict = Record<string, any>;
+
+const dict: Record<Lang, Dict> = {
+  tr: {
+    nav: {
+      home: "Ana Sayfa",
+      about: "Hakkımızda",
+      services: "Hizmetler",
+      references: "Referanslar",
+      contact: "İletişim",
+      menu: "Menü",
+    },
+    common: {
+      activeNow: "Şu an aktif — 7/24 servis",
+      detail: "Detay",
+      callNow: "Hemen Ara",
+      whatsappOffer: "WhatsApp Teklif",
+      send: "WhatsApp ile Gönder",
+      emergencyLine: "Acil Servis Hattı",
+      response: "Müdahale",
+      switchTo: "Switch to English",
+    },
+    home: {
+      title1: "Endüstriyel Teknik Serviste",
+      titleHighlight: "Güvenilir",
+      title2: "Çözüm Ortağınız",
+      sub: "Otel, restoran ve işletmeler için",
+      subStrong: "7/24 bakım, onarım ve teknik servis.",
+      subTail: "Mutfak ekipmanlarından elektrik tesisatına, su sistemlerinden tadilata kadar tek elden profesyonel çözüm.",
+      ctaServices: "Hizmetlerimizi İncele",
+      ctaContact: "Hemen İletişime Geç",
+      trust: [
+        { l: "7/24 Servis", d: "Kesintisiz destek" },
+        { l: "Hızlı Müdahale", d: "Ortalama 60 dk" },
+        { l: "Uzman Teknik Ekip", d: "Sertifikalı ustalar" },
+        { l: "Kurumsal Çözüm", d: "Sözleşmeli bakım" },
+      ],
+      stats: [
+        { v: "500+", l: "Mutlu Müşteri" },
+        { v: "12+", l: "Yıllık Deneyim" },
+        { v: "24/7", l: "Acil Destek" },
+        { v: "60dk", l: "Ortalama Yanıt" },
+      ],
+      servicesLabel: "Hizmetlerimiz",
+      servicesTitle1: "Tek Elden",
+      servicesTitle2: "Tüm Çözümler",
+      servicesSub: "İşletmenizin teknik altyapısını uzman ekiplerimize emanet edin.",
+      whyLabel: "Neden FİXATECH?",
+      whyTitle1: "İşletmenizin",
+      whyTitleHi: "Sürekliliği",
+      whyTitle2: "İçin Çalışıyoruz",
+      whySub: "12 yılı aşkın saha tecrübesi ile otel ve restoran sektörünün teknik servis ihtiyaçlarına özel çözümler üretiyoruz.",
+      whyList: [
+        "Sertifikalı ve deneyimli teknik kadro",
+        "Orijinal yedek parça garantisi",
+        "Şeffaf fiyatlandırma — sürpriz yok",
+        "Periyodik bakım sözleşmeleri",
+        "Anlık raporlama ve dijital takip",
+      ],
+      whyCards: [
+        { t: "Garanti", d: "Tüm işlerde 6-12 ay garanti" },
+        { t: "5★ Memnuniyet", d: "Müşteri puanı ortalaması" },
+        { t: "Zamanında", d: "%98 randevuya sadakat" },
+        { t: "20+ Uzman", d: "Saha & ofis ekibi" },
+      ],
+      brandsLabel: "Birlikte çalıştığımız markalar",
+      ctaTitle: "Tek tıkla profesyonel teklif alın",
+      ctaSub: "WhatsApp üzerinden hızlı yanıt, telefonla anlık destek.",
+    },
+    about: {
+      label: "Hakkımızda",
+      title1: "Endüstriyel teknik serviste",
+      titleHi: "12+ yıllık tecrübe",
+      lead: "FİXATECH; otel, restoran ve kurumsal işletmelerin teknik altyapı ihtiyaçlarına çözüm üreten, sertifikalı uzman ekibiyle hizmet veren bir teknik servis firmasıdır.",
+      teamTitle: "Profesyonel Saha Ekibi",
+      teamDesc: "Mutfak şefleri, mühendisler ve teknik ustalar — sektörün ihtiyaçlarını en iyi anlayan kadro.",
+      storyTitle: "Firma Hikayemiz",
+      story1: "2012 yılında küçük bir teknik servis atölyesi olarak yola çıkan FİXATECH, kısa sürede İstanbul'un önde gelen otel ve restoran zincirlerinin tercih ettiği teknik servis ortağı haline geldi.",
+      story2: "Bugün 20'yi aşkın saha uzmanı, mobil servis araçları ve geniş yedek parça ağı ile 500'den fazla işletmenin teknik altyapısının sürekliliğini sağlıyoruz.",
+      mottoLead: "Mottomuz net:",
+      motto: "\"Sizin işletmeniz durmasın diye, biz hiç durmayız.\"",
+      pillars: [
+        { t: "Misyonumuz", d: "İşletmelerin teknik altyapısını kesintisiz tutmak ve operasyonel verimliliği artırmak." },
+        { t: "Vizyonumuz", d: "Türkiye'nin en güvenilen endüstriyel teknik servis markası olmak." },
+        { t: "Değerlerimiz", d: "Şeffaflık, dürüstlük, zamanında teslimat ve müşteri memnuniyeti." },
+        { t: "Yaklaşımımız", d: "Geçici tamir değil, kalıcı çözüm üreten profesyonel bakış." },
+      ],
+      whyTitle: "Neden FİXATECH?",
+      whySub: "Kurumsal müşterilerimizin bizi tercih etme sebepleri.",
+      whyCards: [
+        { t: "Sertifikalı Ekip", d: "Tüm teknisyenlerimiz alanında belgeli, sürekli eğitimden geçen profesyoneller." },
+        { t: "Garantili İşçilik", d: "Yapılan tüm bakım ve onarımlarda 6-12 ay arası işçilik garantisi sunuyoruz." },
+        { t: "Modern Ekipman", d: "Kaçak tespit kameraları, termal görüntüleyiciler ve özel ölçüm cihazları." },
+      ],
+    },
+    services: {
+      label: "Hizmetlerimiz",
+      title1: "İşletmenize Özel",
+      titleHi: "Profesyonel Çözümler",
+      sub: "Otel, restoran ve kurumsal işletmelerin tüm teknik servis ihtiyaçlarını tek elden, garantili ve hızlı şekilde karşılıyoruz.",
+      ctaWa: "WhatsApp ile Teklif Al",
+      askMsg: (t: string) => `Merhaba, ${t} hizmeti hakkında bilgi almak istiyorum.`,
+    },
+    refs: {
+      label: "Referanslar",
+      title1: "mutlu müşteri, sayısız başarı hikayesi",
+      sub: "Türkiye'nin önde gelen otel zincirleri, restoranlar ve kurumsal işletmelerinin tercih ettiği teknik servis ortağı.",
+      groups: [
+        { title: "Oteller", items: ["Grand Bosphorus Hotel", "Marina Suites", "Park Palace", "Sky View Otel", "Palmiye Resort", "Loft Hotel İstanbul"] },
+        { title: "Restoranlar", items: ["La Cucina", "Marina Bistro", "Sky Lounge", "Park Cafe", "Loft Restaurant", "Olive Garden TR"] },
+        { title: "Kurumsal Firmalar", items: ["Mavi Gıda A.Ş.", "Anadolu Catering", "Tepe Yemek Hizmetleri", "Akdeniz Otelcilik", "Star Holding F&B", "Boğaziçi Catering"] },
+      ],
+      baTitle: "Öncesi / Sonrası",
+      baSub: "Tamamlanmış proje örneklerinden bir kesit.",
+      before: "ÖNCESİ",
+      after: "SONRASI",
+      projects: ["Otel Mutfak Renovasyonu", "Restoran Salon Tadilat"],
+      tTitle: "Müşteri Yorumları",
+      testimonials: [
+        { name: "Mehmet Y.", role: "Grand Bosphorus Hotel — Teknik Müdür", text: "Endüstriyel mutfağımızda yaşadığımız bir arızada gece yarısı aradık, 45 dakika içinde sahadaydılar. Bu profesyonellik kurumsal işletmeler için paha biçilmez." },
+        { name: "Ayşe K.", role: "La Cucina — İşletmeci", text: "3 yıldır periyodik bakım anlaşmamız var. Aylık raporları, şeffaf fiyatlandırmaları ve disiplinli ekipleriyle gerçek bir çözüm ortağı." },
+        { name: "Can D.", role: "Mavi Gıda — Operasyon Direktörü", text: "Tek tedarikçiyle tüm teknik servisi yönetmek inanılmaz pratik. FİXATECH bizim için birden fazla firmanın yerini doldurdu." },
+      ],
+    },
+    contact: {
+      label: "İletişim",
+      title1: "ulaşılabiliriz",
+      sub: "Telefon, WhatsApp veya formu kullanarak hızlıca iletişime geçin.",
+      cards: { phone: "Telefon", wa: "WhatsApp", waVal: "Hızlı yanıt", email: "E-posta", address: "Adres" },
+      formTitle: "Hızlı Teklif Formu",
+      formSub: "Form WhatsApp üzerinden iletilir, anında yanıt alırsınız.",
+      f: { name: "Ad Soyad", namePh: "Adınız ve soyadınız", company: "Firma", companyPh: "Firma / işletme adı", service: "Hizmet", message: "Mesaj", messagePh: "Talebinizi kısaca anlatın..." },
+      hours: "Çalışma Saatleri",
+      weekdays: "Hafta içi: 08:00 - 19:00",
+      weekend: "Hafta sonu: 09:00 - 18:00",
+      emergency: "Acil servis: 7/24 aktif",
+      toastTitle: "Mesajınız WhatsApp üzerinden gönderiliyor",
+      toastDesc: "Birazdan size dönüş yapacağız.",
+      buildMsg: (name: string, company: string, service: string, message: string) =>
+        `Merhaba, ben ${name}${company ? ` (${company})` : ""}.\nHizmet: ${service}\n\n${message}`,
+    },
+    footer: {
+      tag: "Endüstriyel teknik serviste güvenilir çözüm ortağınız. 7/24 profesyonel destek.",
+      services: "Hizmetler",
+      corp: "Kurumsal",
+      contact: "İletişim",
+      sLinks: ["Endüstriyel Mutfak", "Elektrik Tesisatı", "Su Tesisatı", "Tadilat & Tamirat", "Acil Teknik Servis"],
+      copyR: "Tüm hakları saklıdır.",
+      tagline: "Endüstriyel Teknik Servis · Otel & Restoran Bakım Onarım",
+      hours247: "7/24 Acil Servis",
+    },
+    services_data: [
+      {
+        title: "Endüstriyel Mutfak Ekipmanları",
+        short: "Fırın, ocak, bulaşık makinesi ve soğutma sistemlerinde uzman tamir ve bakım hizmeti.",
+        description: "Konveksiyonlu fırın, gazlı ocak, salamander, bulaşık makinesi, buzdolabı ve soğuk oda gibi tüm endüstriyel mutfak ekipmanlarının kurulum, bakım ve onarımını tek elden gerçekleştiriyoruz.",
+        features: ["Konveksiyonlu fırın bakımı", "Bulaşık makinesi servisi", "Soğutma sistemi onarımı", "Gaz hattı kontrolü", "Salamander & ocak tamiri"],
+        response: "2 saat içinde",
+      },
+      {
+        title: "Elektrik Tesisatı",
+        short: "Arıza tespiti, yeni kurulum ve periyodik bakım — sertifikalı ustalar ile.",
+        description: "Sigorta panosu, aydınlatma, topraklama, kompanzasyon ve yüksek akım hatlarında profesyonel kurulum, arıza giderme ve yıllık bakım sözleşmeleri sunuyoruz.",
+        features: ["Pano & sigorta sistemleri", "Aydınlatma kurulumu", "Topraklama ölçümü", "Kompanzasyon", "Acil arıza müdahale"],
+        response: "1 saat içinde",
+      },
+      {
+        title: "Su Tesisatı",
+        short: "Su kaçağı tespiti, tıkanıklık açma ve altyapı onarımında modern ekipman.",
+        description: "Robotik kamera ile tahribatsız kaçak tespiti, basınç testleri, sıcak/soğuk su hattı onarımı, pis su giderleri ve pompa sistemlerinde tam çözüm.",
+        features: ["Tahribatsız kaçak tespiti", "Tıkanıklık açma", "Pompa & hidrofor", "Boyler bakımı", "Drenaj sistemleri"],
+        response: "2 saat içinde",
+      },
+      {
+        title: "Genel Tadilat ve Tamirat",
+        short: "Otel ve restoran renovasyonunda anahtar teslim profesyonel projeler.",
+        description: "Mutfak yenileme, salon tadilatı, alçıpan, boya, fayans, ahşap işleri ve özel mobilya projelerinde tasarımdan teslime kadar süreç yönetimi.",
+        features: ["Mutfak renovasyon", "Salon tadilat", "Alçıpan & boya", "Fayans & seramik", "Özel mobilya"],
+        response: "Proje bazlı",
+      },
+      {
+        title: "Acil Teknik Servis 7/24",
+        short: "Gece-gündüz fark etmeden, kritik arızalarda hızlı saha müdahalesi.",
+        description: "Otel ve restoranlarda iş sürekliliğini koruyan 7/24 acil teknik servis. Telefonla bildirim sonrası en kısa sürede sahada profesyonel ekip.",
+        features: ["7/24 hatlar açık", "Mobil servis araçları", "Yedek parça stoğu", "Garanti kapsamı", "Anlık raporlama"],
+        response: "30-60 dk",
+      },
+    ],
+  },
+  en: {
+    nav: {
+      home: "Home",
+      about: "About",
+      services: "Services",
+      references: "References",
+      contact: "Contact",
+      menu: "Menu",
+    },
+    common: {
+      activeNow: "Live now — 24/7 service",
+      detail: "Details",
+      callNow: "Call Now",
+      whatsappOffer: "WhatsApp Quote",
+      send: "Send via WhatsApp",
+      emergencyLine: "Emergency Hotline",
+      response: "Response",
+      switchTo: "Türkçe'ye geç",
+    },
+    home: {
+      title1: "Your Trusted Partner in",
+      titleHighlight: "Industrial",
+      title2: "Technical Service",
+      sub: "For hotels, restaurants and businesses,",
+      subStrong: "24/7 maintenance, repair and technical service.",
+      subTail: "From kitchen equipment to electrical systems, plumbing to renovations — one professional source for everything.",
+      ctaServices: "Explore Our Services",
+      ctaContact: "Get in Touch Now",
+      trust: [
+        { l: "24/7 Service", d: "Uninterrupted support" },
+        { l: "Fast Response", d: "60 min average" },
+        { l: "Expert Team", d: "Certified technicians" },
+        { l: "Corporate Solutions", d: "Service contracts" },
+      ],
+      stats: [
+        { v: "500+", l: "Happy Clients" },
+        { v: "12+", l: "Years Experience" },
+        { v: "24/7", l: "Emergency Support" },
+        { v: "60min", l: "Avg. Response" },
+      ],
+      servicesLabel: "Our Services",
+      servicesTitle1: "All Solutions,",
+      servicesTitle2: "One Source",
+      servicesSub: "Entrust your technical infrastructure to our expert teams.",
+      whyLabel: "Why FİXATECH?",
+      whyTitle1: "We Work for Your Business",
+      whyTitleHi: "Continuity",
+      whyTitle2: "",
+      whySub: "With 12+ years of field experience we deliver tailored technical service solutions for hotels and restaurants.",
+      whyList: [
+        "Certified and experienced technical staff",
+        "Genuine spare parts guarantee",
+        "Transparent pricing — no surprises",
+        "Periodic maintenance contracts",
+        "Real-time reporting and digital tracking",
+      ],
+      whyCards: [
+        { t: "Warranty", d: "6-12 months on all work" },
+        { t: "5★ Satisfaction", d: "Average customer rating" },
+        { t: "On Time", d: "98% appointment reliability" },
+        { t: "20+ Experts", d: "Field & office team" },
+      ],
+      brandsLabel: "Brands we work with",
+      ctaTitle: "Get a professional quote in one click",
+      ctaSub: "Fast WhatsApp replies, instant phone support.",
+    },
+    about: {
+      label: "About",
+      title1: "12+ years of expertise in",
+      titleHi: "industrial technical service",
+      lead: "FİXATECH is a technical service company providing solutions for the technical infrastructure needs of hotels, restaurants and corporate businesses with a certified expert team.",
+      teamTitle: "Professional Field Team",
+      teamDesc: "Kitchen specialists, engineers and technicians — the team that best understands the industry.",
+      storyTitle: "Our Story",
+      story1: "Founded in 2012 as a small technical workshop, FİXATECH quickly became the preferred service partner of leading hotel and restaurant chains in Istanbul.",
+      story2: "Today we ensure the operational continuity of more than 500 businesses with 20+ field experts, mobile service vehicles and a wide spare parts network.",
+      mottoLead: "Our motto is clear:",
+      motto: "\"So your business never stops, we never stop.\"",
+      pillars: [
+        { t: "Mission", d: "Keep technical infrastructure running and boost operational efficiency." },
+        { t: "Vision", d: "Become Turkey's most trusted industrial technical service brand." },
+        { t: "Values", d: "Transparency, honesty, on-time delivery and customer satisfaction." },
+        { t: "Approach", d: "Lasting solutions, not temporary fixes — a professional mindset." },
+      ],
+      whyTitle: "Why FİXATECH?",
+      whySub: "Reasons our corporate clients choose us.",
+      whyCards: [
+        { t: "Certified Team", d: "All technicians are certified professionals continuously trained in their field." },
+        { t: "Guaranteed Workmanship", d: "We provide 6-12 months workmanship warranty on all maintenance and repairs." },
+        { t: "Modern Equipment", d: "Leak detection cameras, thermal imagers and specialized measurement tools." },
+      ],
+    },
+    services: {
+      label: "Our Services",
+      title1: "Tailored",
+      titleHi: "Professional Solutions",
+      sub: "We meet all technical service needs of hotels, restaurants and corporate businesses from a single source — guaranteed and fast.",
+      ctaWa: "Get a Quote on WhatsApp",
+      askMsg: (t: string) => `Hello, I'd like information about your ${t} service.`,
+    },
+    refs: {
+      label: "References",
+      title1: "happy clients, countless success stories",
+      sub: "The technical service partner chosen by Turkey's leading hotel chains, restaurants and corporate businesses.",
+      groups: [
+        { title: "Hotels", items: ["Grand Bosphorus Hotel", "Marina Suites", "Park Palace", "Sky View Hotel", "Palmiye Resort", "Loft Hotel Istanbul"] },
+        { title: "Restaurants", items: ["La Cucina", "Marina Bistro", "Sky Lounge", "Park Cafe", "Loft Restaurant", "Olive Garden TR"] },
+        { title: "Corporate", items: ["Mavi Gıda Inc.", "Anadolu Catering", "Tepe Food Services", "Akdeniz Hospitality", "Star Holding F&B", "Boğaziçi Catering"] },
+      ],
+      baTitle: "Before / After",
+      baSub: "A glimpse of completed project examples.",
+      before: "BEFORE",
+      after: "AFTER",
+      projects: ["Hotel Kitchen Renovation", "Restaurant Hall Renovation"],
+      tTitle: "Customer Reviews",
+      testimonials: [
+        { name: "Mehmet Y.", role: "Grand Bosphorus Hotel — Technical Manager", text: "When we had a breakdown in our industrial kitchen, we called at midnight and they were on site within 45 minutes. This level of professionalism is invaluable for corporate businesses." },
+        { name: "Ayşe K.", role: "La Cucina — Owner", text: "We have had a periodic maintenance agreement for 3 years. Monthly reports, transparent pricing and disciplined teams — a true solution partner." },
+        { name: "Can D.", role: "Mavi Gıda — Operations Director", text: "Managing all technical services with a single supplier is incredibly practical. FİXATECH replaced multiple companies for us." },
+      ],
+    },
+    contact: {
+      label: "Contact",
+      title1: "available",
+      sub: "Reach out quickly via phone, WhatsApp or the form.",
+      cards: { phone: "Phone", wa: "WhatsApp", waVal: "Fast reply", email: "Email", address: "Address" },
+      formTitle: "Quick Quote Form",
+      formSub: "The form is delivered via WhatsApp — you'll receive an instant reply.",
+      f: { name: "Full Name", namePh: "Your name and surname", company: "Company", companyPh: "Company / business name", service: "Service", message: "Message", messagePh: "Briefly describe your request..." },
+      hours: "Working Hours",
+      weekdays: "Weekdays: 08:00 - 19:00",
+      weekend: "Weekend: 09:00 - 18:00",
+      emergency: "Emergency service: 24/7 active",
+      toastTitle: "Your message is being sent via WhatsApp",
+      toastDesc: "We'll get back to you shortly.",
+      buildMsg: (name: string, company: string, service: string, message: string) =>
+        `Hello, I am ${name}${company ? ` (${company})` : ""}.\nService: ${service}\n\n${message}`,
+    },
+    footer: {
+      tag: "Your trusted partner in industrial technical service. 24/7 professional support.",
+      services: "Services",
+      corp: "Company",
+      contact: "Contact",
+      sLinks: ["Industrial Kitchen", "Electrical", "Plumbing", "Renovation & Repair", "Emergency Service"],
+      copyR: "All rights reserved.",
+      tagline: "Industrial Technical Service · Hotel & Restaurant Maintenance",
+      hours247: "24/7 Emergency Service",
+    },
+    services_data: [
+      {
+        title: "Industrial Kitchen Equipment",
+        short: "Expert repair and maintenance for ovens, ranges, dishwashers and refrigeration systems.",
+        description: "We handle installation, maintenance and repair of all industrial kitchen equipment — convection ovens, gas ranges, salamanders, dishwashers, refrigerators and cold rooms — from a single source.",
+        features: ["Convection oven service", "Dishwasher service", "Refrigeration repair", "Gas line inspection", "Salamander & range repair"],
+        response: "Within 2 hours",
+      },
+      {
+        title: "Electrical Installations",
+        short: "Fault detection, new installations and periodic maintenance — by certified technicians.",
+        description: "We offer professional installation, troubleshooting and annual maintenance contracts for fuse panels, lighting, grounding, compensation and high-current lines.",
+        features: ["Panels & fuse systems", "Lighting installation", "Grounding measurement", "Power factor correction", "Emergency response"],
+        response: "Within 1 hour",
+      },
+      {
+        title: "Plumbing",
+        short: "Leak detection, drain unblocking and infrastructure repair with modern equipment.",
+        description: "Non-destructive leak detection with robotic cameras, pressure tests, hot/cold water line repair, sewer drains and pump systems — full coverage.",
+        features: ["Non-destructive leak detection", "Drain unblocking", "Pumps & hydrophore", "Boiler service", "Drainage systems"],
+        response: "Within 2 hours",
+      },
+      {
+        title: "General Renovation & Repair",
+        short: "Turnkey professional projects for hotel and restaurant renovations.",
+        description: "End-to-end project management from design to delivery for kitchen renovation, hall remodeling, drywall, paint, tiling, woodwork and custom furniture.",
+        features: ["Kitchen renovation", "Hall remodeling", "Drywall & paint", "Tiling & ceramic", "Custom furniture"],
+        response: "Project-based",
+      },
+      {
+        title: "24/7 Emergency Technical Service",
+        short: "Day or night, fast on-site response for critical breakdowns.",
+        description: "24/7 emergency technical service preserving operational continuity for hotels and restaurants. After your call, our professional team is on site as quickly as possible.",
+        features: ["Lines open 24/7", "Mobile service vehicles", "Spare parts stock", "Warranty coverage", "Real-time reporting"],
+        response: "30-60 min",
+      },
+    ],
+  },
+};
+
+const LangCtx = createContext<{ lang: Lang; setLang: (l: Lang) => void; toggle: () => void; t: Dict }>({
+  lang: "tr",
+  setLang: () => {},
+  toggle: () => {},
+  t: dict.tr,
+});
+
+export function LangProvider({ children }: { children: ReactNode }) {
+  const [lang, setLangState] = useState<Lang>("tr");
+
+  useEffect(() => {
+    try {
+      const saved = (localStorage.getItem("lang") as Lang | null) ?? null;
+      if (saved === "tr" || saved === "en") setLangState(saved);
+      else {
+        const nav = (typeof navigator !== "undefined" ? navigator.language : "tr").toLowerCase();
+        setLangState(nav.startsWith("tr") ? "tr" : "en");
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("lang", lang);
+      if (typeof document !== "undefined") document.documentElement.lang = lang;
+    } catch {}
+  }, [lang]);
+
+  const setLang = useCallback((l: Lang) => setLangState(l), []);
+  const toggle = useCallback(() => setLangState((p) => (p === "tr" ? "en" : "tr")), []);
+
+  return <LangCtx.Provider value={{ lang, setLang, toggle, t: dict[lang] }}>{children}</LangCtx.Provider>;
+}
+
+export function useLang() {
+  return useContext(LangCtx);
+}
+
+export function useT() {
+  return useContext(LangCtx).t;
+}
+
+export const dictionaries = dict;

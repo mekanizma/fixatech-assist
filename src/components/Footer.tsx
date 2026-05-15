@@ -2,8 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { Phone, Mail, MapPin, Clock, Instagram, Facebook } from "lucide-react";
 import { COMPANY, PHONE, PHONE_TEL, EMAIL, ADDRESS, waLink } from "@/lib/site";
 import logo from "@/assets/logo.png";
+import { useT } from "@/lib/i18n";
 
 export function Footer() {
+  const t = useT();
   return (
     <footer className="relative mt-24 bg-gradient-hero text-primary-foreground overflow-hidden">
       <div className="absolute inset-0 bg-gradient-mesh opacity-40" />
@@ -15,7 +17,7 @@ export function Footer() {
               <img src={logo} alt={`${COMPANY} logosu`} className="h-14 w-auto object-contain brightness-0 invert" />
             </div>
             <p className="text-sm text-primary-foreground/70 leading-relaxed">
-              Endüstriyel teknik serviste güvenilir çözüm ortağınız. 7/24 profesyonel destek.
+              {t.footer.tag}
             </p>
             <div className="flex gap-3 mt-5">
               <a href="#" className="p-2 rounded-lg glass-dark hover-lift" aria-label="Instagram"><Instagram className="w-4 h-4" /></a>
@@ -24,40 +26,38 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">Hizmetler</h4>
+            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">{t.footer.services}</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/70">
-              <li><Link to="/hizmetler" className="hover:text-primary-glow transition">Endüstriyel Mutfak</Link></li>
-              <li><Link to="/hizmetler" className="hover:text-primary-glow transition">Elektrik Tesisatı</Link></li>
-              <li><Link to="/hizmetler" className="hover:text-primary-glow transition">Su Tesisatı</Link></li>
-              <li><Link to="/hizmetler" className="hover:text-primary-glow transition">Tadilat & Tamirat</Link></li>
-              <li><Link to="/hizmetler" className="hover:text-primary-glow transition">Acil Teknik Servis</Link></li>
+              {t.footer.sLinks.map((s: string) => (
+                <li key={s}><Link to="/hizmetler" className="hover:text-primary-glow transition">{s}</Link></li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">Kurumsal</h4>
+            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">{t.footer.corp}</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/70">
-              <li><Link to="/hakkimizda" className="hover:text-primary-glow transition">Hakkımızda</Link></li>
-              <li><Link to="/referanslar" className="hover:text-primary-glow transition">Referanslar</Link></li>
-              <li><Link to="/iletisim" className="hover:text-primary-glow transition">İletişim</Link></li>
-              <li><a href={waLink()} className="hover:text-primary-glow transition">WhatsApp Teklif</a></li>
+              <li><Link to="/hakkimizda" className="hover:text-primary-glow transition">{t.nav.about}</Link></li>
+              <li><Link to="/referanslar" className="hover:text-primary-glow transition">{t.nav.references}</Link></li>
+              <li><Link to="/iletisim" className="hover:text-primary-glow transition">{t.nav.contact}</Link></li>
+              <li><a href={waLink()} className="hover:text-primary-glow transition">{t.common.whatsappOffer}</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">İletişim</h4>
+            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">{t.footer.contact}</h4>
             <ul className="space-y-3 text-sm text-primary-foreground/70">
               <li className="flex items-start gap-2"><Phone className="w-4 h-4 mt-0.5 text-primary-glow" /><a href={`tel:${PHONE_TEL}`} className="hover:text-primary-glow">{PHONE}</a></li>
               <li className="flex items-start gap-2"><Mail className="w-4 h-4 mt-0.5 text-primary-glow" /><a href={`mailto:${EMAIL}`} className="hover:text-primary-glow">{EMAIL}</a></li>
               <li className="flex items-start gap-2"><MapPin className="w-4 h-4 mt-0.5 text-primary-glow" />{ADDRESS}</li>
-              <li className="flex items-start gap-2"><Clock className="w-4 h-4 mt-0.5 text-primary-glow" />7/24 Acil Servis</li>
+              <li className="flex items-start gap-2"><Clock className="w-4 h-4 mt-0.5 text-primary-glow" />{t.footer.hours247}</li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 pt-6 border-t border-primary-foreground/10 flex flex-col md:flex-row justify-between gap-3 text-xs text-primary-foreground/50">
-          <p>© {new Date().getFullYear()} {COMPANY}. Tüm hakları saklıdır.</p>
-          <p>Endüstriyel Teknik Servis · Otel & Restoran Bakım Onarım</p>
+          <p>© {new Date().getFullYear()} {COMPANY}. {t.footer.copyR}</p>
+          <p>{t.footer.tagline}</p>
         </div>
       </div>
     </footer>

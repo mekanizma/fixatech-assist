@@ -14,6 +14,7 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { Toaster } from "@/components/ui/sonner";
+import { LangProvider } from "@/lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -125,14 +126,16 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ScrollReveal />
-      <Header />
-      <main className="min-h-screen pt-20">
-        <Outlet />
-      </main>
-      <Footer />
-      <WhatsAppFab />
-      <Toaster />
+      <LangProvider>
+        <ScrollReveal />
+        <Header />
+        <main className="min-h-screen pt-20">
+          <Outlet />
+        </main>
+        <Footer />
+        <WhatsAppFab />
+        <Toaster />
+      </LangProvider>
     </QueryClientProvider>
   );
 }

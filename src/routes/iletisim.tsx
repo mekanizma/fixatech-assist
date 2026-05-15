@@ -3,7 +3,8 @@ import { Phone, MessageCircle, Mail, MapPin, Clock, Send, User, Building, Wrench
 import { useState } from "react";
 import { toast } from "sonner";
 import { PHONE, PHONE_TEL, EMAIL, ADDRESS, waLink } from "@/lib/site";
-import { services } from "@/lib/services";
+import { useLocalizedServices } from "@/lib/services";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/iletisim")({
   head: () => ({
@@ -20,13 +21,15 @@ export const Route = createFileRoute("/iletisim")({
 });
 
 function Contact() {
+  const t = useT();
+  const services = useLocalizedServices();
   const [form, setForm] = useState<{ name: string; company: string; service: string; message: string }>({ name: "", company: "", service: services[0].title, message: "" });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const msg = `Merhaba, ben ${form.name}${form.company ? ` (${form.company})` : ""}.\nHizmet: ${form.service}\n\n${form.message}`;
+    const msg = t.contact.buildMsg(form.name, form.company, form.service, form.message);
     window.open(waLink(msg), "_blank");
-    toast.success("Mesajınız WhatsApp üzerinden gönderiliyor", { description: "Birazdan size dönüş yapacağız." });
+    toast.success(t.contact.toastTitle, { description: t.contact.toastDesc });
   };
 
   return (
@@ -34,21 +37,21 @@ function Contact() {
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-mesh opacity-50" />
         <div className="container mx-auto px-4 relative text-center max-w-3xl reveal">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">İletişim</div>
+          <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">{t.contact.label}</div>
           <h1 className="font-display text-5xl md:text-6xl font-bold mb-4 leading-tight">
-            <span className="text-gradient-primary">7/24</span> ulaşılabiliriz
+            <span className="text-gradient-primary">24/7</span> {t.contact.title1}
           </h1>
-          <p className="text-lg text-muted-foreground">Telefon, WhatsApp veya formu kullanarak hızlıca iletişime geçin.</p>
+          <p className="text-lg text-muted-foreground">{t.contact.sub}</p>
         </div>
       </section>
 
       <section className="container mx-auto px-4 pb-12">
         <div className="grid md:grid-cols-4 gap-4">
           {[
-            { icon: Phone, t: "Telefon", v: PHONE, href: `tel:${PHONE_TEL}`, c: "primary" },
-            { icon: MessageCircle, t: "WhatsApp", v: "Hızlı yanıt", href: waLink(), c: "success" },
-            { icon: Mail, t: "E-posta", v: EMAIL, href: `mailto:${EMAIL}`, c: "primary" },
-            { icon: MapPin, t: "Adres", v: ADDRESS, href: "#harita", c: "accent" },
+            { icon: Phone, t: t.contact.cards.phone, v: PHONE, href: `tel:${PHONE_TEL}`, c: "primary" },
+            { icon: MessageCircle, t: t.contact.cards.wa, v: t.contact.cards.waVal, href: waLink(), c: "success" },
+            { icon: Mail, t: t.contact.cards.email, v: EMAIL, href: `mailto:${EMAIL}`, c: "primary" },
+            { icon: MapPin, t: t.contact.cards.address, v: ADDRESS, href: "#harita", c: "accent" },
           ].map((c, i) => (
             <a key={c.t} href={c.href} className="bg-gradient-card rounded-2xl p-6 border border-border card-3d reveal block" style={{ transitionDelay: `${i * 80}ms` }}>
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 shadow-glow ${c.c === "success" ? "bg-success" : c.c === "accent" ? "bg-gradient-accent" : "bg-gradient-primary"}`}>
@@ -65,33 +68,33 @@ function Contact() {
         {/* Form */}
         <form onSubmit={submit} className="bg-gradient-card rounded-3xl p-8 border border-border space-y-5 reveal">
           <div>
-            <h2 className="font-display text-3xl font-bold mb-2">Hızlı Teklif Formu</h2>
-            <p className="text-sm text-muted-foreground">Form WhatsApp üzerinden iletilir, anında yanıt alırsınız.</p>
+            <h2 className="font-display text-3xl font-bold mb-2">{t.contact.formTitle}</h2>
+            <p className="text-sm text-muted-foreground">{t.contact.formSub}</p>
           </div>
 
           <div className="space-y-4">
-            <Field icon={User} label="Ad Soyad" required>
-              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="input" placeholder="Adınız ve soyadınız" />
+            <Field icon={User} label={t.contact.f.name} required>
+              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="input" placeholder={t.contact.f.namePh} />
             </Field>
-            <Field icon={Building} label="Firma">
-              <input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="input" placeholder="Firma / işletme adı" />
+            <Field icon={Building} label={t.contact.f.company}>
+              <input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="input" placeholder={t.contact.f.companyPh} />
             </Field>
-            <Field icon={Wrench} label="Hizmet" required>
+            <Field icon={Wrench} label={t.contact.f.service} required>
               <select value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })} className="input">
                 {services.map((s) => <option key={s.slug}>{s.title}</option>)}
               </select>
             </Field>
-            <Field icon={MessageCircle} label="Mesaj" required>
-              <textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required rows={4} className="input resize-none" placeholder="Talebinizi kısaca anlatın..." />
+            <Field icon={MessageCircle} label={t.contact.f.message} required>
+              <textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required rows={4} className="input resize-none" placeholder={t.contact.f.messagePh} />
             </Field>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <button type="submit" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-primary text-primary-foreground font-semibold btn-3d">
-              <Send className="w-4 h-4" /> WhatsApp ile Gönder
+              <Send className="w-4 h-4" /> {t.common.send}
             </button>
             <a href={`tel:${PHONE_TEL}`} className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-accent text-accent-foreground font-semibold btn-3d-accent">
-              <Phone className="w-4 h-4" /> Hemen Ara
+              <Phone className="w-4 h-4" /> {t.common.callNow}
             </a>
           </div>
         </form>
@@ -102,10 +105,10 @@ function Contact() {
             <div className="flex items-start gap-3">
               <Clock className="w-6 h-6 text-primary shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-display font-bold text-lg">Çalışma Saatleri</h3>
-                <p className="text-muted-foreground text-sm mt-1">Hafta içi: 08:00 - 19:00</p>
-                <p className="text-muted-foreground text-sm">Hafta sonu: 09:00 - 18:00</p>
-                <p className="text-success font-semibold text-sm mt-2">Acil servis: 7/24 aktif</p>
+                <h3 className="font-display font-bold text-lg">{t.contact.hours}</h3>
+                <p className="text-muted-foreground text-sm mt-1">{t.contact.weekdays}</p>
+                <p className="text-muted-foreground text-sm">{t.contact.weekend}</p>
+                <p className="text-success font-semibold text-sm mt-2">{t.contact.emergency}</p>
               </div>
             </div>
           </div>
