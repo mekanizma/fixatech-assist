@@ -41,14 +41,14 @@ function References() {
       {/* Groups */}
       <section className="container mx-auto px-4 pb-16">
         <div className="grid md:grid-cols-3 gap-6">
-          {groups.map((g, i) => (
+          {groups.map((g: { icon: any; title: string; items: string[] }, i: number) => (
             <div key={g.title} className="bg-gradient-card rounded-2xl p-7 border border-border card-3d reveal" style={{ transitionDelay: `${i * 80}ms` }}>
               <div className="bg-gradient-primary w-14 h-14 rounded-2xl flex items-center justify-center mb-4 shadow-glow">
                 <g.icon className="w-7 h-7 text-primary-foreground" />
               </div>
               <h3 className="font-display font-bold text-2xl mb-4">{g.title}</h3>
               <ul className="space-y-2">
-                {g.items.map((x) => (
+                {g.items.map((x: string) => (
                   <li key={x} className="text-sm text-muted-foreground flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-primary" /> {x}
                   </li>
