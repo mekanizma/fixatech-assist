@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { PHONE, PHONE_TEL } from "@/lib/site";
-import logo from "@/assets/logo.jpeg";
+import logo from "@/assets/logo.png";
 
 const links = [
   { to: "/", label: "Ana Sayfa" },

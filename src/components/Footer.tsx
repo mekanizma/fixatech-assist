@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Phone, Mail, MapPin, Clock, Instagram, Facebook } from "lucide-react";
 import { COMPANY, PHONE, PHONE_TEL, EMAIL, ADDRESS, waLink } from "@/lib/site";
-import logo from "@/assets/logo.jpeg";
+import logo from "@/assets/logo.png";
 
 export function Footer() {
   return (
@@ -11,8 +11,8 @@ export function Footer() {
       <div className="relative container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-4 gap-10">
           <div>
-            <div className="mb-4 inline-flex items-center bg-white/95 rounded-2xl p-2 shadow-glow">
-              <img src={logo} alt={`${COMPANY} logosu`} className="h-12 w-auto object-contain" />
+            <div className="mb-4 inline-flex items-center">
+              <img src={logo} alt={`${COMPANY} logosu`} className="h-14 w-auto object-contain brightness-0 invert" />
             </div>
             <p className="text-sm text-primary-foreground/70 leading-relaxed">
               Endüstriyel teknik serviste güvenilir çözüm ortağınız. 7/24 profesyonel destek.
