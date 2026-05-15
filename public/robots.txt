@@ -1,2 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /app/
+Disallow: /takip/
+
+Sitemap: https://fixatech.com.tr/sitemap.xml

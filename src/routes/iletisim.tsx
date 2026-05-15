@@ -2,21 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Phone, MessageCircle, Mail, MapPin, Clock, Send, User, Building, Wrench } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { PHONE, PHONE_TEL, EMAIL, ADDRESS, waLink } from "@/lib/site";
+import { PHONE, PHONE_TEL, EMAIL, ADDRESS, MAP_EMBED_URL, MAP_LINK, waLink } from "@/lib/site";
 import { useLocalizedServices } from "@/lib/services";
 import { useT } from "@/lib/i18n";
+import { buildPageHead, SEO_PAGES } from "@/lib/seo";
 
 export const Route = createFileRoute("/iletisim")({
-  head: () => ({
-    meta: [
-      { title: "İletişim — FİXATECH Endüstriyel Teknik Servis" },
-      { name: "description", content: "FİXATECH ile iletişime geçin. Telefon, WhatsApp, e-posta veya iletişim formu üzerinden 7/24 ulaşabilirsiniz." },
-      { property: "og:title", content: "İletişim — FİXATECH" },
-      { property: "og:description", content: "7/24 iletişim, WhatsApp hızlı teklif." },
-      { property: "og:url", content: "/iletisim" },
-    ],
-    links: [{ rel: "canonical", href: "/iletisim" }],
-  }),
+  head: () => buildPageHead(SEO_PAGES.contact),
   component: Contact,
 });
 
@@ -51,14 +43,21 @@ function Contact() {
             { icon: Phone, t: t.contact.cards.phone, v: PHONE, href: `tel:${PHONE_TEL}`, c: "primary" },
             { icon: MessageCircle, t: t.contact.cards.wa, v: t.contact.cards.waVal, href: waLink(), c: "success" },
             { icon: Mail, t: t.contact.cards.email, v: EMAIL, href: `mailto:${EMAIL}`, c: "primary" },
-            { icon: MapPin, t: t.contact.cards.address, v: ADDRESS, href: "#harita", c: "accent" },
+            { icon: MapPin, t: t.contact.cards.address, v: ADDRESS, href: MAP_LINK, c: "accent", external: true },
           ].map((c, i) => (
-            <a key={c.t} href={c.href} className="bg-gradient-card rounded-2xl p-6 border border-border card-3d reveal block" style={{ transitionDelay: `${i * 80}ms` }}>
+            <a
+              key={c.t}
+              href={c.href}
+              target={"external" in c && c.external ? "_blank" : undefined}
+              rel={"external" in c && c.external ? "noopener noreferrer" : undefined}
+              className="bg-gradient-card rounded-2xl p-6 border border-border card-3d reveal block"
+              style={{ transitionDelay: `${i * 80}ms` }}
+            >
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 shadow-glow ${c.c === "success" ? "bg-success" : c.c === "accent" ? "bg-gradient-accent" : "bg-gradient-primary"}`}>
                 <c.icon className={`w-6 h-6 ${c.c === "success" ? "text-success-foreground" : c.c === "accent" ? "text-accent-foreground" : "text-primary-foreground"}`} />
               </div>
               <div className="text-xs uppercase tracking-wider text-muted-foreground">{c.t}</div>
-              <div className="font-semibold mt-1">{c.v}</div>
+              <div className="mt-1 font-semibold whitespace-pre-line leading-snug">{c.v}</div>
             </a>
           ))}
         </div>
@@ -116,7 +115,7 @@ function Contact() {
           <div id="harita" className="rounded-3xl overflow-hidden border border-border card-3d aspect-[4/3]">
             <iframe
               title="Harita"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=28.9%2C41.0%2C29.1%2C41.1&layer=mapnik"
+              src={MAP_EMBED_URL}
               className="w-full h-full"
               loading="lazy"
             />

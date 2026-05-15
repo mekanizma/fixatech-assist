@@ -78,11 +78,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background flex">
       <aside className="hidden lg:flex w-64 flex-col border-r border-border/60 bg-card/50 backdrop-blur-xl">
-        <div className="p-5 border-b border-border/60">
-          <Link to={roleHome(user.role)} className="flex items-center gap-2">
-            <img src={logo} alt="FİXATECH" className="h-10 w-auto" />
+        <div className="flex flex-col items-center border-b border-border/60 p-5 text-center">
+          <Link to={roleHome(user.role)} className="inline-flex justify-center">
+            <img src={logo} alt="FİXATECH" className="h-20 w-auto max-w-full object-contain" />
           </Link>
-          <p className="text-[10px] uppercase tracking-widest text-muted-foreground mt-2 font-semibold">
+          <p className="mt-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
             Servis Kontrol Paneli
           </p>
         </div>
@@ -103,8 +103,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             size="sm"
             className="w-full justify-start text-destructive"
             onClick={() => {
-              logout();
-              navigate({ to: "/app/giris" });
+              void logout().then(() => navigate({ to: "/app/giris" }));
             }}
           >
             <LogOut className="h-4 w-4 mr-2" /> Çıkış
@@ -121,8 +120,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-72 p-0">
-              <div className="p-5 border-b">
-                <img src={logo} alt="FİXATECH" className="h-9" />
+              <div className="flex flex-col items-center border-b p-5 text-center">
+                <img src={logo} alt="FİXATECH" className="h-16 w-auto max-w-full object-contain" />
               </div>
               <div className="py-4">
                 <NavLinks mobile />

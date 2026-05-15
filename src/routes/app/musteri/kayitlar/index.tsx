@@ -13,7 +13,8 @@ export const Route = createFileRoute("/app/musteri/kayitlar/")({
 
 function CustomerTickets() {
   const { user } = useAuth();
-  const { tickets } = useDeskData();
+  const desk = useDeskData();
+  const { tickets } = desk;
   const mine = tickets.filter((t) => t.companyId === user?.companyId || t.createdByUserId === user?.id);
 
   return (
@@ -41,7 +42,16 @@ function CustomerTickets() {
             </div>
             <div className="flex items-center gap-2">
               <TicketStatusBadge status={t.status} />
-              <Button variant="outline" size="sm" onClick={() => openServiceReportPdf(t)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  openServiceReportPdf(t, {
+                    events: desk.events.filter((e) => e.ticketId === t.id),
+                    technician: desk.technicians.find((x) => x.id === t.assignedTechnicianId),
+                  })
+                }
+              >
                 <FileText className="h-4 w-4" />
               </Button>
             </div>

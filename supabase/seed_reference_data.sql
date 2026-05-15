@@ -1,0 +1,2 @@
+-- Bu dosya birleştirildi → supabase/seed_demo_users.sql dosyasını çalıştırın.
+-- Sıra: 001_service_desk.sql → 003_ensure_profile.sql → seed_demo_users.sql

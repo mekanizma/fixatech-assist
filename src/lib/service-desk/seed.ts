@@ -8,7 +8,6 @@ export const SEED_DATA: ServiceDeskData = {
     {
       id: "u-admin",
       email: "admin@fixatech.com",
-      password: "admin123",
       name: "Sistem Yöneticisi",
       role: "admin",
       phone: "+90 533 821 61 72",
@@ -16,7 +15,6 @@ export const SEED_DATA: ServiceDeskData = {
     {
       id: "u-tech-1",
       email: "teknik@fixatech.com",
-      password: "teknik123",
       name: "Ahmet Yılmaz",
       role: "technician",
       phone: "+90 532 100 20 30",
@@ -24,7 +22,6 @@ export const SEED_DATA: ServiceDeskData = {
     {
       id: "u-tech-2",
       email: "mehmet@fixatech.com",
-      password: "teknik123",
       name: "Mehmet Kaya",
       role: "technician",
       phone: "+90 532 200 30 40",
@@ -32,7 +29,6 @@ export const SEED_DATA: ServiceDeskData = {
     {
       id: "u-customer-1",
       email: "musteri@fixatech.com",
-      password: "musteri123",
       name: "Mehmet Yıldırım",
       role: "customer",
       phone: "+90 212 555 01 01",

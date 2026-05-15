@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Building2, Package, AlertCircle, Calendar, Camera, Video, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Switch } from "@/components/ui/switch";
 import { PRODUCT_TYPES, TIME_SLOTS, BUSINESS_LABELS, MAX_FILE_SIZE } from "@/lib/service-desk/constants";
 import { fileToDataUrl } from "@/lib/service-desk/utils";
-import type { BusinessType, ServiceMode, TicketInput, Urgency, WarrantyStatus } from "@/lib/service-desk/types";
+import type {
+  BusinessType,
+  Company,
+  ServiceMode,
+  ServiceTicket,
+  TicketInput,
+  Urgency,
+  WarrantyStatus,
+} from "@/lib/service-desk/types";
 import { cn } from "@/lib/utils";
 import { waLink, PHONE_TEL } from "@/lib/site";
 
@@ -41,6 +49,45 @@ export type ServiceFormValues = {
   location?: { lat: number; lng: number };
 };
 
+const COMPANY_FIELDS = [
+  "companyName",
+  "contactPerson",
+  "phone",
+  "email",
+  "address",
+  "district",
+  "city",
+  "businessType",
+] as const satisfies readonly (keyof ServiceFormValues)[];
+
+export function companyToFormDefaults(company: Company): Pick<ServiceFormValues, (typeof COMPANY_FIELDS)[number]> {
+  return {
+    companyName: company.name,
+    contactPerson: company.contactPerson,
+    phone: company.phone,
+    email: company.email,
+    address: company.address,
+    district: company.district,
+    city: company.city,
+    businessType: company.type,
+  };
+}
+
+export function ticketToFormDefaults(
+  ticket: ServiceTicket,
+): Pick<ServiceFormValues, (typeof COMPANY_FIELDS)[number]> {
+  return {
+    companyName: ticket.companyName,
+    contactPerson: ticket.contactPerson,
+    phone: ticket.phone,
+    email: ticket.email,
+    address: ticket.address,
+    district: ticket.district,
+    city: ticket.city,
+    businessType: ticket.businessType,
+  };
+}
+
 const empty: ServiceFormValues = {
   companyName: "",
   contactPerson: "",
@@ -70,18 +117,50 @@ const empty: ServiceFormValues = {
 
 type Props = {
   initial?: Partial<ServiceFormValues>;
+  /** Kayıtlı firma bilgileri gösterilir; müşteri tekrar girmek zorunda kalmaz */
+  lockCompanyFields?: boolean;
   onSubmit: (values: ServiceFormValues) => void;
   submitLabel?: string;
   showWhatsApp?: boolean;
 };
 
+function applyCompanyDefaults(
+  prev: ServiceFormValues,
+  initial?: Partial<ServiceFormValues>,
+): ServiceFormValues {
+  if (!initial) return prev;
+  const next = { ...prev };
+  for (const key of COMPANY_FIELDS) {
+    const value = initial[key];
+    if (value !== undefined && value !== "") {
+      next[key] = value as ServiceFormValues[typeof key];
+    }
+  }
+  return next;
+}
+
 export function ServiceRequestForm({
   initial,
+  lockCompanyFields = false,
   onSubmit,
   submitLabel = "Servis Talebi Oluştur",
   showWhatsApp = true,
 }: Props) {
-  const [form, setForm] = useState<ServiceFormValues>({ ...empty, ...initial });
+  const [form, setForm] = useState<ServiceFormValues>(() => applyCompanyDefaults({ ...empty }, initial));
+
+  useEffect(() => {
+    setForm((prev) => applyCompanyDefaults(prev, initial));
+  }, [
+    initial?.companyName,
+    initial?.contactPerson,
+    initial?.phone,
+    initial?.email,
+    initial?.address,
+    initial?.district,
+    initial?.city,
+    initial?.businessType,
+  ]);
+
   const set = <K extends keyof ServiceFormValues>(k: K, v: ServiceFormValues[K]) =>
     setForm((p) => ({ ...p, [k]: v }));
 
@@ -139,7 +218,38 @@ export function ServiceRequestForm({
         onSubmit(form);
       }}
     >
-      <Section icon={Building2} title="Firma Bilgileri" desc="Otel, restoran veya işletme bilgileriniz">
+      <Section
+        icon={Building2}
+        title="Firma Bilgileri"
+        desc={
+          lockCompanyFields
+            ? "Kayıtlı işletme bilgileriniz otomatik kullanılıyor"
+            : "Otel, restoran veya işletme bilgileriniz"
+        }
+      >
+        {lockCompanyFields ? (
+          <div className="space-y-4">
+            <div className="rounded-xl border border-border/60 bg-muted/40 p-4 grid sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+              <ReadonlyField label="Firma" value={form.companyName} />
+              <ReadonlyField label="Yetkili" value={form.contactPerson} />
+              <ReadonlyField label="Telefon" value={form.phone} />
+              <ReadonlyField label="E-posta" value={form.email || "—"} />
+              <ReadonlyField label="İşletme türü" value={BUSINESS_LABELS[form.businessType]} />
+              <ReadonlyField label="İl / İlçe" value={`${form.district} / ${form.city}`} />
+              <ReadonlyField label="Adres" value={form.address} className="sm:col-span-2" />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={shareLocation}>
+                <MapPin className="h-4 w-4 mr-2" /> Konum Paylaş
+              </Button>
+              {form.location && (
+                <span className="text-xs text-muted-foreground self-center">
+                  Konum alındı ({form.location.lat.toFixed(4)}, {form.location.lng.toFixed(4)})
+                </span>
+              )}
+            </div>
+          </div>
+        ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           <Field label="Firma Adı *">
             <Input required value={form.companyName} onChange={(e) => set("companyName", e.target.value)} />
@@ -187,6 +297,7 @@ export function ServiceRequestForm({
             )}
           </div>
         </div>
+        )}
       </Section>
 
       <Section icon={Package} title="Ürün Bilgileri" desc="Arızalı ekipman detayları">
@@ -454,6 +565,23 @@ function Field({
     <div className={cn("space-y-2", className)}>
       <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</Label>
       {children}
+    </div>
+  );
+}
+
+function ReadonlyField({
+  label,
+  value,
+  className,
+}: {
+  label: string;
+  value: string;
+  className?: string;
+}) {
+  return (
+    <div className={className}>
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="font-medium text-foreground">{value}</p>
     </div>
   );
 }

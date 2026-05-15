@@ -33,7 +33,10 @@ export function TicketDetailView({
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => openServiceReportPdf(ticket)}>
+          <Button
+            variant="outline"
+            onClick={() => openServiceReportPdf(ticket, { events, technician: tech })}
+          >
             <FileText className="h-4 w-4 mr-2" /> PDF Rapor
           </Button>
           {actions}

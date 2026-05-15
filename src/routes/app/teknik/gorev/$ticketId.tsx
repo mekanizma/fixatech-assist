@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { CheckCircle2, Camera } from "lucide-react";
 import { TicketDetailView } from "@/components/service-desk/TicketDetailView";
@@ -8,7 +9,8 @@ import {
   addTicketPhoto,
   updateTicketStatus,
   addTicketNote,
-} from "@/lib/service-desk/store";
+} from "@/lib/service-desk/api";
+import { deskKeys } from "@/lib/service-desk/query-keys";
 import { useDeskData } from "@/hooks/use-desk-data";
 import { useTicket } from "@/hooks/use-service-desk";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,7 @@ export const Route = createFileRoute("/app/teknik/gorev/$ticketId")({
 function TechJobDetail() {
   const { ticketId } = Route.useParams();
   useDeskData();
+  const qc = useQueryClient();
   const { user } = useAuth();
   const ticket = useTicket(ticketId);
   const [work, setWork] = useState(ticket?.workPerformed ?? "");
@@ -43,9 +46,14 @@ function TechJobDetail() {
         actions={
           <Select
             value={ticket.status}
-            onValueChange={(v) => {
-              updateTicketStatus(ticket.id, v as ServiceStatus, actor);
-              toast.success(STATUS_LABELS[v as ServiceStatus]);
+            onValueChange={async (v) => {
+              try {
+                await updateTicketStatus(ticket.id, v as ServiceStatus, actor);
+                await qc.invalidateQueries({ queryKey: deskKeys.all });
+                toast.success(STATUS_LABELS[v as ServiceStatus]);
+              } catch (e) {
+                toast.error(e instanceof Error ? e.message : "Güncellenemedi");
+              }
             }}
           >
             <SelectTrigger className="w-[200px]">
@@ -83,36 +91,51 @@ function TechJobDetail() {
             onChange={async (e) => {
               const f = e.target.files?.[0];
               if (!f) return;
-              const url = await fileToDataUrl(f);
-              addTicketPhoto(ticket.id, url, actor);
-              toast.success("Fotoğraf eklendi");
+              try {
+                const url = await fileToDataUrl(f);
+                await addTicketPhoto(ticket.id, url, actor);
+                await qc.invalidateQueries({ queryKey: deskKeys.all });
+                toast.success("Fotoğraf eklendi");
+              } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Fotoğraf eklenemedi");
+              }
             }}
           />
         </label>
         <div className="flex flex-wrap gap-2 pt-2">
           <Button
             variant="outline"
-            onClick={() => {
+            onClick={async () => {
               if (!work.trim()) return;
-              addTicketNote(ticket.id, work, actor);
-              toast.success("İşlem kaydedildi");
+              try {
+                await addTicketNote(ticket.id, work, actor);
+                await qc.invalidateQueries({ queryKey: deskKeys.all });
+                toast.success("İşlem kaydedildi");
+              } catch (e) {
+                toast.error(e instanceof Error ? e.message : "Kaydedilemedi");
+              }
             }}
           >
             İşlemi Kaydet
           </Button>
           <Button
             className="rounded-full"
-            onClick={() => {
+            onClick={async () => {
               if (!work.trim()) {
                 toast.error("Yapılan işlemi girin");
                 return;
               }
-              completeTicket(
-                ticket.id,
-                { workPerformed: work, technicianSignature: signature || user.name },
-                actor,
-              );
-              toast.success("İş tamamlandı");
+              try {
+                await completeTicket(
+                  ticket.id,
+                  { workPerformed: work, technicianSignature: signature || user.name },
+                  actor,
+                );
+                await qc.invalidateQueries({ queryKey: deskKeys.all });
+                toast.success("İş tamamlandı");
+              } catch (e) {
+                toast.error(e instanceof Error ? e.message : "Tamamlanamadı");
+              }
             }}
           >
             <CheckCircle2 className="h-4 w-4 mr-2" /> İş Tamamlandı

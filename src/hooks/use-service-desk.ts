@@ -1,5 +1,9 @@
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useDeskData } from "@/hooks/use-desk-data";
+import { fetchPublicTicketByCode } from "@/lib/service-desk/api";
+import { deskKeys } from "@/lib/service-desk/query-keys";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import type { ServiceTicket, TicketEvent, Technician } from "@/lib/service-desk/types";
 
 export function useTicket(id: string | undefined) {
@@ -8,22 +12,41 @@ export function useTicket(id: string | undefined) {
 }
 
 export function useTicketByCode(code: string | undefined) {
-  const data = useDeskData();
-  return useMemo(
-    () => data.tickets.find((t) => t.code.toUpperCase() === (code ?? "").toUpperCase()),
-    [data.tickets, code],
+  const desk = useDeskData();
+  const fromDesk = useMemo(
+    () => desk.tickets.find((t) => t.code.toUpperCase() === (code ?? "").toUpperCase()),
+    [desk.tickets, code],
   );
+
+  const { data: publicData } = useQuery({
+    queryKey: deskKeys.publicTicket(code ?? ""),
+    queryFn: () => fetchPublicTicketByCode(code!),
+    enabled: isSupabaseConfigured() && Boolean(code) && !fromDesk,
+  });
+
+  return fromDesk ?? publicData?.ticket;
 }
 
 export function useTicketEvents(ticketId: string | undefined): TicketEvent[] {
   const data = useDeskData();
-  return useMemo(
-    () =>
-      data.events
-        .filter((e) => e.ticketId === ticketId)
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()),
-    [data.events, ticketId],
-  );
+  const code = useMemo(() => data.tickets.find((t) => t.id === ticketId)?.code, [data.tickets, ticketId]);
+
+  const { data: publicData } = useQuery({
+    queryKey: deskKeys.publicTicket(code ?? ""),
+    queryFn: () => fetchPublicTicketByCode(code!),
+    enabled: isSupabaseConfigured() && Boolean(code) && !data.events.some((e) => e.ticketId === ticketId),
+  });
+
+  return useMemo(() => {
+    const fromDesk = data.events
+      .filter((e) => e.ticketId === ticketId)
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    if (fromDesk.length) return fromDesk;
+    if (publicData?.events?.length && publicData.ticket.id === ticketId) {
+      return publicData.events;
+    }
+    return fromDesk;
+  }, [data.events, ticketId, publicData]);
 }
 
 export function useTechnician(id: string | undefined): Technician | undefined {

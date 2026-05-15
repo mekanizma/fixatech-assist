@@ -5,17 +5,10 @@ import { ServiceIcon } from "@/components/ServiceIcon";
 import { waLink } from "@/lib/site";
 import { useT } from "@/lib/i18n";
 
+import { buildPageHead, SEO_PAGES } from "@/lib/seo";
+
 export const Route = createFileRoute("/hizmetler")({
-  head: () => ({
-    meta: [
-      { title: "Hizmetlerimiz — Endüstriyel Mutfak, Elektrik, Su Tesisatı | FİXATECH" },
-      { name: "description", content: "Endüstriyel mutfak ekipmanları, elektrik tesisatı, su tesisatı, tadilat ve 7/24 acil teknik servis hizmetlerimizi keşfedin." },
-      { property: "og:title", content: "Hizmetlerimiz — FİXATECH" },
-      { property: "og:description", content: "Otel ve restoranlar için tüm teknik servis hizmetleri." },
-      { property: "og:url", content: "/hizmetler" },
-    ],
-    links: [{ rel: "canonical", href: "/hizmetler" }],
-  }),
+  head: () => buildPageHead(SEO_PAGES.services),
   component: Services,
 });
 

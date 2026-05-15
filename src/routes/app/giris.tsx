@@ -1,107 +1,196 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Wrench, Shield, User, HardHat } from "lucide-react";
+import { Wrench, Shield, User, HardHat, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/lib/service-desk/auth";
-import { findUserByEmail } from "@/lib/service-desk/store";
 import { DEMO_ACCOUNTS } from "@/lib/service-desk/constants";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { roleHome } from "@/lib/service-desk/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/giris")({
   component: LoginPage,
 });
+
+const FEATURES = [
+  { icon: Shield, t: "Kurumsal güvenlik", d: "Rol bazlı erişim — admin, teknisyen, müşteri" },
+  { icon: Wrench, t: "Uçtan uca takip", d: "Talep → atama → saha → tamamlama" },
+  { icon: User, t: "Müşteri portalı", d: "Canlı durum ve PDF servis raporu" },
+] as const;
+
+function LoginHero() {
+  return (
+    <div className="relative hidden min-h-screen flex-1 flex-col overflow-hidden bg-gradient-hero text-primary-foreground lg:flex">
+      <div className="absolute inset-0 bg-gradient-mesh opacity-50" />
+      <div className="pointer-events-none absolute -right-16 top-1/4 h-72 w-72 rounded-full bg-primary-glow/25 blur-3xl animate-float" />
+      <div
+        className="pointer-events-none absolute -left-20 bottom-1/4 h-96 w-96 rounded-full bg-accent/15 blur-3xl animate-float"
+        style={{ animationDelay: "2s" }}
+      />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-glow/60 to-transparent" />
+
+      <div className="relative flex flex-1 flex-col items-center justify-center px-10 py-14 xl:px-14">
+        <div className="w-full max-w-lg space-y-8 text-center">
+          <div className="mx-auto inline-flex rounded-2xl bg-white/95 p-4 shadow-[0_20px_50px_-12px_oklch(0_0_0/0.35)] ring-1 ring-white/20">
+            <img src={logo} alt="FİXATECH" className="h-24 w-auto object-contain sm:h-28" />
+          </div>
+
+          <div className="space-y-4">
+            <div className="glass-dark mx-auto inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide">
+              <Sparkles className="h-3.5 w-3.5 text-primary-glow" />
+              Servis Kontrol Paneli
+            </div>
+            <h1 className="font-display text-3xl font-bold leading-tight xl:text-4xl">
+              Teknik servis operasyonlarınızı{" "}
+              <span className="text-gradient-accent">tek merkezden</span> yönetin
+            </h1>
+            <p className="mx-auto max-w-md text-base leading-relaxed text-primary-foreground/75">
+              Oteller, restoranlar ve endüstriyel mutfak işletmeleri için profesyonel talep, atama ve
+              raporlama akışı.
+            </p>
+          </div>
+
+          <ul className="grid gap-3 text-left sm:grid-cols-1">
+            {FEATURES.map((item) => (
+              <li
+                key={item.t}
+                className="glass-dark group flex gap-4 rounded-2xl p-4 transition hover:bg-white/[0.08]"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
+                  <item.icon className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <div className="min-w-0 pt-0.5">
+                  <p className="text-sm font-semibold">{item.t}</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-primary-foreground/65">{item.d}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <p className="relative pb-8 text-center text-[11px] tracking-wide text-primary-foreground/40">
+        © {new Date().getFullYear()} FİXATECH — Tüm hakları saklıdır
+      </p>
+    </div>
+  );
+}
 
 function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("admin@fixatech.com");
   const [password, setPassword] = useState("admin123");
+  const [submitting, setSubmitting] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(email, password)) {
-      const u = findUserByEmail(email);
-      toast.success("Giriş başarılı");
-      navigate({ to: u ? roleHome(u.role) : "/app/admin" });
-    } else {
-      toast.error("E-posta veya şifre hatalı");
+    if (!isSupabaseConfigured()) {
+      toast.error(".env dosyasında VITE_SUPABASE_URL ve VITE_SUPABASE_ANON_KEY tanımlayın");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const result = await login(email, password);
+      if (result.ok) {
+        toast.success("Giriş başarılı");
+        navigate({ to: roleHome(result.user.role) });
+      } else {
+        toast.error(result.message);
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-hero text-primary-foreground p-12 flex-col justify-between relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-40" />
-        <div className="relative">
-          <img src={logo} alt="FİXATECH" className="h-14 brightness-0 invert mb-8" />
-          <h1 className="font-display text-4xl font-bold leading-tight">Teknik Servis Kontrol Paneli</h1>
-          <p className="mt-4 text-primary-foreground/80 max-w-md text-lg">
-            Oteller, restoranlar ve endüstriyel mutfak işletmeleri için profesyonel servis yönetimi.
-          </p>
-        </div>
-        <ul className="relative space-y-4 text-sm">
-          {[
-            { icon: Shield, t: "Kurumsal güvenlik", d: "Rol bazlı erişim — admin, teknisyen, müşteri" },
-            { icon: Wrench, t: "Uçtan uca takip", d: "Talep → atama → saha → tamamlama" },
-            { icon: User, t: "Müşteri portalı", d: "Canlı durum ve PDF servis raporu" },
-          ].map((item) => (
-            <li key={item.t} className="flex gap-3">
-              <item.icon className="h-5 w-5 text-primary-glow shrink-0" />
-              <div>
-                <p className="font-semibold">{item.t}</p>
-                <p className="text-primary-foreground/70">{item.d}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="flex min-h-screen">
+      <LoginHero />
 
-      <div className="flex-1 flex items-center justify-center p-6 bg-background">
-        <Card className="w-full max-w-md border-border/60 shadow-xl">
-          <CardHeader>
-            <CardTitle className="font-display text-2xl">Panele Giriş</CardTitle>
-            <CardDescription>FİXATECH servis yönetim sistemine hoş geldiniz</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={submit} className="space-y-4">
-              <div className="space-y-2">
-                <Label>E-posta</Label>
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              </div>
-              <div className="space-y-2">
-                <Label>Şifre</Label>
-                <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-              </div>
-              <Button type="submit" className="w-full rounded-full" size="lg">
-                Giriş Yap
-              </Button>
-            </form>
+      <div className="relative flex flex-1 flex-col items-center justify-center bg-background p-6 sm:p-10">
+        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-primary/5 blur-3xl lg:hidden" />
 
-            <div className="mt-6 rounded-xl bg-muted/50 p-4 space-y-2">
-              <p className="text-xs font-semibold uppercase text-muted-foreground">Demo hesaplar</p>
-              {DEMO_ACCOUNTS.map((a) => (
-                <button
-                  key={a.email}
-                  type="button"
-                  className="w-full text-left text-xs rounded-lg px-3 py-2 hover:bg-background transition flex items-center gap-2"
-                  onClick={() => {
-                    setEmail(a.email);
-                    setPassword(a.password);
-                  }}
-                >
-                  <HardHat className="h-3.5 w-3.5 text-primary" />
-                  <span className="font-medium">{a.hint}</span>
-                  <span className="text-muted-foreground ml-auto">{a.email}</span>
-                </button>
-              ))}
+        <div className="relative w-full max-w-md space-y-6">
+          <div className="flex flex-col items-center text-center lg:hidden">
+            <div className="mb-4 inline-flex rounded-2xl bg-card p-3 shadow-md ring-1 ring-border/60">
+              <img src={logo} alt="FİXATECH" className="h-16 w-auto object-contain" />
             </div>
-          </CardContent>
-        </Card>
+            <p className="text-sm text-muted-foreground">FİXATECH Servis Kontrol Paneli</p>
+          </div>
+
+          <Card className="border-border/60 shadow-xl shadow-primary/5">
+            <CardHeader className="space-y-1 pb-2">
+              <CardTitle className="font-display text-2xl">Panele Giriş</CardTitle>
+              <CardDescription>Hesabınızla devam edin veya demo hesap seçin</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={submit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">E-posta</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="bg-muted/30"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Şifre</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="bg-muted/30"
+                  />
+                </div>
+                <Button type="submit" className="w-full rounded-full btn-3d" size="lg" disabled={submitting}>
+                  {submitting ? "Giriş yapılıyor…" : "Giriş Yap"}
+                </Button>
+              </form>
+
+              <div className="mt-6 space-y-2 rounded-xl border border-border/60 bg-muted/30 p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Demo hesaplar
+                </p>
+                {DEMO_ACCOUNTS.map((a) => (
+                  <button
+                    key={a.email}
+                    type="button"
+                    className={cn(
+                      "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs transition",
+                      "hover:bg-background hover:shadow-sm",
+                    )}
+                    onClick={() => {
+                      setEmail(a.email);
+                      setPassword(a.password);
+                    }}
+                  >
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
+                      <HardHat className="h-3.5 w-3.5 text-primary" />
+                    </span>
+                    <span className="font-medium">{a.hint}</span>
+                    <span className="ml-auto truncate text-muted-foreground">{a.email}</span>
+                  </button>
+                ))}
+              </div>
+
+              <p className="mt-6 text-center text-xs text-muted-foreground">
+                <Link to="/" className="font-medium text-primary hover:underline">
+                  Ana siteye dön
+                </Link>
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

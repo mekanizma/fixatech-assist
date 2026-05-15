@@ -20,7 +20,11 @@ function TrackIndex() {
       <div className="min-h-screen bg-gradient-mesh flex items-center justify-center p-6">
         <Card className="w-full max-w-md shadow-xl border-border/60">
           <CardHeader className="text-center">
-            <img src={logo} alt="FİXATECH" className="h-12 mx-auto mb-4" />
+            <img
+              src={logo}
+              alt="FİXATECH"
+              className="h-14 w-auto max-w-full mx-auto origin-center object-contain scale-[1.6] sm:scale-[1.75] mb-4"
+            />
             <CardTitle className="font-display text-2xl">Servis Takip</CardTitle>
             <CardDescription>Kayıt numaranız ile canlı servis durumunu görüntüleyin</CardDescription>
           </CardHeader>

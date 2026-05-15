@@ -1,34 +1,35 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Phone, MessageCircle, Clock, Zap, Users, Building2, ShieldCheck, Star, CheckCircle2, Siren } from "lucide-react";
 import heroImg from "@/assets/hero-technician.jpg";
 import { useLocalizedServices } from "@/lib/services";
 import { ServiceIcon } from "@/components/ServiceIcon";
 import { PHONE_TEL, waLink } from "@/lib/site";
+import { useEffect } from "react";
 import { useT } from "@/lib/i18n";
+import { HeroHeadline, type HeroTitleSegment } from "@/components/HeroHeadline";
+import { HeroTrustCards } from "@/components/HeroTrustCards";
+import { buildPageHead, SEO_PAGES } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "FİXATECH — Endüstriyel Teknik Serviste Güvenilir Çözüm Ortağınız" },
-      { name: "description", content: "Otel, restoran ve işletmeler için 7/24 endüstriyel mutfak tamiri, elektrik, su tesisatı ve tadilat hizmetleri. Hızlı müdahale, uzman ekip." },
-      { property: "og:title", content: "FİXATECH — Endüstriyel Teknik Servis" },
-      { property: "og:description", content: "7/24 endüstriyel teknik servis. Otel & restoran bakım onarım." },
-      { property: "og:url", content: "/" },
-    ],
-    links: [{ rel: "canonical", href: "/" }],
-  }),
+  head: () => buildPageHead(SEO_PAGES.home),
   component: Home,
 });
 
 const trustIcons = [Clock, Zap, Users, Building2];
 
-const refLogos = ["Grand Hotel", "Marina Bistro", "Bosphorus Suites", "La Cucina", "Sky Lounge", "Palmiye Otel", "Loft Restaurant", "Park Cafe"];
-
 function Home() {
   const t = useT();
   const services = useLocalizedServices();
-  const trustBadges = t.home.trust.map((b: any, i: number) => ({ icon: trustIcons[i], label: b.l, desc: b.d }));
-  const stats = t.home.stats;
+  const trustBadges = t.home.trust.map((b: { l: string; d: string }, i: number) => ({
+    icon: trustIcons[i],
+    label: b.l,
+    desc: b.d,
+  }));
+
+  useEffect(() => {
+    document.title = t.home.metaTitle;
+  }, [t.home.metaTitle]);
+
   return (
     <>
       {/* HERO */}
@@ -53,11 +54,7 @@ function Home() {
               {t.home.activeNow ?? t.common.activeNow}
             </div>
 
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05]">
-              {t.home.title1}{" "}
-              <span className="text-gradient-primary">{t.home.titleHighlight}</span>{" "}
-              {t.home.title2}
-            </h1>
+            <HeroHeadline segments={t.home.heroTitle as HeroTitleSegment[]} />
 
             <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
               {t.home.sub} <strong className="text-foreground">{t.home.subStrong}</strong> {t.home.subTail}
@@ -97,38 +94,7 @@ function Home() {
             </a>
           </div>
 
-          {/* trust pills floating card */}
-          <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-primary opacity-20 blur-3xl rounded-3xl animate-tilt" />
-            <div className="relative grid grid-cols-2 gap-4">
-              {trustBadges.map((b: any, i: number) => (
-                <div
-                  key={b.label}
-                  className="glass card-3d rounded-2xl p-5 reveal"
-                  style={{ animationDelay: `${i * 100}ms`, transitionDelay: `${i * 80}ms` }}
-                >
-                  <div className="bg-gradient-primary w-12 h-12 rounded-xl flex items-center justify-center mb-3 shadow-glow">
-                    <b.icon className="w-6 h-6 text-primary-foreground" />
-                  </div>
-                  <div className="font-display font-bold text-lg">{b.label}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{b.desc}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <section className="py-12 bg-gradient-hero text-primary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-30" />
-        <div className="relative container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((s: any, i: number) => (
-            <div key={s.l} className="text-center reveal" style={{ transitionDelay: `${i * 100}ms` }}>
-              <div className="font-display text-4xl md:text-5xl font-bold text-gradient-accent">{s.v}</div>
-              <div className="text-sm text-primary-foreground/70 mt-1 uppercase tracking-wider">{s.l}</div>
-            </div>
-          ))}
+          <HeroTrustCards badges={trustBadges} />
         </div>
       </section>
 
@@ -141,7 +107,7 @@ function Home() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.slice(0, 6).map((s: any, i: number) => (
+          {services.slice(0, 6).map((s: { slug: string; image: string; title: string; icon: string; response: string; short: string }, i: number) => (
             <Link
               key={s.slug}
               to="/hizmetler"
@@ -186,33 +152,18 @@ function Home() {
             </ul>
           </div>
           <div className="grid grid-cols-2 gap-4 reveal">
-            {t.home.whyCards.map((c: any, i: number) => {
+            {t.home.whyCards.map((c: { t: string; d: string }, i: number) => {
               const Icon = [ShieldCheck, Star, Clock, Users][i];
               return (
-              <div key={c.t} className="glass card-3d rounded-2xl p-6 text-center">
-                <div className="bg-gradient-primary w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-glow animate-float">
-                  <Icon className="w-7 h-7 text-primary-foreground" />
+                <div key={c.t} className="glass card-3d rounded-2xl p-6 text-center">
+                  <div className="bg-gradient-primary w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-glow animate-float">
+                    <Icon className="w-7 h-7 text-primary-foreground" />
+                  </div>
+                  <div className="font-display font-bold text-lg">{c.t}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{c.d}</div>
                 </div>
-                <div className="font-display font-bold text-lg">{c.t}</div>
-                <div className="text-xs text-muted-foreground mt-1">{c.d}</div>
-              </div>
-            );})}
-          </div>
-        </div>
-      </section>
-
-      {/* REFERENCES MARQUEE */}
-      <section className="py-16 overflow-hidden">
-        <div className="text-center mb-10 reveal">
-          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">{t.home.brandsLabel}</p>
-        </div>
-        <div className="relative">
-          <div className="flex gap-8 animate-marquee w-max">
-            {[...refLogos, ...refLogos].map((n, i) => (
-              <div key={i} className="glass px-8 py-5 rounded-2xl font-display font-bold text-xl text-muted-foreground hover:text-primary transition whitespace-nowrap">
-                {n}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

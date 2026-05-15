@@ -22,22 +22,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { PHONE, PHONE_TEL, waLink } from "@/lib/site";
 import { useT } from "@/lib/i18n";
+import { buildPageHead, SEO_PAGES } from "@/lib/seo";
 
 export const Route = createFileRoute("/teknik-servis")({
-  head: () => ({
-    meta: [
-      { title: "Teknik Servis Talebi — FİXATECH Endüstriyel Teknik Servis" },
-      {
-        name: "description",
-        content:
-          "Ürününüzü servise gönderin. Ürün bilgisi, adet, adres ve teslim alma randevusu ile hızlı teknik servis talebi oluşturun.",
-      },
-      { property: "og:title", content: "Teknik Servis Talebi — FİXATECH" },
-      { property: "og:description", content: "Online teknik servis kayıt formu — hızlı randevu ve WhatsApp iletişim." },
-      { property: "og:url", content: "/teknik-servis" },
-    ],
-    links: [{ rel: "canonical", href: "/teknik-servis" }],
-  }),
+  head: () => buildPageHead(SEO_PAGES.techService),
   component: TechService,
 });
 

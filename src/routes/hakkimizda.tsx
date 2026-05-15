@@ -2,18 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import teamImg from "@/assets/about-team.jpg";
 import { Target, Eye, Award, Heart, Sparkles, ShieldCheck } from "lucide-react";
 import { useT } from "@/lib/i18n";
+import { buildPageHead, SEO_PAGES } from "@/lib/seo";
 
 export const Route = createFileRoute("/hakkimizda")({
-  head: () => ({
-    meta: [
-      { title: "Hakkımızda — FİXATECH Endüstriyel Teknik Servis" },
-      { name: "description", content: "FİXATECH; otel ve restoran sektörüne 12 yılı aşkın süredir profesyonel teknik servis sağlayan, güvenilir ve uzman ekipten oluşan bir teknik servis firmasıdır." },
-      { property: "og:title", content: "Hakkımızda — FİXATECH" },
-      { property: "og:description", content: "12 yılı aşkın deneyim, profesyonel ekip, kurumsal çözümler." },
-      { property: "og:url", content: "/hakkimizda" },
-    ],
-    links: [{ rel: "canonical", href: "/hakkimizda" }],
-  }),
+  head: () => buildPageHead(SEO_PAGES.about),
   component: About,
 });
 

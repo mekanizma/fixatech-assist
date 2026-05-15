@@ -1,11 +1,14 @@
-import type { ServiceTicket } from "./types";
+import type { ServiceTicket, TicketEvent, Technician } from "./types";
 import { STATUS_LABELS, URGENCY_LABELS, BUSINESS_LABELS } from "./constants";
 import { formatDate, formatDateTime } from "./utils";
-import { getTechnician, getTicketEvents } from "./store";
+import { ADDRESS_INLINE } from "@/lib/site";
 
-export function openServiceReportPdf(ticket: ServiceTicket) {
-  const tech = ticket.assignedTechnicianId ? getTechnician(ticket.assignedTechnicianId) : null;
-  const events = getTicketEvents(ticket.id);
+export function openServiceReportPdf(
+  ticket: ServiceTicket,
+  opts?: { events?: TicketEvent[]; technician?: Technician | null },
+) {
+  const tech = opts?.technician ?? null;
+  const events = opts?.events ?? [];
 
   const html = `<!DOCTYPE html>
 <html lang="tr">
@@ -92,7 +95,7 @@ export function openServiceReportPdf(ticket: ServiceTicket) {
   </ul>
 
   <div class="footer">
-    FİXATECH Endüstriyel Teknik Servis · ${new Date().toLocaleDateString("tr-TR")} · Bu belge dijital olarak oluşturulmuştur.
+    FİXATECH Endüstriyel Teknik Servis · ${ADDRESS_INLINE} · ${new Date().toLocaleDateString("tr-TR")} · Bu belge dijital olarak oluşturulmuştur.
   </div>
   <script>window.onload = () => { window.print(); }</script>
 </body>

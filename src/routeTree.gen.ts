@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeknikServisRouteImport } from './routes/teknik-servis'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ReferanslarRouteImport } from './routes/referanslar'
 import { Route as IletisimRouteImport } from './routes/iletisim'
 import { Route as HizmetlerRouteImport } from './routes/hizmetler'
 import { Route as HakkimizdaRouteImport } from './routes/hakkimizda'
@@ -41,11 +40,6 @@ const TeknikServisRoute = TeknikServisRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReferanslarRoute = ReferanslarRouteImport.update({
-  id: '/referanslar',
-  path: '/referanslar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IletisimRoute = IletisimRouteImport.update({
@@ -157,7 +151,6 @@ export interface FileRoutesByFullPath {
   '/hakkimizda': typeof HakkimizdaRoute
   '/hizmetler': typeof HizmetlerRoute
   '/iletisim': typeof IletisimRoute
-  '/referanslar': typeof ReferanslarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/teknik-servis': typeof TeknikServisRoute
   '/app/giris': typeof AppGirisRoute
@@ -182,7 +175,6 @@ export interface FileRoutesByTo {
   '/hakkimizda': typeof HakkimizdaRoute
   '/hizmetler': typeof HizmetlerRoute
   '/iletisim': typeof IletisimRoute
-  '/referanslar': typeof ReferanslarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/teknik-servis': typeof TeknikServisRoute
   '/app/giris': typeof AppGirisRoute
@@ -208,7 +200,6 @@ export interface FileRoutesById {
   '/hakkimizda': typeof HakkimizdaRoute
   '/hizmetler': typeof HizmetlerRoute
   '/iletisim': typeof IletisimRoute
-  '/referanslar': typeof ReferanslarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/teknik-servis': typeof TeknikServisRoute
   '/app/giris': typeof AppGirisRoute
@@ -235,7 +226,6 @@ export interface FileRouteTypes {
     | '/hakkimizda'
     | '/hizmetler'
     | '/iletisim'
-    | '/referanslar'
     | '/sitemap.xml'
     | '/teknik-servis'
     | '/app/giris'
@@ -260,7 +250,6 @@ export interface FileRouteTypes {
     | '/hakkimizda'
     | '/hizmetler'
     | '/iletisim'
-    | '/referanslar'
     | '/sitemap.xml'
     | '/teknik-servis'
     | '/app/giris'
@@ -285,7 +274,6 @@ export interface FileRouteTypes {
     | '/hakkimizda'
     | '/hizmetler'
     | '/iletisim'
-    | '/referanslar'
     | '/sitemap.xml'
     | '/teknik-servis'
     | '/app/giris'
@@ -311,7 +299,6 @@ export interface RootRouteChildren {
   HakkimizdaRoute: typeof HakkimizdaRoute
   HizmetlerRoute: typeof HizmetlerRoute
   IletisimRoute: typeof IletisimRoute
-  ReferanslarRoute: typeof ReferanslarRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeknikServisRoute: typeof TeknikServisRoute
   TakipCodeRoute: typeof TakipCodeRoute
@@ -332,13 +319,6 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/referanslar': {
-      id: '/referanslar'
-      path: '/referanslar'
-      fullPath: '/referanslar'
-      preLoaderRoute: typeof ReferanslarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/iletisim': {
@@ -526,7 +506,6 @@ const rootRouteChildren: RootRouteChildren = {
   HakkimizdaRoute: HakkimizdaRoute,
   HizmetlerRoute: HizmetlerRoute,
   IletisimRoute: IletisimRoute,
-  ReferanslarRoute: ReferanslarRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeknikServisRoute: TeknikServisRoute,
   TakipCodeRoute: TakipCodeRoute,
