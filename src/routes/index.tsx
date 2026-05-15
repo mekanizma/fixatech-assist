@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Phone, MessageCircle, Clock, Zap, Users, Building2, ShieldCheck, Star, CheckCircle2, Siren } from "lucide-react";
 import heroImg from "@/assets/hero-technician.jpg";
-import { services } from "@/lib/services";
+import { useLocalizedServices } from "@/lib/services";
 import { ServiceIcon } from "@/components/ServiceIcon";
 import { PHONE_TEL, waLink } from "@/lib/site";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,23 +20,15 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const trustBadges = [
-  { icon: Clock, label: "7/24 Servis", desc: "Kesintisiz destek" },
-  { icon: Zap, label: "Hızlı Müdahale", desc: "Ortalama 60 dk" },
-  { icon: Users, label: "Uzman Teknik Ekip", desc: "Sertifikalı ustalar" },
-  { icon: Building2, label: "Kurumsal Çözüm", desc: "Sözleşmeli bakım" },
-];
-
-const stats = [
-  { v: "500+", l: "Mutlu Müşteri" },
-  { v: "12+", l: "Yıllık Deneyim" },
-  { v: "24/7", l: "Acil Destek" },
-  { v: "60dk", l: "Ortalama Yanıt" },
-];
+const trustIcons = [Clock, Zap, Users, Building2];
 
 const refLogos = ["Grand Hotel", "Marina Bistro", "Bosphorus Suites", "La Cucina", "Sky Lounge", "Palmiye Otel", "Loft Restaurant", "Park Cafe"];
 
 function Home() {
+  const t = useT();
+  const services = useLocalizedServices();
+  const trustBadges = t.home.trust.map((b: any, i: number) => ({ icon: trustIcons[i], label: b.l, desc: b.d }));
+  const stats = t.home.stats;
   return (
     <>
       {/* HERO */}
@@ -57,18 +50,17 @@ function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
               </span>
-              Şu an aktif — 7/24 servis
+              {t.home.activeNow ?? t.common.activeNow}
             </div>
 
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05]">
-              Endüstriyel Teknik Serviste{" "}
-              <span className="text-gradient-primary">Güvenilir</span>{" "}
-              Çözüm Ortağınız
+              {t.home.title1}{" "}
+              <span className="text-gradient-primary">{t.home.titleHighlight}</span>{" "}
+              {t.home.title2}
             </h1>
 
             <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
-              Otel, restoran ve işletmeler için <strong className="text-foreground">7/24 bakım, onarım ve teknik servis.</strong>{" "}
-              Mutfak ekipmanlarından elektrik tesisatına, su sistemlerinden tadilata kadar tek elden profesyonel çözüm.
+              {t.home.sub} <strong className="text-foreground">{t.home.subStrong}</strong> {t.home.subTail}
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -76,7 +68,7 @@ function Home() {
                 to="/hizmetler"
                 className="group inline-flex items-center gap-2 px-7 py-4 rounded-full bg-gradient-primary text-primary-foreground font-semibold btn-3d"
               >
-                Hizmetlerimizi İncele
+                {t.home.ctaServices}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
               </Link>
               <a
@@ -86,7 +78,7 @@ function Home() {
                 className="group inline-flex items-center gap-2 px-7 py-4 rounded-full bg-gradient-accent text-accent-foreground font-semibold btn-3d-accent"
               >
                 <MessageCircle className="w-5 h-5" />
-                Hemen İletişime Geç
+                {t.home.ctaContact}
               </a>
             </div>
 
@@ -99,7 +91,7 @@ function Home() {
                 <Siren className="w-5 h-5 relative" />
               </span>
               <span>
-                <span className="block text-xs text-muted-foreground uppercase tracking-wider">Acil Servis Hattı</span>
+                <span className="block text-xs text-muted-foreground uppercase tracking-wider">{t.common.emergencyLine}</span>
                 <span className="font-display font-bold text-lg group-hover:text-primary transition">+90 533 821 61 72</span>
               </span>
             </a>
@@ -109,7 +101,7 @@ function Home() {
           <div className="relative">
             <div className="absolute -inset-4 bg-gradient-primary opacity-20 blur-3xl rounded-3xl animate-tilt" />
             <div className="relative grid grid-cols-2 gap-4">
-              {trustBadges.map((b, i) => (
+              {trustBadges.map((b: any, i: number) => (
                 <div
                   key={b.label}
                   className="glass card-3d rounded-2xl p-5 reveal"
@@ -131,7 +123,7 @@ function Home() {
       <section className="py-12 bg-gradient-hero text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-mesh opacity-30" />
         <div className="relative container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((s, i) => (
+          {stats.map((s: any, i: number) => (
             <div key={s.l} className="text-center reveal" style={{ transitionDelay: `${i * 100}ms` }}>
               <div className="font-display text-4xl md:text-5xl font-bold text-gradient-accent">{s.v}</div>
               <div className="text-sm text-primary-foreground/70 mt-1 uppercase tracking-wider">{s.l}</div>
@@ -143,9 +135,9 @@ function Home() {
       {/* SERVICES PREVIEW */}
       <section className="py-24 container mx-auto px-4">
         <div className="text-center mb-14 reveal">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">Hizmetlerimiz</div>
-          <h2 className="font-display text-4xl md:text-5xl font-bold">Tek Elden <span className="text-gradient-primary">Tüm Çözümler</span></h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">İşletmenizin teknik altyapısını uzman ekiplerimize emanet edin.</p>
+          <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-4">{t.home.servicesLabel}</div>
+          <h2 className="font-display text-4xl md:text-5xl font-bold">{t.home.servicesTitle1} <span className="text-gradient-primary">{t.home.servicesTitle2}</span></h2>
+          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">{t.home.servicesSub}</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,7 +160,7 @@ function Home() {
                 <h3 className="font-display text-xl font-bold mb-2 group-hover:text-primary transition">{s.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{s.short}</p>
                 <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                  Detay <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+                  {t.common.detail} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
                 </div>
               </div>
             </Link>
@@ -181,39 +173,30 @@ function Home() {
         <div className="absolute inset-0 bg-gradient-mesh opacity-30" />
         <div className="relative container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
           <div className="reveal">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-accent/20 text-accent-foreground text-xs font-semibold uppercase tracking-wider mb-4">Neden FİXATECH?</div>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">İşletmenizin <span className="text-gradient-accent">Sürekliliği</span> İçin Çalışıyoruz</h2>
-            <p className="text-muted-foreground mb-6 text-lg">12 yılı aşkın saha tecrübesi ile otel ve restoran sektörünün teknik servis ihtiyaçlarına özel çözümler üretiyoruz.</p>
+            <div className="inline-block px-4 py-1.5 rounded-full bg-accent/20 text-accent-foreground text-xs font-semibold uppercase tracking-wider mb-4">{t.home.whyLabel}</div>
+            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">{t.home.whyTitle1} <span className="text-gradient-accent">{t.home.whyTitleHi}</span> {t.home.whyTitle2}</h2>
+            <p className="text-muted-foreground mb-6 text-lg">{t.home.whySub}</p>
             <ul className="space-y-3">
-              {[
-                "Sertifikalı ve deneyimli teknik kadro",
-                "Orijinal yedek parça garantisi",
-                "Şeffaf fiyatlandırma — sürpriz yok",
-                "Periyodik bakım sözleşmeleri",
-                "Anlık raporlama ve dijital takip",
-              ].map((t) => (
-                <li key={t} className="flex items-start gap-3">
+              {t.home.whyList.map((line: string) => (
+                <li key={line} className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-success shrink-0 mt-0.5" />
-                  <span className="text-foreground">{t}</span>
+                  <span className="text-foreground">{line}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div className="grid grid-cols-2 gap-4 reveal">
-            {[
-              { icon: ShieldCheck, t: "Garanti", d: "Tüm işlerde 6-12 ay garanti" },
-              { icon: Star, t: "5★ Memnuniyet", d: "Müşteri puanı ortalaması" },
-              { icon: Clock, t: "Zamanında", d: "%98 randevuya sadakat" },
-              { icon: Users, t: "20+ Uzman", d: "Saha & ofis ekibi" },
-            ].map((c) => (
+            {t.home.whyCards.map((c: any, i: number) => {
+              const Icon = [ShieldCheck, Star, Clock, Users][i];
+              return (
               <div key={c.t} className="glass card-3d rounded-2xl p-6 text-center">
                 <div className="bg-gradient-primary w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-glow animate-float">
-                  <c.icon className="w-7 h-7 text-primary-foreground" />
+                  <Icon className="w-7 h-7 text-primary-foreground" />
                 </div>
                 <div className="font-display font-bold text-lg">{c.t}</div>
                 <div className="text-xs text-muted-foreground mt-1">{c.d}</div>
               </div>
-            ))}
+            );})}
           </div>
         </div>
       </section>
@@ -221,7 +204,7 @@ function Home() {
       {/* REFERENCES MARQUEE */}
       <section className="py-16 overflow-hidden">
         <div className="text-center mb-10 reveal">
-          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Birlikte çalıştığımız markalar</p>
+          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">{t.home.brandsLabel}</p>
         </div>
         <div className="relative">
           <div className="flex gap-8 animate-marquee w-max">
@@ -241,15 +224,15 @@ function Home() {
           <div className="absolute -top-20 -right-20 w-80 h-80 bg-accent/30 rounded-full blur-3xl animate-float" />
           <div className="relative grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Tek tıkla profesyonel teklif alın</h2>
-              <p className="text-primary-foreground/80 text-lg">WhatsApp üzerinden hızlı yanıt, telefonla anlık destek.</p>
+              <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">{t.home.ctaTitle}</h2>
+              <p className="text-primary-foreground/80 text-lg">{t.home.ctaSub}</p>
             </div>
             <div className="flex flex-wrap gap-4 md:justify-end">
               <a href={waLink()} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-white text-primary font-semibold btn-3d">
-                <MessageCircle className="w-5 h-5" /> WhatsApp Teklif
+                <MessageCircle className="w-5 h-5" /> {t.common.whatsappOffer}
               </a>
               <a href={`tel:${PHONE_TEL}`} className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-gradient-accent text-accent-foreground font-semibold btn-3d-accent">
-                <Phone className="w-5 h-5" /> Hemen Ara
+                <Phone className="w-5 h-5" /> {t.common.callNow}
               </a>
             </div>
           </div>
