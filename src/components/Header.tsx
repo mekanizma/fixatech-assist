@@ -16,6 +16,8 @@ export function Header() {
     { to: "/hizmetler", label: t.nav.services },
     { to: "/referanslar", label: t.nav.references },
     { to: "/iletisim", label: t.nav.contact },
+    { to: "/teknik-servis", label: t.nav.techService },
+    { to: "/app/giris", label: t.nav.panel },
   ] as const;
 
   useEffect(() => {

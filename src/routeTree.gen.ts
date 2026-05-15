@@ -9,13 +9,35 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TeknikServisRouteImport } from './routes/teknik-servis'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ReferanslarRouteImport } from './routes/referanslar'
 import { Route as IletisimRouteImport } from './routes/iletisim'
 import { Route as HizmetlerRouteImport } from './routes/hizmetler'
 import { Route as HakkimizdaRouteImport } from './routes/hakkimizda'
+import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TakipIndexRouteImport } from './routes/takip/index'
+import { Route as TakipCodeRouteImport } from './routes/takip/$code'
+import { Route as AppGirisRouteImport } from './routes/app/giris'
+import { Route as AppTeknikIndexRouteImport } from './routes/app/teknik/index'
+import { Route as AppMusteriIndexRouteImport } from './routes/app/musteri/index'
+import { Route as AppAdminIndexRouteImport } from './routes/app/admin/index'
+import { Route as AppTeknikGorevlerRouteImport } from './routes/app/teknik/gorevler'
+import { Route as AppMusteriYeniRouteImport } from './routes/app/musteri/yeni'
+import { Route as AppAdminMusterilerRouteImport } from './routes/app/admin/musteriler'
+import { Route as AppAdminEkipRouteImport } from './routes/app/admin/ekip'
+import { Route as AppMusteriKayitlarIndexRouteImport } from './routes/app/musteri/kayitlar/index'
+import { Route as AppAdminKayitlarIndexRouteImport } from './routes/app/admin/kayitlar/index'
+import { Route as AppTeknikGorevTicketIdRouteImport } from './routes/app/teknik/gorev/$ticketId'
+import { Route as AppMusteriKayitlarTicketIdRouteImport } from './routes/app/musteri/kayitlar/$ticketId'
+import { Route as AppAdminKayitlarTicketIdRouteImport } from './routes/app/admin/kayitlar/$ticketId'
 
+const TeknikServisRoute = TeknikServisRouteImport.update({
+  id: '/teknik-servis',
+  path: '/teknik-servis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -41,75 +63,270 @@ const HakkimizdaRoute = HakkimizdaRouteImport.update({
   path: '/hakkimizda',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TakipIndexRoute = TakipIndexRouteImport.update({
+  id: '/takip/',
+  path: '/takip/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TakipCodeRoute = TakipCodeRouteImport.update({
+  id: '/takip/$code',
+  path: '/takip/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppGirisRoute = AppGirisRouteImport.update({
+  id: '/giris',
+  path: '/giris',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppTeknikIndexRoute = AppTeknikIndexRouteImport.update({
+  id: '/teknik/',
+  path: '/teknik/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppMusteriIndexRoute = AppMusteriIndexRouteImport.update({
+  id: '/musteri/',
+  path: '/musteri/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppTeknikGorevlerRoute = AppTeknikGorevlerRouteImport.update({
+  id: '/teknik/gorevler',
+  path: '/teknik/gorevler',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppMusteriYeniRoute = AppMusteriYeniRouteImport.update({
+  id: '/musteri/yeni',
+  path: '/musteri/yeni',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppAdminMusterilerRoute = AppAdminMusterilerRouteImport.update({
+  id: '/admin/musteriler',
+  path: '/admin/musteriler',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppAdminEkipRoute = AppAdminEkipRouteImport.update({
+  id: '/admin/ekip',
+  path: '/admin/ekip',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppMusteriKayitlarIndexRoute = AppMusteriKayitlarIndexRouteImport.update({
+  id: '/musteri/kayitlar/',
+  path: '/musteri/kayitlar/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppAdminKayitlarIndexRoute = AppAdminKayitlarIndexRouteImport.update({
+  id: '/admin/kayitlar/',
+  path: '/admin/kayitlar/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppTeknikGorevTicketIdRoute = AppTeknikGorevTicketIdRouteImport.update({
+  id: '/teknik/gorev/$ticketId',
+  path: '/teknik/gorev/$ticketId',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppMusteriKayitlarTicketIdRoute =
+  AppMusteriKayitlarTicketIdRouteImport.update({
+    id: '/musteri/kayitlar/$ticketId',
+    path: '/musteri/kayitlar/$ticketId',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppAdminKayitlarTicketIdRoute =
+  AppAdminKayitlarTicketIdRouteImport.update({
+    id: '/admin/kayitlar/$ticketId',
+    path: '/admin/kayitlar/$ticketId',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/hakkimizda': typeof HakkimizdaRoute
   '/hizmetler': typeof HizmetlerRoute
   '/iletisim': typeof IletisimRoute
   '/referanslar': typeof ReferanslarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/teknik-servis': typeof TeknikServisRoute
+  '/app/giris': typeof AppGirisRoute
+  '/takip/$code': typeof TakipCodeRoute
+  '/takip/': typeof TakipIndexRoute
+  '/app/admin/ekip': typeof AppAdminEkipRoute
+  '/app/admin/musteriler': typeof AppAdminMusterilerRoute
+  '/app/musteri/yeni': typeof AppMusteriYeniRoute
+  '/app/teknik/gorevler': typeof AppTeknikGorevlerRoute
+  '/app/admin/': typeof AppAdminIndexRoute
+  '/app/musteri/': typeof AppMusteriIndexRoute
+  '/app/teknik/': typeof AppTeknikIndexRoute
+  '/app/admin/kayitlar/$ticketId': typeof AppAdminKayitlarTicketIdRoute
+  '/app/musteri/kayitlar/$ticketId': typeof AppMusteriKayitlarTicketIdRoute
+  '/app/teknik/gorev/$ticketId': typeof AppTeknikGorevTicketIdRoute
+  '/app/admin/kayitlar/': typeof AppAdminKayitlarIndexRoute
+  '/app/musteri/kayitlar/': typeof AppMusteriKayitlarIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/hakkimizda': typeof HakkimizdaRoute
   '/hizmetler': typeof HizmetlerRoute
   '/iletisim': typeof IletisimRoute
   '/referanslar': typeof ReferanslarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/teknik-servis': typeof TeknikServisRoute
+  '/app/giris': typeof AppGirisRoute
+  '/takip/$code': typeof TakipCodeRoute
+  '/takip': typeof TakipIndexRoute
+  '/app/admin/ekip': typeof AppAdminEkipRoute
+  '/app/admin/musteriler': typeof AppAdminMusterilerRoute
+  '/app/musteri/yeni': typeof AppMusteriYeniRoute
+  '/app/teknik/gorevler': typeof AppTeknikGorevlerRoute
+  '/app/admin': typeof AppAdminIndexRoute
+  '/app/musteri': typeof AppMusteriIndexRoute
+  '/app/teknik': typeof AppTeknikIndexRoute
+  '/app/admin/kayitlar/$ticketId': typeof AppAdminKayitlarTicketIdRoute
+  '/app/musteri/kayitlar/$ticketId': typeof AppMusteriKayitlarTicketIdRoute
+  '/app/teknik/gorev/$ticketId': typeof AppTeknikGorevTicketIdRoute
+  '/app/admin/kayitlar': typeof AppAdminKayitlarIndexRoute
+  '/app/musteri/kayitlar': typeof AppMusteriKayitlarIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/hakkimizda': typeof HakkimizdaRoute
   '/hizmetler': typeof HizmetlerRoute
   '/iletisim': typeof IletisimRoute
   '/referanslar': typeof ReferanslarRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/teknik-servis': typeof TeknikServisRoute
+  '/app/giris': typeof AppGirisRoute
+  '/takip/$code': typeof TakipCodeRoute
+  '/takip/': typeof TakipIndexRoute
+  '/app/admin/ekip': typeof AppAdminEkipRoute
+  '/app/admin/musteriler': typeof AppAdminMusterilerRoute
+  '/app/musteri/yeni': typeof AppMusteriYeniRoute
+  '/app/teknik/gorevler': typeof AppTeknikGorevlerRoute
+  '/app/admin/': typeof AppAdminIndexRoute
+  '/app/musteri/': typeof AppMusteriIndexRoute
+  '/app/teknik/': typeof AppTeknikIndexRoute
+  '/app/admin/kayitlar/$ticketId': typeof AppAdminKayitlarTicketIdRoute
+  '/app/musteri/kayitlar/$ticketId': typeof AppMusteriKayitlarTicketIdRoute
+  '/app/teknik/gorev/$ticketId': typeof AppTeknikGorevTicketIdRoute
+  '/app/admin/kayitlar/': typeof AppAdminKayitlarIndexRoute
+  '/app/musteri/kayitlar/': typeof AppMusteriKayitlarIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
     | '/hakkimizda'
     | '/hizmetler'
     | '/iletisim'
     | '/referanslar'
     | '/sitemap.xml'
+    | '/teknik-servis'
+    | '/app/giris'
+    | '/takip/$code'
+    | '/takip/'
+    | '/app/admin/ekip'
+    | '/app/admin/musteriler'
+    | '/app/musteri/yeni'
+    | '/app/teknik/gorevler'
+    | '/app/admin/'
+    | '/app/musteri/'
+    | '/app/teknik/'
+    | '/app/admin/kayitlar/$ticketId'
+    | '/app/musteri/kayitlar/$ticketId'
+    | '/app/teknik/gorev/$ticketId'
+    | '/app/admin/kayitlar/'
+    | '/app/musteri/kayitlar/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app'
     | '/hakkimizda'
     | '/hizmetler'
     | '/iletisim'
     | '/referanslar'
     | '/sitemap.xml'
+    | '/teknik-servis'
+    | '/app/giris'
+    | '/takip/$code'
+    | '/takip'
+    | '/app/admin/ekip'
+    | '/app/admin/musteriler'
+    | '/app/musteri/yeni'
+    | '/app/teknik/gorevler'
+    | '/app/admin'
+    | '/app/musteri'
+    | '/app/teknik'
+    | '/app/admin/kayitlar/$ticketId'
+    | '/app/musteri/kayitlar/$ticketId'
+    | '/app/teknik/gorev/$ticketId'
+    | '/app/admin/kayitlar'
+    | '/app/musteri/kayitlar'
   id:
     | '__root__'
     | '/'
+    | '/app'
     | '/hakkimizda'
     | '/hizmetler'
     | '/iletisim'
     | '/referanslar'
     | '/sitemap.xml'
+    | '/teknik-servis'
+    | '/app/giris'
+    | '/takip/$code'
+    | '/takip/'
+    | '/app/admin/ekip'
+    | '/app/admin/musteriler'
+    | '/app/musteri/yeni'
+    | '/app/teknik/gorevler'
+    | '/app/admin/'
+    | '/app/musteri/'
+    | '/app/teknik/'
+    | '/app/admin/kayitlar/$ticketId'
+    | '/app/musteri/kayitlar/$ticketId'
+    | '/app/teknik/gorev/$ticketId'
+    | '/app/admin/kayitlar/'
+    | '/app/musteri/kayitlar/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   HakkimizdaRoute: typeof HakkimizdaRoute
   HizmetlerRoute: typeof HizmetlerRoute
   IletisimRoute: typeof IletisimRoute
   ReferanslarRoute: typeof ReferanslarRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TeknikServisRoute: typeof TeknikServisRoute
+  TakipCodeRoute: typeof TakipCodeRoute
+  TakipIndexRoute: typeof TakipIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/teknik-servis': {
+      id: '/teknik-servis'
+      path: '/teknik-servis'
+      fullPath: '/teknik-servis'
+      preLoaderRoute: typeof TeknikServisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -145,6 +362,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HakkimizdaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -152,17 +376,172 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/takip/': {
+      id: '/takip/'
+      path: '/takip'
+      fullPath: '/takip/'
+      preLoaderRoute: typeof TakipIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/takip/$code': {
+      id: '/takip/$code'
+      path: '/takip/$code'
+      fullPath: '/takip/$code'
+      preLoaderRoute: typeof TakipCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/giris': {
+      id: '/app/giris'
+      path: '/giris'
+      fullPath: '/app/giris'
+      preLoaderRoute: typeof AppGirisRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/teknik/': {
+      id: '/app/teknik/'
+      path: '/teknik'
+      fullPath: '/app/teknik/'
+      preLoaderRoute: typeof AppTeknikIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/musteri/': {
+      id: '/app/musteri/'
+      path: '/musteri'
+      fullPath: '/app/musteri/'
+      preLoaderRoute: typeof AppMusteriIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/admin/': {
+      id: '/app/admin/'
+      path: '/admin'
+      fullPath: '/app/admin/'
+      preLoaderRoute: typeof AppAdminIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/teknik/gorevler': {
+      id: '/app/teknik/gorevler'
+      path: '/teknik/gorevler'
+      fullPath: '/app/teknik/gorevler'
+      preLoaderRoute: typeof AppTeknikGorevlerRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/musteri/yeni': {
+      id: '/app/musteri/yeni'
+      path: '/musteri/yeni'
+      fullPath: '/app/musteri/yeni'
+      preLoaderRoute: typeof AppMusteriYeniRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/admin/musteriler': {
+      id: '/app/admin/musteriler'
+      path: '/admin/musteriler'
+      fullPath: '/app/admin/musteriler'
+      preLoaderRoute: typeof AppAdminMusterilerRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/admin/ekip': {
+      id: '/app/admin/ekip'
+      path: '/admin/ekip'
+      fullPath: '/app/admin/ekip'
+      preLoaderRoute: typeof AppAdminEkipRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/musteri/kayitlar/': {
+      id: '/app/musteri/kayitlar/'
+      path: '/musteri/kayitlar'
+      fullPath: '/app/musteri/kayitlar/'
+      preLoaderRoute: typeof AppMusteriKayitlarIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/admin/kayitlar/': {
+      id: '/app/admin/kayitlar/'
+      path: '/admin/kayitlar'
+      fullPath: '/app/admin/kayitlar/'
+      preLoaderRoute: typeof AppAdminKayitlarIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/teknik/gorev/$ticketId': {
+      id: '/app/teknik/gorev/$ticketId'
+      path: '/teknik/gorev/$ticketId'
+      fullPath: '/app/teknik/gorev/$ticketId'
+      preLoaderRoute: typeof AppTeknikGorevTicketIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/musteri/kayitlar/$ticketId': {
+      id: '/app/musteri/kayitlar/$ticketId'
+      path: '/musteri/kayitlar/$ticketId'
+      fullPath: '/app/musteri/kayitlar/$ticketId'
+      preLoaderRoute: typeof AppMusteriKayitlarTicketIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/admin/kayitlar/$ticketId': {
+      id: '/app/admin/kayitlar/$ticketId'
+      path: '/admin/kayitlar/$ticketId'
+      fullPath: '/app/admin/kayitlar/$ticketId'
+      preLoaderRoute: typeof AppAdminKayitlarTicketIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
+interface AppRouteRouteChildren {
+  AppGirisRoute: typeof AppGirisRoute
+  AppAdminEkipRoute: typeof AppAdminEkipRoute
+  AppAdminMusterilerRoute: typeof AppAdminMusterilerRoute
+  AppMusteriYeniRoute: typeof AppMusteriYeniRoute
+  AppTeknikGorevlerRoute: typeof AppTeknikGorevlerRoute
+  AppAdminIndexRoute: typeof AppAdminIndexRoute
+  AppMusteriIndexRoute: typeof AppMusteriIndexRoute
+  AppTeknikIndexRoute: typeof AppTeknikIndexRoute
+  AppAdminKayitlarTicketIdRoute: typeof AppAdminKayitlarTicketIdRoute
+  AppMusteriKayitlarTicketIdRoute: typeof AppMusteriKayitlarTicketIdRoute
+  AppTeknikGorevTicketIdRoute: typeof AppTeknikGorevTicketIdRoute
+  AppAdminKayitlarIndexRoute: typeof AppAdminKayitlarIndexRoute
+  AppMusteriKayitlarIndexRoute: typeof AppMusteriKayitlarIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppGirisRoute: AppGirisRoute,
+  AppAdminEkipRoute: AppAdminEkipRoute,
+  AppAdminMusterilerRoute: AppAdminMusterilerRoute,
+  AppMusteriYeniRoute: AppMusteriYeniRoute,
+  AppTeknikGorevlerRoute: AppTeknikGorevlerRoute,
+  AppAdminIndexRoute: AppAdminIndexRoute,
+  AppMusteriIndexRoute: AppMusteriIndexRoute,
+  AppTeknikIndexRoute: AppTeknikIndexRoute,
+  AppAdminKayitlarTicketIdRoute: AppAdminKayitlarTicketIdRoute,
+  AppMusteriKayitlarTicketIdRoute: AppMusteriKayitlarTicketIdRoute,
+  AppTeknikGorevTicketIdRoute: AppTeknikGorevTicketIdRoute,
+  AppAdminKayitlarIndexRoute: AppAdminKayitlarIndexRoute,
+  AppMusteriKayitlarIndexRoute: AppMusteriKayitlarIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   HakkimizdaRoute: HakkimizdaRoute,
   HizmetlerRoute: HizmetlerRoute,
   IletisimRoute: IletisimRoute,
   ReferanslarRoute: ReferanslarRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TeknikServisRoute: TeknikServisRoute,
+  TakipCodeRoute: TakipCodeRoute,
+  TakipIndexRoute: TakipIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

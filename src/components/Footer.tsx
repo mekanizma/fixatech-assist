@@ -40,6 +40,8 @@ export function Footer() {
               <li><Link to="/hakkimizda" className="hover:text-primary-glow transition">{t.nav.about}</Link></li>
               <li><Link to="/referanslar" className="hover:text-primary-glow transition">{t.nav.references}</Link></li>
               <li><Link to="/iletisim" className="hover:text-primary-glow transition">{t.nav.contact}</Link></li>
+              <li><Link to="/teknik-servis" className="hover:text-primary-glow transition">{t.nav.techService}</Link></li>
+              <li><Link to="/app/giris" className="hover:text-primary-glow transition">{t.nav.panel}</Link></li>
               <li><a href={waLink()} className="hover:text-primary-glow transition">{t.common.whatsappOffer}</a></li>
             </ul>
           </div>

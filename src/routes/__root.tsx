@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -51,6 +52,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <p className="mt-2 text-sm text-muted-foreground">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
+        {import.meta.env.DEV && error?.message ? (
+          <p className="mt-3 max-w-md text-xs text-destructive font-mono break-all">{error.message}</p>
+        ) : null}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -123,18 +127,29 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isPanel = pathname.startsWith("/app") || pathname.startsWith("/takip");
 
   return (
     <QueryClientProvider client={queryClient}>
       <LangProvider>
-        <ScrollReveal />
-        <Header />
-        <main className="min-h-screen pt-20">
-          <Outlet />
-        </main>
-        <Footer />
-        <WhatsAppFab />
-        <Toaster />
+        {isPanel ? (
+          <>
+            <Outlet />
+            <Toaster />
+          </>
+        ) : (
+          <>
+            <ScrollReveal />
+            <Header />
+            <main className="min-h-screen pt-20">
+              <Outlet />
+            </main>
+            <Footer />
+            <WhatsAppFab />
+            <Toaster />
+          </>
+        )}
       </LangProvider>
     </QueryClientProvider>
   );
