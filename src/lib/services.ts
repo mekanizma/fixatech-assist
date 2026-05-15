@@ -1,3 +1,5 @@
+import { useT } from "@/lib/i18n";
+
 import kitchenImg from "@/assets/service-kitchen.jpg";
 import electricImg from "@/assets/service-electric.jpg";
 import plumbingImg from "@/assets/service-plumbing.jpg";
