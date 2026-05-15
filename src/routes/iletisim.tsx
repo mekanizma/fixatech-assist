@@ -20,7 +20,7 @@ export const Route = createFileRoute("/iletisim")({
 });
 
 function Contact() {
-  const [form, setForm] = useState({ name: "", company: "", service: services[0].title, message: "" });
+  const [form, setForm] = useState<{ name: string; company: string; service: string; message: string }>({ name: "", company: "", service: services[0].title, message: "" });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();

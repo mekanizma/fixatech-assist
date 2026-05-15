@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, Phone, Wrench } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { PHONE, PHONE_TEL } from "@/lib/site";
+import logo from "@/assets/logo.jpeg";
 
 const links = [
   { to: "/", label: "Ana Sayfa" },
@@ -29,17 +30,12 @@ export function Header() {
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-primary rounded-xl blur-md opacity-60 group-hover:opacity-100 transition-opacity" />
-            <div className="relative bg-gradient-primary p-2.5 rounded-xl shadow-glow">
-              <Wrench className="w-5 h-5 text-primary-foreground" />
-            </div>
-          </div>
-          <div className="leading-tight">
-            <div className="font-display font-bold text-xl tracking-tight">FİXATECH</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Teknik Servis</div>
-          </div>
+        <Link to="/" className="flex items-center gap-2 group" aria-label="FİXATECH">
+          <img
+            src={logo}
+            alt="FİXATECH logosu"
+            className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-md"
+          />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
