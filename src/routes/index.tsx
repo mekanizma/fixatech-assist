@@ -141,7 +141,7 @@ function Home() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.slice(0, 6).map((s, i) => (
+          {services.slice(0, 6).map((s: any, i: number) => (
             <Link
               key={s.slug}
               to="/hizmetler"
