@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   User,
   Building2,
@@ -11,16 +11,18 @@ import {
   Clock,
   Truck,
   AlertTriangle,
-  Send,
+  ClipboardList,
+  MessageCircle,
   Wrench,
   ShieldCheck,
-  ClipboardList,
   MessageSquare,
   ChevronRight,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PHONE, PHONE_TEL, waLink } from "@/lib/site";
+import { createFormSubmission } from "@/lib/form-submissions/api";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n";
 import { buildPageHead, SEO_PAGES } from "@/lib/seo";
 
@@ -65,8 +67,8 @@ const initialForm = (): FormState => ({
   issue: "",
   address: "",
   district: "",
-  city: "İstanbul",
-  delivery: "pickup",
+  city: "",
+  delivery: "onsite",
   pickupDate: "",
   pickupTime: "",
   urgency: "normal",
@@ -76,21 +78,73 @@ const initialForm = (): FormState => ({
 function TechService() {
   const t = useT();
   const ts = t.techService;
+  const navigate = useNavigate();
   const [form, setForm] = useState<FormState>(initialForm);
+  const [sendingPanel, setSendingPanel] = useState(false);
+  const [sendingWa, setSendingWa] = useState(false);
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
+
+  const saveToPanel = async () => {
+    const msg = ts.buildMsg(form);
+    return createFormSubmission({
+      type: "tech_service",
+      contactName: form.name,
+      contactPhone: form.phone,
+      contactEmail: form.email,
+      companyName: form.company,
+      summary: `${form.productName}${form.company ? ` — ${form.company}` : form.name ? ` — ${form.name}` : ""}`,
+      payload: { ...form },
+      whatsappMessage: msg,
+    });
+  };
+
+  const submitToPanel = async () => {
+    if (!isSupabaseConfigured()) {
+      toast.error(ts.toastPanelNoDb);
+      return;
+    }
+    setSendingPanel(true);
+    try {
+      await saveToPanel();
+      navigate({
+        to: "/teknik-servis/basarili",
+        state: {
+          contactName: form.name,
+          phone: form.phone,
+          productName: form.productName,
+        },
+        replace: true,
+      });
+    } catch {
+      toast.error(ts.toastPanelError);
+    } finally {
+      setSendingPanel(false);
+    }
+  };
+
+  const submitWhatsApp = async () => {
+    const msg = ts.buildMsg(form);
+    setSendingWa(true);
+    try {
+      if (isSupabaseConfigured()) {
+        try {
+          await saveToPanel();
+        } catch {
+          toast.error("Form panelde kaydedilemedi; WhatsApp ile göndermeye devam edebilirsiniz.");
+        }
+      }
+      window.open(waLink(msg), "_blank");
+      toast.success(ts.toastTitle, { description: ts.toastDesc });
+    } finally {
+      setSendingWa(false);
+    }
+  };
 
   const categories = ts.categories as string[];
   const timeSlots = ts.timeSlots as string[];
   const deliveryOptions = ts.deliveryOptions as { value: string; label: string; desc: string }[];
   const urgencyOptions = ts.urgencyOptions as { value: string; label: string; desc: string }[];
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const msg = ts.buildMsg(form);
-    window.open(waLink(msg), "_blank");
-    toast.success(ts.toastTitle, { description: ts.toastDesc });
-  };
 
   const minDate = new Date().toISOString().split("T")[0];
 
@@ -156,7 +210,13 @@ function TechService() {
 
       <section className="container mx-auto px-4 pb-24">
         <div className="grid xl:grid-cols-[1fr_340px] gap-8 items-start">
-          <form onSubmit={submit} className="space-y-6 reveal">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void submitToPanel();
+            }}
+            className="space-y-6 reveal"
+          >
             <FormSection icon={User} title={ts.sections.contact} subtitle={ts.sections.contactSub}>
               <div className="grid sm:grid-cols-2 gap-4">
                 <Field icon={User} label={ts.f.name} required>
@@ -294,7 +354,13 @@ function TechService() {
                   />
                 </Field>
                 <Field icon={MapPin} label={ts.f.city} required>
-                  <input value={form.city} onChange={(e) => set("city", e.target.value)} required className="input" />
+                  <input
+                    value={form.city}
+                    onChange={(e) => set("city", e.target.value)}
+                    required
+                    className="input"
+                    placeholder={ts.f.cityPh}
+                  />
                 </Field>
               </div>
             </FormSection>
@@ -401,17 +467,28 @@ function TechService() {
               </div>
             </FormSection>
 
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 pt-2">
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-primary text-primary-foreground font-semibold btn-3d text-base"
+                disabled={sendingPanel || sendingWa}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-primary text-primary-foreground font-semibold btn-3d text-base disabled:opacity-60"
               >
-                <Send className="w-4 h-4" />
-                {ts.submit}
+                <ClipboardList className="w-4 h-4" />
+                {sendingPanel ? "Gönderiliyor..." : ts.submitPanel}
+              </button>
+              <button
+                type="button"
+                disabled={sendingPanel || sendingWa}
+                onClick={() => void submitWhatsApp()}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold btn-3d text-base text-white disabled:opacity-60"
+                style={{ background: "linear-gradient(135deg, #25D366, #128C7E)" }}
+              >
+                <MessageCircle className="w-4 h-4" />
+                {sendingWa ? "Açılıyor..." : ts.submit}
               </button>
               <a
                 href={`tel:${PHONE_TEL}`}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-accent text-accent-foreground font-semibold btn-3d-accent"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-accent text-accent-foreground font-semibold btn-3d-accent"
               >
                 <Phone className="w-4 h-4" />
                 {t.common.callNow}

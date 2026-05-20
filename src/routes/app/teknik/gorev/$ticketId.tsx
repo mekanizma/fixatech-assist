@@ -1,20 +1,14 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { CheckCircle2, Camera } from "lucide-react";
+import { Camera } from "lucide-react";
 import { TicketDetailView } from "@/components/service-desk/TicketDetailView";
+import { TicketPricingPanel } from "@/components/service-desk/TicketPricingPanel";
 import { useAuth } from "@/lib/service-desk/auth";
-import {
-  completeTicket,
-  addTicketPhoto,
-  updateTicketStatus,
-  addTicketNote,
-} from "@/lib/service-desk/api";
+import { addTicketPhoto, updateTicketStatus } from "@/lib/service-desk/api";
 import { deskKeys } from "@/lib/service-desk/query-keys";
 import { useDeskData } from "@/hooks/use-desk-data";
 import { useTicket } from "@/hooks/use-service-desk";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
@@ -33,7 +27,6 @@ function TechJobDetail() {
   const qc = useQueryClient();
   const { user } = useAuth();
   const ticket = useTicket(ticketId);
-  const [work, setWork] = useState(ticket?.workPerformed ?? "");
   const [signature, setSignature] = useState("");
 
   if (!ticket || !user) throw notFound();
@@ -70,12 +63,15 @@ function TechJobDetail() {
         }
       />
 
-      <div className="max-w-2xl rounded-2xl border bg-card p-6 space-y-4">
+      <TicketPricingPanel
+        ticket={ticket}
+        actor={actor}
+        showComplete
+        technicianSignature={signature || user.name}
+      />
+
+      <div className="max-w-3xl rounded-2xl border bg-card p-6 space-y-4">
         <h2 className="font-display font-bold text-lg">Saha İşlemleri</h2>
-        <div className="space-y-2">
-          <Label>Yapılan işlem</Label>
-          <Textarea value={work} onChange={(e) => setWork(e.target.value)} rows={3} />
-        </div>
         <div className="space-y-2">
           <Label>Dijital imza (ad soyad)</Label>
           <Input value={signature} onChange={(e) => setSignature(e.target.value)} placeholder="Teknisyen imzası" />
@@ -102,45 +98,6 @@ function TechJobDetail() {
             }}
           />
         </label>
-        <div className="flex flex-wrap gap-2 pt-2">
-          <Button
-            variant="outline"
-            onClick={async () => {
-              if (!work.trim()) return;
-              try {
-                await addTicketNote(ticket.id, work, actor);
-                await qc.invalidateQueries({ queryKey: deskKeys.all });
-                toast.success("İşlem kaydedildi");
-              } catch (e) {
-                toast.error(e instanceof Error ? e.message : "Kaydedilemedi");
-              }
-            }}
-          >
-            İşlemi Kaydet
-          </Button>
-          <Button
-            className="rounded-full"
-            onClick={async () => {
-              if (!work.trim()) {
-                toast.error("Yapılan işlemi girin");
-                return;
-              }
-              try {
-                await completeTicket(
-                  ticket.id,
-                  { workPerformed: work, technicianSignature: signature || user.name },
-                  actor,
-                );
-                await qc.invalidateQueries({ queryKey: deskKeys.all });
-                toast.success("İş tamamlandı");
-              } catch (e) {
-                toast.error(e instanceof Error ? e.message : "Tamamlanamadı");
-              }
-            }}
-          >
-            <CheckCircle2 className="h-4 w-4 mr-2" /> İş Tamamlandı
-          </Button>
-        </div>
       </div>
     </div>
   );

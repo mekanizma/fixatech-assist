@@ -124,19 +124,35 @@ type Props = {
   showWhatsApp?: boolean;
 };
 
-function applyCompanyDefaults(
+/** Tanımlı tüm alanları birleştirir (firma + ürün + servis planlama). */
+function mergeFormInitial(
   prev: ServiceFormValues,
   initial?: Partial<ServiceFormValues>,
 ): ServiceFormValues {
   if (!initial) return prev;
   const next = { ...prev };
-  for (const key of COMPANY_FIELDS) {
+  for (const key of Object.keys(initial) as (keyof ServiceFormValues)[]) {
     const value = initial[key];
-    if (value !== undefined && value !== "") {
+    if (value !== undefined) {
       next[key] = value as ServiceFormValues[typeof key];
     }
   }
   return next;
+}
+
+function applyCompanyDefaults(
+  prev: ServiceFormValues,
+  initial?: Partial<ServiceFormValues>,
+): ServiceFormValues {
+  if (!initial) return prev;
+  const patch: Partial<ServiceFormValues> = {};
+  for (const key of COMPANY_FIELDS) {
+    const value = initial[key];
+    if (value !== undefined && value !== "") {
+      patch[key] = value as ServiceFormValues[typeof key];
+    }
+  }
+  return mergeFormInitial(prev, patch);
 }
 
 export function ServiceRequestForm({
@@ -146,10 +162,10 @@ export function ServiceRequestForm({
   submitLabel = "Servis Talebi Oluştur",
   showWhatsApp = true,
 }: Props) {
-  const [form, setForm] = useState<ServiceFormValues>(() => applyCompanyDefaults({ ...empty }, initial));
+  const [form, setForm] = useState<ServiceFormValues>(() => mergeFormInitial({ ...empty }, initial));
 
   useEffect(() => {
-    setForm((prev) => applyCompanyDefaults(prev, initial));
+    setForm((prev) => mergeFormInitial(prev, initial));
   }, [
     initial?.companyName,
     initial?.contactPerson,
@@ -159,6 +175,18 @@ export function ServiceRequestForm({
     initial?.district,
     initial?.city,
     initial?.businessType,
+    initial?.productType,
+    initial?.productName,
+    initial?.brand,
+    initial?.model,
+    initial?.serialNo,
+    initial?.quantity,
+    initial?.issueDescription,
+    initial?.urgency,
+    initial?.serviceDate,
+    initial?.serviceTime,
+    initial?.serviceMode,
+    initial?.notes,
   ]);
 
   const set = <K extends keyof ServiceFormValues>(k: K, v: ServiceFormValues[K]) =>

@@ -3,9 +3,9 @@ import { useAuth } from "@/lib/service-desk/auth";
 import { useDeskData } from "@/hooks/use-desk-data";
 import { TicketStatusBadge } from "@/components/service-desk/TicketStatusBadge";
 import { formatDate } from "@/lib/service-desk/utils";
-import { openServiceReportPdf } from "@/lib/service-desk/pdf";
+import { openDeliveryFormPdf, openServiceApplicationPdf } from "@/lib/service-desk/pdf";
 import { Button } from "@/components/ui/button";
-import { FileText } from "lucide-react";
+import { ClipboardList, Package } from "lucide-react";
 
 export const Route = createFileRoute("/app/musteri/kayitlar/")({
   component: CustomerTickets,
@@ -45,14 +45,28 @@ function CustomerTickets() {
               <Button
                 variant="outline"
                 size="sm"
+                title="Başvuru formu"
                 onClick={() =>
-                  openServiceReportPdf(t, {
+                  openServiceApplicationPdf(t, {
                     events: desk.events.filter((e) => e.ticketId === t.id),
                     technician: desk.technicians.find((x) => x.id === t.assignedTechnicianId),
                   })
                 }
               >
-                <FileText className="h-4 w-4" />
+                <ClipboardList className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                title="Teslim formu"
+                onClick={() =>
+                  openDeliveryFormPdf(t, {
+                    events: desk.events.filter((e) => e.ticketId === t.id),
+                    technician: desk.technicians.find((x) => x.id === t.assignedTechnicianId),
+                  })
+                }
+              >
+                <Package className="h-4 w-4" />
               </Button>
             </div>
           </div>

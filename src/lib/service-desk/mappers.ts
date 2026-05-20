@@ -5,6 +5,7 @@ import type {
   TicketEvent,
   User,
   PartUsed,
+  WorkLineItem,
 } from "./types";
 
 export type DbCompany = {
@@ -73,6 +74,7 @@ export type DbTicket = {
   previous_service: boolean;
   notes: string;
   work_performed: string | null;
+  work_items: WorkLineItem[] | null;
   parts_used: PartUsed[] | null;
   invoice_amount: number | null;
   technician_signature: string | null;
@@ -166,8 +168,9 @@ export function mapTicket(row: DbTicket): ServiceTicket {
     previousService: row.previous_service,
     notes: row.notes,
     workPerformed: row.work_performed ?? undefined,
+    workItems: (row.work_items ?? []).length ? (row.work_items ?? []) : undefined,
     partsUsed: row.parts_used ?? undefined,
-    invoiceAmount: row.invoice_amount ?? undefined,
+    invoiceAmount: row.invoice_amount != null ? Number(row.invoice_amount) : undefined,
     technicianSignature: row.technician_signature ?? undefined,
     customerSignature: row.customer_signature ?? undefined,
     location: row.location ?? undefined,
@@ -224,6 +227,7 @@ export function ticketToInsert(
     previous_service: input.previousService,
     notes: input.notes,
     work_performed: input.workPerformed ?? null,
+    work_items: input.workItems ?? [],
     parts_used: input.partsUsed ?? null,
     invoice_amount: input.invoiceAmount ?? null,
     technician_signature: input.technicianSignature ?? null,

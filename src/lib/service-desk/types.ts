@@ -52,6 +52,12 @@ export interface PartUsed {
   cost?: number;
 }
 
+/** İşçilik / yapılan işlem fiyat kalemi */
+export interface WorkLineItem {
+  description: string;
+  amount: number;
+}
+
 export interface TicketEvent {
   id: string;
   ticketId: string;
@@ -96,6 +102,7 @@ export interface ServiceTicket {
   previousService: boolean;
   notes: string;
   workPerformed?: string;
+  workItems?: WorkLineItem[];
   partsUsed?: PartUsed[];
   invoiceAmount?: number;
   technicianSignature?: string;

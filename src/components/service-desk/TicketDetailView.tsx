@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { FileText, MapPin, Phone, User } from "lucide-react";
+import { ClipboardList, MapPin, Package, Phone, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/service-desk/TicketStatusBadge";
 import { StatusStepper, TicketTimeline } from "@/components/service-desk/TicketTimeline";
-import { openServiceReportPdf } from "@/lib/service-desk/pdf";
+import { openDeliveryFormPdf, openServiceApplicationPdf } from "@/lib/service-desk/pdf";
 import { useTechnician, useTicketEvents } from "@/hooks/use-service-desk";
 import { formatDate, statusProgress } from "@/lib/service-desk/utils";
 import { BUSINESS_LABELS } from "@/lib/service-desk/constants";
+import { computeInvoiceTotal, formatTry } from "@/lib/service-desk/pricing";
 import type { ServiceTicket } from "@/lib/service-desk/types";
 import { Progress } from "@/components/ui/progress";
 
@@ -35,9 +36,15 @@ export function TicketDetailView({
         <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
-            onClick={() => openServiceReportPdf(ticket, { events, technician: tech })}
+            onClick={() => openServiceApplicationPdf(ticket, { events, technician: tech })}
           >
-            <FileText className="h-4 w-4 mr-2" /> PDF Rapor
+            <ClipboardList className="h-4 w-4 mr-2" /> Başvuru Formu
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => openDeliveryFormPdf(ticket, { events, technician: tech })}
+          >
+            <Package className="h-4 w-4 mr-2" /> Teslim Formu
           </Button>
           {actions}
         </div>
@@ -118,12 +125,56 @@ export function TicketDetailView({
         </Card>
       )}
 
+      {(ticket.workItems?.length || ticket.partsUsed?.length || ticket.invoiceAmount) && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Fiyatlandırma</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm space-y-3">
+            {ticket.workItems?.length ? (
+              <div>
+                <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">İşçilik</p>
+                <ul className="space-y-1">
+                  {ticket.workItems.map((w, i) => (
+                    <li key={i} className="flex justify-between gap-4">
+                      <span>{w.description}</span>
+                      <span className="font-medium shrink-0">{formatTry(Number(w.amount) || 0)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            {ticket.partsUsed?.length ? (
+              <div>
+                <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">Parçalar</p>
+                <ul className="space-y-1">
+                  {ticket.partsUsed.map((p, i) => (
+                    <li key={i} className="flex justify-between gap-4">
+                      <span>
+                        {p.name} × {p.qty}
+                      </span>
+                      <span className="font-medium shrink-0">{formatTry(Number(p.cost) || 0)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            <div className="flex justify-between pt-2 border-t font-semibold">
+              <span>Toplam</span>
+              <span className="text-primary">
+                {formatTry(ticket.invoiceAmount ?? computeInvoiceTotal(ticket.workItems, ticket.partsUsed))}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {ticket.workPerformed && (
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Yapılan İşlemler</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm">{ticket.workPerformed}</CardContent>
+          <CardContent className="text-sm whitespace-pre-wrap">{ticket.workPerformed}</CardContent>
         </Card>
       )}
 

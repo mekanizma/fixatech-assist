@@ -3,6 +3,8 @@ import { Phone, MessageCircle, Mail, MapPin, Clock, Send, User, Building, Wrench
 import { useState } from "react";
 import { toast } from "sonner";
 import { PHONE, PHONE_TEL, EMAIL, ADDRESS, MAP_EMBED_URL, MAP_LINK, waLink } from "@/lib/site";
+import { createFormSubmission } from "@/lib/form-submissions/api";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { useLocalizedServices } from "@/lib/services";
 import { useT } from "@/lib/i18n";
 import { buildPageHead, SEO_PAGES } from "@/lib/seo";
@@ -17,9 +19,23 @@ function Contact() {
   const services = useLocalizedServices();
   const [form, setForm] = useState<{ name: string; company: string; service: string; message: string }>({ name: "", company: "", service: services[0].title, message: "" });
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const msg = t.contact.buildMsg(form.name, form.company, form.service, form.message);
+    if (isSupabaseConfigured()) {
+      try {
+        await createFormSubmission({
+          type: "contact",
+          contactName: form.name,
+          companyName: form.company,
+          summary: `${form.name} — ${form.service}`,
+          payload: { ...form },
+          whatsappMessage: msg,
+        });
+      } catch {
+        toast.error("Form panelde kaydedilemedi; WhatsApp ile göndermeye devam edebilirsiniz.");
+      }
+    }
     window.open(waLink(msg), "_blank");
     toast.success(t.contact.toastTitle, { description: t.contact.toastDesc });
   };

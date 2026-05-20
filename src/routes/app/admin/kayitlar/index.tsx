@@ -35,7 +35,7 @@ function AdminTickets() {
           <p className="text-muted-foreground text-sm">{filtered.length} kayıt</p>
         </div>
         <Button asChild className="rounded-full">
-          <Link to="/app/musteri/yeni">
+          <Link to="/app/admin/kayitlar/yeni">
             <Plus className="h-4 w-4 mr-2" /> Yeni Kayıt
           </Link>
         </Button>

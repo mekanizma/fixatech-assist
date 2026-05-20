@@ -1,4 +1,4 @@
-import type { BusinessType, ServiceStatus, Urgency } from "./types";
+import type { BusinessType, ServiceMode, ServiceStatus, Urgency } from "./types";
 
 export const STORAGE_KEY = "fixatech-service-desk-v1";
 export const SESSION_KEY = "fixatech-session-v1";
@@ -53,6 +53,11 @@ export const BUSINESS_LABELS: Record<BusinessType, string> = {
   cafe: "Kafe",
   industrial_kitchen: "Endüstriyel Mutfak",
   corporate: "Kurumsal",
+};
+
+export const SERVICE_MODE_LABELS: Record<ServiceMode, string> = {
+  onsite: "Yerinde Servis",
+  workshop: "Atölye Servisi",
 };
 
 export const DEMO_ACCOUNTS = [

@@ -463,6 +463,7 @@ export async function updateTicket(
   const row: Record<string, unknown> = {};
   if (patch.status !== undefined) row.status = patch.status;
   if (patch.workPerformed !== undefined) row.work_performed = patch.workPerformed;
+  if (patch.workItems !== undefined) row.work_items = patch.workItems;
   if (patch.partsUsed !== undefined) row.parts_used = patch.partsUsed;
   if (patch.invoiceAmount !== undefined) row.invoice_amount = patch.invoiceAmount;
   if (patch.technicianSignature !== undefined) row.technician_signature = patch.technicianSignature;
@@ -491,6 +492,7 @@ export async function completeTicket(
   ticketId: string,
   payload: {
     workPerformed: string;
+    workItems?: ServiceTicket["workItems"];
     partsUsed?: ServiceTicket["partsUsed"];
     technicianSignature?: string;
     customerSignature?: string;
@@ -504,6 +506,7 @@ export async function completeTicket(
     .update({
       status: "completed",
       work_performed: payload.workPerformed,
+      work_items: payload.workItems ?? [],
       parts_used: payload.partsUsed ?? null,
       technician_signature: payload.technicianSignature ?? null,
       customer_signature: payload.customerSignature ?? null,

@@ -2,6 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   ClipboardList,
+  FileText,
   Users,
   Wrench,
   PlusCircle,
@@ -28,6 +29,7 @@ const NAV: Record<UserRole, NavItem[]> = {
   admin: [
     { to: "/app/admin", label: "Dashboard", icon: LayoutDashboard },
     { to: "/app/admin/kayitlar", label: "Servis Kayıtları", icon: ClipboardList },
+    { to: "/app/admin/talep-formlari", label: "Talep Formları", icon: FileText },
     { to: "/app/admin/musteriler", label: "Müşteriler", icon: Users },
     { to: "/app/admin/ekip", label: "Teknik Ekip", icon: Wrench },
   ],

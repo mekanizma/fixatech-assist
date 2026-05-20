@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { TicketDetailView } from "@/components/service-desk/TicketDetailView";
+import { TicketPricingPanel } from "@/components/service-desk/TicketPricingPanel";
 import { useAuth } from "@/lib/service-desk/auth";
 import { assignTechnician, updateTicketStatus, addTicketNote } from "@/lib/service-desk/api";
 import { deskKeys } from "@/lib/service-desk/query-keys";
@@ -32,6 +33,7 @@ function AdminTicketDetail() {
   const actor = { id: user.id, name: user.name };
 
   return (
+    <div className="space-y-6">
     <TicketDetailView
       ticket={ticket}
       actions={
@@ -102,5 +104,7 @@ function AdminTicketDetail() {
         </div>
       }
     />
+    <TicketPricingPanel ticket={ticket} actor={actor} />
+    </div>
   );
 }
