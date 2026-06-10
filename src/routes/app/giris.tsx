@@ -1,10 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Wrench, Shield, User, HardHat, Sparkles } from "lucide-react";
+import { Wrench, Shield, User, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { COMPANY } from "@/lib/site";
 import { useAuth } from "@/lib/service-desk/auth";
-import { DEMO_ACCOUNTS } from "@/lib/service-desk/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { roleHome } from "@/lib/service-desk/utils";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/giris")({
   component: LoginPage,
@@ -85,8 +83,8 @@ function LoginHero() {
 function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@pragmatechnical.com");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
@@ -127,7 +125,7 @@ function LoginPage() {
           <Card className="border-border/60 shadow-xl shadow-primary/5">
             <CardHeader className="space-y-1 pb-2">
               <CardTitle className="font-display text-2xl">Panele Giriş</CardTitle>
-              <CardDescription>Hesabınızla devam edin veya demo hesap seçin</CardDescription>
+              <CardDescription>Kurumsal hesabınızla giriş yapın</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={submit} className="space-y-4">
@@ -157,32 +155,6 @@ function LoginPage() {
                   {submitting ? "Giriş yapılıyor…" : "Giriş Yap"}
                 </Button>
               </form>
-
-              <div className="mt-6 space-y-2 rounded-xl border border-border/60 bg-muted/30 p-4">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Demo hesaplar
-                </p>
-                {DEMO_ACCOUNTS.map((a) => (
-                  <button
-                    key={a.email}
-                    type="button"
-                    className={cn(
-                      "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs transition",
-                      "hover:bg-background hover:shadow-sm",
-                    )}
-                    onClick={() => {
-                      setEmail(a.email);
-                      setPassword(a.password);
-                    }}
-                  >
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
-                      <HardHat className="h-3.5 w-3.5 text-primary" />
-                    </span>
-                    <span className="font-medium">{a.hint}</span>
-                    <span className="ml-auto truncate text-muted-foreground">{a.email}</span>
-                  </button>
-                ))}
-              </div>
 
               <p className="mt-6 text-center text-xs text-muted-foreground">
                 <Link to="/" className="font-medium text-primary hover:underline">

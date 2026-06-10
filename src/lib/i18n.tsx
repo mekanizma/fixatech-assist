@@ -26,8 +26,61 @@ const dict: Record<Lang, Dict> = {
       response: "Müdahale",
       switchTo: "Switch to English",
     },
+    seo: {
+      areasLabel: "Hizmet Bölgeleri",
+      areasTitle: "KKTC'de Tamir, Bakım ve Onarım Hizmeti",
+      areasSub:
+        "Girne merkezli ekibimizle Kuzey Kıbrıs'ın dört bir yanında otel, restoran ve işletmelere yerinde teknik servis sunuyoruz. Acil arıza, periyodik bakım ve tadilat işlerinde tek adres.",
+      areas: [
+        "Girne",
+        "Lefkoşa",
+        "Gazimağusa",
+        "Güzelyurt",
+        "İskele",
+        "Alsancak",
+        "Lapta",
+        "Çatalköy",
+        "Esentepe",
+        "Bellapais",
+      ],
+      servicesLabel: "Uzmanlık",
+      servicesTitle: "KKTC Teknik Servis Kapsamımız",
+      servicesSub:
+        "Endüstriyel mutfaktan elektrik ve su tesisatına kadar işletmenizin tüm teknik altyapı ihtiyaçlarını tek çatı altında karşılıyoruz.",
+      serviceBullets: [
+        "Endüstriyel mutfak ekipmanı tamiri ve periyodik bakımı",
+        "Elektrik pano, aydınlatma ve acil arıza müdahalesi",
+        "Su kaçağı tespiti, tıkanıklık açma ve pompa servisi",
+        "Otel ve restoran tadilat, renovasyon projeleri",
+        "7/24 acil teknik servis ve mobil saha ekibi",
+      ],
+      faqLabel: "SSS",
+      faqTitle: "Sık Sorulan Sorular",
+      faqs: [
+        {
+          q: "KKTC'nin hangi bölgelerine teknik servis veriyorsunuz?",
+          a: "Girne merkezli olarak Girne, Lefkoşa, Gazimağusa, Güzelyurt, İskele ve çevre mahallelere yerinde tamir, bakım ve onarım hizmeti sunuyoruz.",
+        },
+        {
+          q: "Otel ve restoranlar için periyodik bakım yapıyor musunuz?",
+          a: "Evet. Endüstriyel mutfak, elektrik ve su tesisatı için aylık veya yıllık bakım sözleşmeleri ile arıza riskini azaltıyoruz.",
+        },
+        {
+          q: "Acil arızada ne kadar sürede müdahale ediyorsunuz?",
+          a: "Kritik arızalarda Girne ve yakın bölgelerde ortalama 30–60 dakika içinde saha ekibimizi yönlendiriyoruz. 7/24 hatlarımız açıktır.",
+        },
+        {
+          q: "Endüstriyel mutfak ve soğutma sistemi tamiri yapıyor musunuz?",
+          a: "Konveksiyonlu fırın, bulaşık makinesi, soğuk oda ve tüm mutfak ekipmanlarında kurulum, tamir ve bakım hizmeti veriyoruz.",
+        },
+        {
+          q: "Tamir ve onarım işlerinde garanti veriyor musunuz?",
+          a: "Tüm işlerimizde şeffaf fiyatlandırma ve işçilik garantisi sunuyoruz. Yapılan işlemler dijital servis raporunda kayıt altına alınır.",
+        },
+      ],
+    },
     home: {
-      metaTitle: "PRAGMATECHNICAL | Girne Teknik Servis — Profesyonel ve Kalıcı Çözümler",
+      metaTitle: "KKTC Girne Teknik Servis | Tamir, Bakım, Onarım — PRAGMATECHNICAL",
       heroTitle: [
         { text: "Teknik Sorunlarınıza" },
         { text: "Profesyonel", emphasis: true },
@@ -320,9 +373,11 @@ const dict: Record<Lang, Dict> = {
       },
     },
     footer: {
-      tag: "Teknik sorunlarınıza profesyonel ve kalıcı çözümler sunuyoruz.",
+      tag: "KKTC ve Girne'de otel, restoran ve işletmelere tamir, bakım ve onarımda profesyonel teknik servis.",
       ctaTitle: "7/24 teknik destek bir tık uzağınızda",
-      ctaSub: "Girne ve KKTC genelinde hızlı müdahale, şeffaf fiyat, garantili işçilik.",
+      ctaSub: "Girne, Lefkoşa, Gazimağusa ve KKTC genelinde hızlı müdahale — şeffaf fiyat, garantili işçilik.",
+      areasTitle: "Hizmet Bölgeleri",
+      areas: ["Girne", "Lefkoşa", "Gazimağusa", "Güzelyurt", "İskele"],
       services: "Hizmetler",
       corp: "Kurumsal",
       contact: "İletişim",
@@ -390,8 +445,61 @@ const dict: Record<Lang, Dict> = {
       response: "Response",
       switchTo: "Türkçe'ye geç",
     },
+    seo: {
+      areasLabel: "Service Areas",
+      areasTitle: "Repair, Maintenance & Service in Northern Cyprus",
+      areasSub:
+        "From our Girne base we provide on-site technical service across Northern Cyprus for hotels, restaurants and businesses — emergency repair, scheduled maintenance and renovation.",
+      areas: [
+        "Girne (Kyrenia)",
+        "Lefkoşa (Nicosia)",
+        "Gazimağusa (Famagusta)",
+        "Güzelyurt (Morphou)",
+        "İskele (Trikomo)",
+        "Alsancak",
+        "Lapta",
+        "Çatalköy",
+        "Esentepe",
+        "Bellapais",
+      ],
+      servicesLabel: "Expertise",
+      servicesTitle: "Our Technical Service Scope in NC",
+      servicesSub:
+        "From industrial kitchens to electrical and plumbing — we cover your entire technical infrastructure under one roof.",
+      serviceBullets: [
+        "Industrial kitchen equipment repair and preventive maintenance",
+        "Electrical panels, lighting and emergency fault response",
+        "Leak detection, drain clearing and pump service",
+        "Hotel and restaurant renovation projects",
+        "24/7 emergency technical service with mobile field teams",
+      ],
+      faqLabel: "FAQ",
+      faqTitle: "Frequently Asked Questions",
+      faqs: [
+        {
+          q: "Which areas in Northern Cyprus do you serve?",
+          a: "Based in Girne, we cover Girne, Lefkoşa, Gazimağusa, Güzelyurt, İskele and surrounding areas with on-site repair, maintenance and service.",
+        },
+        {
+          q: "Do you offer preventive maintenance for hotels and restaurants?",
+          a: "Yes. We offer monthly or annual maintenance contracts for industrial kitchens, electrical and plumbing systems.",
+        },
+        {
+          q: "How fast is emergency response?",
+          a: "For critical faults in Girne and nearby areas we typically dispatch a field team within 30–60 minutes. Our lines are open 24/7.",
+        },
+        {
+          q: "Do you repair industrial kitchen and refrigeration equipment?",
+          a: "Yes — combi ovens, dishwashers, cold rooms and all kitchen equipment: installation, repair and maintenance.",
+        },
+        {
+          q: "Do you guarantee repair work?",
+          a: "We offer transparent pricing and workmanship warranty. All work is recorded in a digital service report.",
+        },
+      ],
+    },
     home: {
-      metaTitle: "PRAGMATECHNICAL | Girne Technical Service — Professional & Lasting Solutions",
+      metaTitle: "NC Girne Technical Service | Repair & Maintenance — PRAGMATECHNICAL",
       heroTitle: [
         { text: "We Provide" },
         { text: "Professional", emphasis: true },
@@ -683,9 +791,11 @@ const dict: Record<Lang, Dict> = {
       },
     },
     footer: {
-      tag: "We provide professional and lasting solutions to your technical problems.",
+      tag: "Professional repair, maintenance and service for hotels, restaurants and businesses in Girne and Northern Cyprus.",
       ctaTitle: "24/7 technical support is one click away",
-      ctaSub: "Fast response across Girne and Northern Cyprus — transparent pricing, guaranteed workmanship.",
+      ctaSub: "Fast response across Girne, Lefkoşa, Famagusta and NC — transparent pricing, guaranteed workmanship.",
+      areasTitle: "Service Areas",
+      areas: ["Girne", "Lefkoşa", "Gazimağusa", "Güzelyurt", "İskele"],
       services: "Services",
       corp: "Company",
       contact: "Contact",

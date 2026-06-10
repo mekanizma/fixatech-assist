@@ -49,6 +49,12 @@ export function Footer() {
           {/* Marka */}
           <div className="flex flex-col items-center pt-8 text-center sm:col-span-2 sm:pt-10 lg:col-span-1 lg:pt-12">
             <p className="max-w-sm text-sm leading-relaxed text-primary-foreground/80 sm:text-base">{t.footer.tag}</p>
+            <p className="mt-3 text-[10px] font-semibold uppercase tracking-widest text-primary-glow">
+              {t.footer.areasTitle}
+            </p>
+            <p className="mt-1 max-w-sm text-xs leading-relaxed text-primary-foreground/65">
+              {t.footer.areas.join(" · ")}
+            </p>
             <div className="mt-4 flex justify-center gap-2">
               <a
                 href="#"

@@ -2,12 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { SEO_PAGES, SITE_URL } from "@/lib/seo";
 
-const PUBLIC_PATHS = [
-  SEO_PAGES.home,
-  SEO_PAGES.about,
-  SEO_PAGES.services,
-  SEO_PAGES.contact,
-  SEO_PAGES.techService,
+const PUBLIC_PAGES = [
+  { ...SEO_PAGES.home, priority: "1.0", changefreq: "weekly" },
+  { ...SEO_PAGES.services, priority: "0.9", changefreq: "weekly" },
+  { ...SEO_PAGES.techService, priority: "0.9", changefreq: "weekly" },
+  { ...SEO_PAGES.contact, priority: "0.8", changefreq: "monthly" },
+  { ...SEO_PAGES.about, priority: "0.7", changefreq: "monthly" },
 ] as const;
 
 export const Route = createFileRoute("/sitemap.xml")({
@@ -15,13 +15,13 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const lastmod = new Date().toISOString().slice(0, 10);
-        const urls = PUBLIC_PATHS.map(
+        const urls = PUBLIC_PAGES.map(
           (page) =>
             `  <url>
     <loc>${SITE_URL}${page.path === "/" ? "" : page.path}</loc>
     <lastmod>${lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>${page.path === "/" ? "1.0" : "0.8"}</priority>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
   </url>`,
         ).join("\n");
         const xml = `<?xml version="1.0" encoding="UTF-8"?>

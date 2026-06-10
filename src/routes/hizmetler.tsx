@@ -31,6 +31,7 @@ function Services() {
       <section className="container mx-auto px-4 pb-24 space-y-10">
         {services.map((s, i) => (
           <article
+            id={s.slug}
             key={s.slug}
             className={`group grid lg:grid-cols-2 gap-8 items-center bg-gradient-card rounded-3xl overflow-hidden border border-border card-3d reveal ${
               i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""

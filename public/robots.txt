@@ -3,4 +3,5 @@ Allow: /
 Disallow: /app/
 Disallow: /takip/
 
+# KKTC Girne teknik servis — PRAGMATECHNICAL
 Sitemap: https://pragmatechnical.com.tr/sitemap.xml

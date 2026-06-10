@@ -1,12 +1,106 @@
 import { ADDRESS_REGION, ADDRESS_STREET, COMPANY, EMAIL, PHONE_TEL } from "@/lib/site";
 
-export const SITE_URL = (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, "") || "https://pragmatechnical.com.tr";
+export const SITE_URL =
+  (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, "") || "https://pragmatechnical.com.tr";
 
 export const OG_IMAGE =
   "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/88f3bdf4-db66-4eb7-bde3-122840072f36/id-preview-78933056--1e8218dc-4c87-4ecd-9914-4c3d3b2aa4e6.lovable.app-1778829939425.png";
 
-export const SEO_KEYWORDS =
-  "pragmatechnical, girne teknik servis, kktc teknik servis, girne endüstriyel mutfak tamiri, otel teknik servis girne, restoran bakım onarım kktc, elektrik tesisat girne, su tesisatı tamir, acil teknik servis 7/24, profesyonel teknik çözüm, endüstriyel teknik servis";
+/** KKTC / Girne odaklı anahtar kelime kümesi */
+export const SEO_KEYWORDS = [
+  "kktc teknik servis",
+  "girne teknik servis",
+  "kktc tamir bakım onarım",
+  "girne tamirat",
+  "kktc endüstriyel mutfak tamiri",
+  "girne endüstriyel mutfak servisi",
+  "kktc otel teknik servis",
+  "girne restoran bakım onarım",
+  "kktc elektrik tesisatı",
+  "girne su tesisatı tamir",
+  "kktc acil teknik servis 7/24",
+  "kuzey kıbrıs teknik servis",
+  "lefkoşa teknik servis",
+  "gazimağusa tamirat",
+  "pragmatechnical",
+  "profesyonel teknik çözüm",
+  "periyodik bakım sözleşmesi kktc",
+  "soğutma sistemi onarım girne",
+  "konveksiyonlu fırın servisi kktc",
+].join(", ");
+
+/** Hizmet verilen KKTC bölgeleri — yerel SEO */
+export const KKTC_SERVICE_AREAS = [
+  "Girne",
+  "Lefkoşa",
+  "Gazimağusa",
+  "Güzelyurt",
+  "İskele",
+  "Alsancak",
+  "Lapta",
+  "Çatalköy",
+  "Esentepe",
+  "Bellapais",
+] as const;
+
+export type SeoFaq = { question: string; answer: string };
+
+export const SEO_FAQS: SeoFaq[] = [
+  {
+    question: "KKTC'nin hangi bölgelerine teknik servis veriyorsunuz?",
+    answer:
+      "Girne merkezli olarak Girne, Lefkoşa, Gazimağusa, Güzelyurt, İskele ve çevre mahallelere yerinde tamir, bakım ve onarım hizmeti sunuyoruz.",
+  },
+  {
+    question: "Otel ve restoranlar için periyodik bakım yapıyor musunuz?",
+    answer:
+      "Evet. Endüstriyel mutfak, elektrik ve su tesisatı için aylık veya yıllık bakım sözleşmeleri ile arıza riskini azaltıyoruz.",
+  },
+  {
+    question: "Acil arızada ne kadar sürede müdahale ediyorsunuz?",
+    answer:
+      "Kritik arızalarda Girne ve yakın bölgelerde ortalama 30–60 dakika içinde saha ekibimizi yönlendiriyoruz. 7/24 hatlarımız açıktır.",
+  },
+  {
+    question: "Endüstriyel mutfak ve soğutma sistemi tamiri yapıyor musunuz?",
+    answer:
+      "Konveksiyonlu fırın, bulaşık makinesi, soğuk oda ve tüm mutfak ekipmanlarında kurulum, tamir ve bakım hizmeti veriyoruz.",
+  },
+  {
+    question: "Tamir ve onarım işlerinde garanti veriyor musunuz?",
+    answer:
+      "Tüm işlerimizde şeffaf fiyatlandırma ve işçilik garantisi sunuyoruz. Yapılan işlemler dijital servis raporunda kayıt altına alınır.",
+  },
+];
+
+export const SERVICE_CATALOG = [
+  {
+    slug: "endustriyel-mutfak",
+    name: "Endüstriyel Mutfak Tamir ve Bakım",
+    description:
+      "KKTC'de konveksiyonlu fırın, bulaşık makinesi, soğutma ve gazlı ocak onarımı; otel ve restoranlara yerinde servis.",
+  },
+  {
+    slug: "elektrik-tesisati",
+    name: "Elektrik Tesisatı Tamir ve Bakım",
+    description: "Girne ve KKTC genelinde pano, aydınlatma, topraklama ve acil elektrik arıza müdahalesi.",
+  },
+  {
+    slug: "su-tesisati",
+    name: "Su Tesisatı Onarım",
+    description: "Su kaçağı tespiti, tıkanıklık açma, pompa ve hidrofor bakımı; tahribatsız müdahale.",
+  },
+  {
+    slug: "tadilat-tamirat",
+    name: "Tadilat ve Genel Tamirat",
+    description: "Otel ve restoran renovasyonu, mutfak yenileme, alçıpan, boya ve fayans işleri.",
+  },
+  {
+    slug: "acil-servis",
+    name: "Acil Teknik Servis 7/24",
+    description: "KKTC'de kritik arızalarda hızlı saha müdahalesi ve mobil servis desteği.",
+  },
+] as const;
 
 export type PageSeoConfig = {
   title: string;
@@ -22,6 +116,13 @@ export function absoluteUrl(path: string) {
   return `${SITE_URL}${normalized}`;
 }
 
+const GEO_META = [
+  { name: "geo.region", content: "CY" },
+  { name: "geo.placename", content: "Girne, KKTC" },
+  { name: "geo.position", content: "35.34;33.32" },
+  { name: "ICBM", content: "35.34, 33.32" },
+] as const;
+
 export function buildPageHead(page: PageSeoConfig) {
   const canonical = absoluteUrl(page.path);
   const ogTitle = page.ogTitle ?? page.title;
@@ -34,14 +135,16 @@ export function buildPageHead(page: PageSeoConfig) {
       { name: "author", content: COMPANY },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { name: "googlebot", content: "index, follow" },
+      ...GEO_META,
       { property: "og:title", content: ogTitle },
       { property: "og:description", content: page.description },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical },
       { property: "og:locale", content: "tr_TR" },
+      { property: "og:locale:alternate", content: "en_US" },
       { property: "og:site_name", content: COMPANY },
       { property: "og:image", content: OG_IMAGE },
-      { property: "og:image:alt", content: `${COMPANY} — Girne endüstriyel teknik servis` },
+      { property: "og:image:alt", content: `${COMPANY} — KKTC Girne teknik servis, tamir ve bakım` },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: ogTitle },
       { name: "twitter:description", content: page.description },
@@ -50,6 +153,7 @@ export function buildPageHead(page: PageSeoConfig) {
     links: [
       { rel: "canonical", href: canonical },
       { rel: "alternate", href: canonical, hrefLang: "tr" },
+      { rel: "alternate", href: canonical, hrefLang: "en" },
       { rel: "alternate", href: canonical, hrefLang: "x-default" },
     ],
   };
@@ -67,55 +171,65 @@ export function buildNoIndexHead(title: string) {
 export const SEO_PAGES = {
   home: {
     path: "/",
-    title: "PRAGMATECHNICAL | Girne Teknik Servis — Profesyonel ve Kalıcı Çözümler",
+    title: "KKTC Girne Teknik Servis | Tamir, Bakım, Onarım — PRAGMATECHNICAL",
     description:
-      "Teknik sorunlarınıza profesyonel ve kalıcı çözümler. KKTC Girne'de otel, restoran ve işletmeler için 7/24 endüstriyel mutfak, elektrik, su tesisatı ve tadilat.",
+      "KKTC ve Girne'de otel, restoran ve işletmelere 7/24 teknik servis. Endüstriyel mutfak tamiri, elektrik ve su tesisatı onarımı, periyodik bakım ve acil müdahale — şeffaf fiyat, garantili işçilik.",
     keywords:
-      "girne teknik servis, kktc teknik servis, profesyonel teknik çözüm, kalıcı onarım, endüstriyel mutfak tamiri girne",
+      "kktc teknik servis, girne tamir bakım onarım, kktc endüstriyel mutfak tamiri, girne acil teknik servis, otel restoran bakım kktc",
   },
   about: {
     path: "/hakkimizda",
-    title: "Hakkımızda | PRAGMATECHNICAL — Girne Endüstriyel Teknik Servis",
+    title: "Hakkımızda | KKTC Girne Teknik Servis — PRAGMATECHNICAL",
     description:
-      "PRAGMATECHNICAL: KKTC Girne merkezli, otel ve restoranlara profesyonel teknik servis. Deneyimli ekip, şeffaf fiyat, garantili işçilik.",
+      "PRAGMATECHNICAL: KKTC Girne merkezli teknik servis firması. Otel, restoran ve kurumsal işletmelere tamir, bakım, onarım ve periyodik bakım sözleşmeleri. Deneyimli saha ekibi, garantili işçilik.",
+    keywords:
+      "kktc teknik servis firması, girne bakım onarım şirketi, endüstriyel teknik servis kktc, pragmatechnical hakkında",
   },
   services: {
     path: "/hizmetler",
-    title: "Hizmetler | Endüstriyel Mutfak, Elektrik, Su Tesisatı — PRAGMATECHNICAL Girne",
+    title: "Hizmetler | KKTC Tamir, Bakım ve Onarım — PRAGMATECHNICAL Girne",
     description:
-      "Girne ve KKTC'de endüstriyel mutfak ekipmanı, elektrik, su tesisatı, tadilat ve 7/24 acil teknik servis hizmetleri.",
+      "Girne ve KKTC'de endüstriyel mutfak ekipmanı tamiri, elektrik tesisatı, su tesisatı onarımı, tadilat ve 7/24 acil teknik servis. Otel ve restoranlara özel çözümler.",
+    keywords:
+      "kktc endüstriyel mutfak servisi, girne elektrik tamiri, kktc su tesisatı onarım, otel bakım hizmeti girne, restoran tamirat kktc",
   },
   contact: {
     path: "/iletisim",
-    title: "İletişim | PRAGMATECHNICAL Girne — 7/24 Teknik Servis",
+    title: "İletişim | KKTC 7/24 Teknik Servis — PRAGMATECHNICAL Girne",
     description:
-      "PRAGMATECHNICAL ile iletişime geçin: telefon, WhatsApp, e-posta. Türk Mahallesi No: 10, KKTC/Girne. Hızlı teklif ve acil müdahale.",
+      "KKTC Girne teknik servis için hemen arayın veya WhatsApp ile yazın. Türk Mahallesi No: 10, Girne. Acil tamir, bakım teklifi ve randevu — hızlı yanıt.",
+    keywords:
+      "girne teknik servis telefon, kktc acil tamirat iletişim, pragmatechnical whatsapp, girne teknik servis adres",
   },
   techService: {
     path: "/teknik-servis",
-    title: "Teknik Servis Talebi | Online Kayıt — PRAGMATECHNICAL",
+    title: "Online Teknik Servis Talebi | KKTC Tamir Kaydı — PRAGMATECHNICAL",
     description:
-      "Ürün bilgisi ve adresinizle online teknik servis talebi oluşturun. Girne ve KKTC genelinde hızlı randevu ve WhatsApp onayı.",
+      "KKTC'de online teknik servis talebi oluşturun. Ürün bilgisi, adres ve randevu ile hızlı kayıt; Girne ve çevresinde yerinde tamir, bakım ve onarım.",
+    keywords:
+      "kktc online teknik servis, girne arıza kaydı, ürün tamir talebi kktc, teknik servis formu girne",
   },
 } as const satisfies Record<string, PageSeoConfig>;
 
 export function getLocalBusinessJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
     "@id": `${SITE_URL}/#organization`,
     name: COMPANY,
+    alternateName: "PRAGMATECHNICAL Teknik Servis",
     url: SITE_URL,
     logo: OG_IMAGE,
     image: OG_IMAGE,
     telephone: PHONE_TEL,
     email: EMAIL,
     description: SEO_PAGES.home.description,
+    slogan: "KKTC'de profesyonel tamir, bakım ve onarım",
     address: {
       "@type": "PostalAddress",
       streetAddress: ADDRESS_STREET,
       addressLocality: "Girne",
-      addressRegion: ADDRESS_REGION,
+      addressRegion: "KKTC",
       addressCountry: "CY",
     },
     geo: {
@@ -123,9 +237,24 @@ export function getLocalBusinessJsonLd() {
       latitude: 35.34,
       longitude: 33.32,
     },
-    areaServed: [
-      { "@type": "City", name: "Girne" },
-      { "@type": "AdministrativeArea", name: "KKTC" },
+    areaServed: KKTC_SERVICE_AREAS.map((name) => ({
+      "@type": "City",
+      name,
+      containedInPlace: { "@type": "AdministrativeArea", name: "KKTC" },
+    })),
+    serviceType: [
+      "Endüstriyel mutfak tamiri",
+      "Elektrik tesisatı onarımı",
+      "Su tesisatı tamiratı",
+      "Periyodik bakım",
+      "Acil teknik servis",
+      "Tadilat ve renovasyon",
+    ],
+    knowsAbout: [
+      "KKTC teknik servis",
+      "Girne tamir bakım onarım",
+      "Otel teknik bakım",
+      "Restoran ekipman servisi",
     ],
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
@@ -140,7 +269,21 @@ export function getLocalBusinessJsonLd() {
       availableLanguage: ["Turkish", "English"],
       areaServed: "CY",
     },
-    sameAs: [],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "KKTC Teknik Servis Hizmetleri",
+      itemListElement: SERVICE_CATALOG.map((s, i) => ({
+        "@type": "Offer",
+        position: i + 1,
+        itemOffered: {
+          "@type": "Service",
+          name: s.name,
+          description: s.description,
+          areaServed: { "@type": "AdministrativeArea", name: "KKTC" },
+          provider: { "@id": `${SITE_URL}/#organization` },
+        },
+      })),
+    },
     priceRange: "$$",
   };
 }
@@ -155,6 +298,59 @@ export function getWebSiteJsonLd() {
     description: SEO_PAGES.home.description,
     inLanguage: ["tr", "en"],
     publisher: { "@id": `${SITE_URL}/#organization` },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE_URL}/takip/{search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function getFaqJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${SITE_URL}/#faq`,
+    mainEntity: SEO_FAQS.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+export function getServicesItemListJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${SITE_URL}/#services`,
+    name: "KKTC Teknik Servis Hizmetleri",
+    itemListElement: SERVICE_CATALOG.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: s.name,
+      description: s.description,
+      url: `${SITE_URL}/hizmetler#${s.slug}`,
+    })),
+  };
+}
+
+/** Tüm yapılandırılmış veri grafiği */
+export function getSeoJsonLdGraph() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      getLocalBusinessJsonLd(),
+      getWebSiteJsonLd(),
+      getFaqJsonLd(),
+      getServicesItemListJsonLd(),
+    ],
   };
 }
 
@@ -169,6 +365,7 @@ export function buildDefaultSiteHead() {
       { name: "keywords", content: SEO_KEYWORDS },
       { name: "author", content: COMPANY },
       { name: "theme-color", content: "#1e3a5f" },
+      ...GEO_META,
       { property: "og:site_name", content: COMPANY },
       { property: "og:locale", content: "tr_TR" },
       { property: "og:image", content: OG_IMAGE },

@@ -9,6 +9,7 @@ import { useT } from "@/lib/i18n";
 import { HeroHeadline, type HeroTitleSegment } from "@/components/HeroHeadline";
 import { HeroTrustCards } from "@/components/HeroTrustCards";
 import { buildPageHead, SEO_PAGES } from "@/lib/seo";
+import { SeoLocalSection } from "@/components/SeoLocalSection";
 
 export const Route = createFileRoute("/")({
   head: () => buildPageHead(SEO_PAGES.home),
@@ -167,6 +168,8 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <SeoLocalSection />
 
       {/* CTA */}
       <section className="py-20 container mx-auto px-4">
