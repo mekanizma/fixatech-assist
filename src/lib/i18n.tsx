@@ -27,7 +27,7 @@ const dict: Record<Lang, Dict> = {
       switchTo: "Switch to English",
     },
     home: {
-      metaTitle: "FİXATECH | Girne Teknik Servis — Profesyonel ve Kalıcı Çözümler",
+      metaTitle: "PRAGMATECHNICAL | Girne Teknik Servis — Profesyonel ve Kalıcı Çözümler",
       heroTitle: [
         { text: "Teknik Sorunlarınıza" },
         { text: "Profesyonel", emphasis: true },
@@ -60,7 +60,7 @@ const dict: Record<Lang, Dict> = {
       servicesTitle1: "Tek Elden",
       servicesTitle2: "Tüm Çözümler",
       servicesSub: "İşletmenizin teknik altyapısını uzman ekiplerimize emanet edin.",
-      whyLabel: "Neden FİXATECH?",
+      whyLabel: "Neden PRAGMATECHNICAL?",
       whyTitle1: "İşletmenizin",
       whyTitleHi: "Sürekliliği",
       whyTitle2: "İçin Çalışıyoruz",
@@ -86,11 +86,11 @@ const dict: Record<Lang, Dict> = {
       label: "Hakkımızda",
       title1: "Endüstriyel teknik serviste",
       titleHi: "12+ yıllık tecrübe",
-      lead: "FİXATECH; otel, restoran ve kurumsal işletmelerin teknik altyapı ihtiyaçlarına çözüm üreten, sertifikalı uzman ekibiyle hizmet veren bir teknik servis firmasıdır.",
+      lead: "PRAGMATECHNICAL; otel, restoran ve kurumsal işletmelerin teknik altyapı ihtiyaçlarına çözüm üreten, sertifikalı uzman ekibiyle hizmet veren bir teknik servis firmasıdır.",
       teamTitle: "Profesyonel Saha Ekibi",
       teamDesc: "Mutfak şefleri, mühendisler ve teknik ustalar — sektörün ihtiyaçlarını en iyi anlayan kadro.",
       storyTitle: "Firma Hikayemiz",
-      story1: "2012 yılında küçük bir teknik servis atölyesi olarak yola çıkan FİXATECH, kısa sürede İstanbul'un önde gelen otel ve restoran zincirlerinin tercih ettiği teknik servis ortağı haline geldi.",
+      story1: "2012 yılında küçük bir teknik servis atölyesi olarak yola çıkan PRAGMATECHNICAL, kısa sürede İstanbul'un önde gelen otel ve restoran zincirlerinin tercih ettiği teknik servis ortağı haline geldi.",
       story2: "Bugün 20'yi aşkın saha uzmanı, mobil servis araçları ve geniş yedek parça ağı ile 500'den fazla işletmenin teknik altyapısının sürekliliğini sağlıyoruz.",
       mottoLead: "Mottomuz net:",
       motto: "\"Sizin işletmeniz durmasın diye, biz hiç durmayız.\"",
@@ -100,7 +100,7 @@ const dict: Record<Lang, Dict> = {
         { t: "Değerlerimiz", d: "Şeffaflık, dürüstlük, zamanında teslimat ve müşteri memnuniyeti." },
         { t: "Yaklaşımımız", d: "Geçici tamir değil, kalıcı çözüm üreten profesyonel bakış." },
       ],
-      whyTitle: "Neden FİXATECH?",
+      whyTitle: "Neden PRAGMATECHNICAL?",
       whySub: "Kurumsal müşterilerimizin bizi tercih etme sebepleri.",
       whyCards: [
         { t: "Sertifikalı Ekip", d: "Tüm teknisyenlerimiz alanında belgeli, sürekli eğitimden geçen profesyoneller." },
@@ -134,7 +134,7 @@ const dict: Record<Lang, Dict> = {
       testimonials: [
         { name: "Mehmet Y.", role: "Grand Bosphorus Hotel — Teknik Müdür", text: "Endüstriyel mutfağımızda yaşadığımız bir arızada gece yarısı aradık, 45 dakika içinde sahadaydılar. Bu profesyonellik kurumsal işletmeler için paha biçilmez." },
         { name: "Ayşe K.", role: "La Cucina — İşletmeci", text: "3 yıldır periyodik bakım anlaşmamız var. Aylık raporları, şeffaf fiyatlandırmaları ve disiplinli ekipleriyle gerçek bir çözüm ortağı." },
-        { name: "Can D.", role: "Mavi Gıda — Operasyon Direktörü", text: "Tek tedarikçiyle tüm teknik servisi yönetmek inanılmaz pratik. FİXATECH bizim için birden fazla firmanın yerini doldurdu." },
+        { name: "Can D.", role: "Mavi Gıda — Operasyon Direktörü", text: "Tek tedarikçiyle tüm teknik servisi yönetmek inanılmaz pratik. PRAGMATECHNICAL bizim için birden fazla firmanın yerini doldurdu." },
       ],
     },
     contact: {
@@ -292,7 +292,7 @@ const dict: Record<Lang, Dict> = {
           { value: "emergency", label: "7/24 Acil" },
         ].find((u) => u.value === f.urgency)?.label ?? f.urgency;
         return [
-          "🔧 *TEKNİK SERVİS TALEBİ — FİXATECH*",
+          "🔧 *TEKNİK SERVİS TALEBİ — PRAGMATECHNICAL*",
           "",
           `👤 *İletişim:* ${f.name}${f.company ? ` (${f.company})` : ""}`,
           `📞 *Telefon:* ${f.phone}`,
@@ -391,7 +391,7 @@ const dict: Record<Lang, Dict> = {
       switchTo: "Türkçe'ye geç",
     },
     home: {
-      metaTitle: "FİXATECH | Girne Technical Service — Professional & Lasting Solutions",
+      metaTitle: "PRAGMATECHNICAL | Girne Technical Service — Professional & Lasting Solutions",
       heroTitle: [
         { text: "We Provide" },
         { text: "Professional", emphasis: true },
@@ -424,7 +424,7 @@ const dict: Record<Lang, Dict> = {
       servicesTitle1: "All Solutions,",
       servicesTitle2: "One Source",
       servicesSub: "Entrust your technical infrastructure to our expert teams.",
-      whyLabel: "Why FİXATECH?",
+      whyLabel: "Why PRAGMATECHNICAL?",
       whyTitle1: "We Work for Your Business",
       whyTitleHi: "Continuity",
       whyTitle2: "",
@@ -450,11 +450,11 @@ const dict: Record<Lang, Dict> = {
       label: "About",
       title1: "12+ years of expertise in",
       titleHi: "industrial technical service",
-      lead: "FİXATECH is a technical service company providing solutions for the technical infrastructure needs of hotels, restaurants and corporate businesses with a certified expert team.",
+      lead: "PRAGMATECHNICAL is a technical service company providing solutions for the technical infrastructure needs of hotels, restaurants and corporate businesses with a certified expert team.",
       teamTitle: "Professional Field Team",
       teamDesc: "Kitchen specialists, engineers and technicians — the team that best understands the industry.",
       storyTitle: "Our Story",
-      story1: "Founded in 2012 as a small technical workshop, FİXATECH quickly became the preferred service partner of leading hotel and restaurant chains in Istanbul.",
+      story1: "Founded in 2012 as a small technical workshop, PRAGMATECHNICAL quickly became the preferred service partner of leading hotel and restaurant chains in Istanbul.",
       story2: "Today we ensure the operational continuity of more than 500 businesses with 20+ field experts, mobile service vehicles and a wide spare parts network.",
       mottoLead: "Our motto is clear:",
       motto: "\"So your business never stops, we never stop.\"",
@@ -464,7 +464,7 @@ const dict: Record<Lang, Dict> = {
         { t: "Values", d: "Transparency, honesty, on-time delivery and customer satisfaction." },
         { t: "Approach", d: "Lasting solutions, not temporary fixes — a professional mindset." },
       ],
-      whyTitle: "Why FİXATECH?",
+      whyTitle: "Why PRAGMATECHNICAL?",
       whySub: "Reasons our corporate clients choose us.",
       whyCards: [
         { t: "Certified Team", d: "All technicians are certified professionals continuously trained in their field." },
@@ -498,7 +498,7 @@ const dict: Record<Lang, Dict> = {
       testimonials: [
         { name: "Mehmet Y.", role: "Grand Bosphorus Hotel — Technical Manager", text: "When we had a breakdown in our industrial kitchen, we called at midnight and they were on site within 45 minutes. This level of professionalism is invaluable for corporate businesses." },
         { name: "Ayşe K.", role: "La Cucina — Owner", text: "We have had a periodic maintenance agreement for 3 years. Monthly reports, transparent pricing and disciplined teams — a true solution partner." },
-        { name: "Can D.", role: "Mavi Gıda — Operations Director", text: "Managing all technical services with a single supplier is incredibly practical. FİXATECH replaced multiple companies for us." },
+        { name: "Can D.", role: "Mavi Gıda — Operations Director", text: "Managing all technical services with a single supplier is incredibly practical. PRAGMATECHNICAL replaced multiple companies for us." },
       ],
     },
     contact: {
@@ -655,7 +655,7 @@ const dict: Record<Lang, Dict> = {
           { value: "emergency", label: "24/7 Emergency" },
         ].find((u) => u.value === f.urgency)?.label ?? f.urgency;
         return [
-          "🔧 *TECHNICAL SERVICE REQUEST — FİXATECH*",
+          "🔧 *TECHNICAL SERVICE REQUEST — PRAGMATECHNICAL*",
           "",
           `👤 *Contact:* ${f.name}${f.company ? ` (${f.company})` : ""}`,
           `📞 *Phone:* ${f.phone}`,

@@ -1,5 +1,5 @@
 -- =============================================================================
--- FİXATECH — Demo hesaplar (SQL ile giriş çalışır)
+-- PRAGMATECHNICAL — Demo hesaplar (SQL ile giriş çalışır)
 -- Sıra: 001_service_desk.sql → 003_ensure_profile.sql → bu dosya
 -- Supabase SQL Editor → Run
 -- =============================================================================
@@ -149,28 +149,28 @@ declare
 begin
   perform public.seed_auth_user(
     v_admin,
-    'admin@fixatech.com',
+    'admin@pragmatechnical.com',
     'admin123',
     '{"role":"admin","name":"Sistem Yöneticisi","phone":"+90 533 821 61 72"}'::jsonb
   );
 
   perform public.seed_auth_user(
     v_tech1,
-    'teknik@fixatech.com',
+    'teknik@pragmatechnical.com',
     'teknik123',
     '{"role":"technician","name":"Ahmet Yılmaz","phone":"+90 532 100 20 30"}'::jsonb
   );
 
   perform public.seed_auth_user(
     v_tech2,
-    'mehmet@fixatech.com',
+    'mehmet@pragmatechnical.com',
     'teknik123',
     '{"role":"technician","name":"Mehmet Kaya","phone":"+90 532 200 30 40"}'::jsonb
   );
 
   perform public.seed_auth_user(
     v_customer,
-    'musteri@fixatech.com',
+    'musteri@pragmatechnical.com',
     'musteri123',
     '{"role":"customer","name":"Mehmet Yıldırım","phone":"+90 212 555 01 01","company_id":"a0000001-0001-4001-8001-000000000001"}'::jsonb
   );
@@ -181,7 +181,7 @@ insert into public.profiles (id, email, name, role, phone, company_id)
 values
   (
     'b0000001-0001-4001-8001-000000000001',
-    'admin@fixatech.com',
+    'admin@pragmatechnical.com',
     'Sistem Yöneticisi',
     'admin',
     '+90 533 821 61 72',
@@ -189,7 +189,7 @@ values
   ),
   (
     'b0000001-0001-4001-8001-000000000002',
-    'teknik@fixatech.com',
+    'teknik@pragmatechnical.com',
     'Ahmet Yılmaz',
     'technician',
     '+90 532 100 20 30',
@@ -197,7 +197,7 @@ values
   ),
   (
     'b0000001-0001-4001-8001-000000000003',
-    'mehmet@fixatech.com',
+    'mehmet@pragmatechnical.com',
     'Mehmet Kaya',
     'technician',
     '+90 532 200 30 40',
@@ -205,7 +205,7 @@ values
   ),
   (
     'b0000001-0001-4001-8001-000000000004',
-    'musteri@fixatech.com',
+    'musteri@pragmatechnical.com',
     'Mehmet Yıldırım',
     'customer',
     '+90 212 555 01 01',
@@ -226,7 +226,7 @@ values
     'b0000001-0001-4001-8001-000000000002',
     'Ahmet Yılmaz',
     '+90 532 100 20 30',
-    'teknik@fixatech.com',
+    'teknik@pragmatechnical.com',
     array['Endüstriyel Mutfak', 'Soğutma'],
     true,
     '{"lat":41.04,"lng":28.98,"label":"Şişli — Saha"}'::jsonb
@@ -236,7 +236,7 @@ values
     'b0000001-0001-4001-8001-000000000003',
     'Mehmet Kaya',
     '+90 532 200 30 40',
-    'mehmet@fixatech.com',
+    'mehmet@pragmatechnical.com',
     array['Elektrik', 'Su Tesisatı'],
     true,
     '{"lat":41.01,"lng":29.02,"label":"Kadıköy — Saha"}'::jsonb
@@ -263,7 +263,7 @@ insert into public.service_tickets (
 values
   (
     'd0000001-0001-4001-8001-000000000001',
-    'FIX-2026-0001',
+    'PRAGMA-2026-0001',
     'a0000001-0001-4001-8001-000000000001',
     'b0000001-0001-4001-8001-000000000004',
     'c0000001-0001-4001-8001-000000000001',
@@ -282,7 +282,7 @@ values
   ),
   (
     'd0000001-0001-4001-8001-000000000002',
-    'FIX-2026-0002',
+    'PRAGMA-2026-0002',
     'a0000001-0001-4001-8001-000000000002',
     'b0000001-0001-4001-8001-000000000001',
     'c0000001-0001-4001-8001-000000000002',
@@ -299,7 +299,7 @@ values
   ),
   (
     'd0000001-0001-4001-8001-000000000003',
-    'FIX-2026-0003',
+    'PRAGMA-2026-0003',
     'a0000001-0001-4001-8001-000000000001',
     'b0000001-0001-4001-8001-000000000004',
     null,
@@ -329,5 +329,5 @@ on conflict (id) do nothing;
 
 -- Özet (SQL Editor Results sekmesinde görünür)
 select email, role, name from public.profiles
-where email like '%@fixatech.com'
+where email like '%@pragmatechnical.com'
 order by role;

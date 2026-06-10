@@ -48,7 +48,7 @@
 :root {
   --radius: 0.875rem;
 
-  /* FİXATECH brand: deep industrial navy + electric cyan + amber accent */
+  /* PRAGMATECHNICAL brand: deep industrial navy + electric cyan + amber accent */
   --background: oklch(0.99 0.005 240);
   --foreground: oklch(0.18 0.04 250);
 

@@ -10,7 +10,7 @@ import {
   Wrench,
   ChevronRight,
 } from "lucide-react";
-import { PHONE, PHONE_TEL } from "@/lib/site";
+import { COMPANY, PHONE, PHONE_TEL } from "@/lib/site";
 import logo from "@/assets/logo.png";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -92,8 +92,8 @@ export function Header() {
             aria-label={t.nav.menu}
           >
             <div className="flex items-center justify-between border-b border-border/60 px-4 py-3 shrink-0">
-              <Link to="/" onClick={closeMobile} className="flex items-center" aria-label="FİXATECH">
-                <img src={logo} alt="" className="h-10 w-auto origin-left object-contain scale-[1.55]" />
+              <Link to="/" onClick={closeMobile} className="flex items-center" aria-label={COMPANY}>
+                <img src={logo} alt="" className="h-11 w-auto origin-left object-contain scale-[1.7]" />
               </Link>
               <button
                 type="button"
@@ -198,15 +198,15 @@ export function Header() {
       <div className="container mx-auto grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 overflow-visible px-4 lg:gap-3">
         <Link
           to="/"
-          className="relative z-20 block h-10 w-32 shrink-0 overflow-visible sm:w-36 md:w-40 group"
-          aria-label="FİXATECH"
+          className="relative z-20 block h-12 w-36 shrink-0 overflow-visible sm:w-40 md:w-44 group"
+          aria-label={COMPANY}
         >
           <img
             src={logo}
-            alt="FİXATECH logosu"
+            alt={`${COMPANY} logosu`}
             className={cn(
               "pointer-events-none absolute left-0 top-1/2 w-auto -translate-y-1/2 object-contain transition-opacity duration-300",
-              "h-[180px] w-auto",
+              "h-[210px] w-auto",
               "group-hover:opacity-90",
             )}
           />

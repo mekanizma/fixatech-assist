@@ -1,5 +1,5 @@
 import type { ServiceStatus } from "./types";
-import { STATUS_ORDER } from "./constants";
+import { STATUS_ORDER, TICKET_CODE_PREFIX } from "./constants";
 
 export function uid(prefix = "id") {
   return `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
@@ -7,14 +7,15 @@ export function uid(prefix = "id") {
 
 export function nextTicketCode(tickets: { code: string }[]) {
   const year = new Date().getFullYear();
+  const re = new RegExp(`(?:${TICKET_CODE_PREFIX}|FIX)-${year}-(\\d+)`);
   const nums = tickets
     .map((t) => {
-      const m = t.code.match(/FIX-\d{4}-(\d+)/);
+      const m = t.code.match(re);
       return m ? parseInt(m[1], 10) : 0;
     })
     .filter((n) => !Number.isNaN(n));
   const next = (nums.length ? Math.max(...nums) : 0) + 1;
-  return `FIX-${year}-${String(next).padStart(4, "0")}`;
+  return `${TICKET_CODE_PREFIX}-${year}-${String(next).padStart(4, "0")}`;
 }
 
 export function statusProgress(status: ServiceStatus) {

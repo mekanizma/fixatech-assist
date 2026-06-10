@@ -6,7 +6,7 @@ import {
   SERVICE_MODE_LABELS,
 } from "./constants";
 import { formatDate, formatDateTime } from "./utils";
-import { ADDRESS_INLINE } from "@/lib/site";
+import { ADDRESS_INLINE, COMPANY } from "@/lib/site";
 import { computeInvoiceTotal, formatTry } from "./pricing";
 
 export type ServicePdfOpts = {
@@ -111,7 +111,7 @@ function buildApplicationHtml(ticket: ServiceTicket, tech: Technician | null) {
     </div>
 
     <footer class="page-foot">
-      <strong>FİXATECH</strong> Endüstriyel Teknik Servis · ${ADDRESS_INLINE}
+      <strong>${COMPANY}</strong> Endüstriyel Teknik Servis · ${ADDRESS_INLINE}
       <span class="dot">·</span> ${new Date().toLocaleDateString("tr-TR")}
     </footer>
   </div>
@@ -177,7 +177,7 @@ function buildDeliveryHtml(ticket: ServiceTicket, _tech: Technician | null) {
     </div>
 
     <footer class="page-foot">
-      <strong>FİXATECH</strong> Endüstriyel Teknik Servis · ${ADDRESS_INLINE}
+      <strong>${COMPANY}</strong> Endüstriyel Teknik Servis · ${ADDRESS_INLINE}
       <span class="dot">·</span> ${new Date().toLocaleDateString("tr-TR")}
     </footer>
   </div>
@@ -496,9 +496,9 @@ function pdfDocHeader(
 ) {
   return `<header class="doc-header">
     <div class="brand-block">
-      <div class="brand-mark">F</div>
+      <div class="brand-mark">P</div>
       <div>
-        <div class="brand-name">FİXATECH</div>
+        <div class="brand-name">${COMPANY}</div>
         <div class="brand-tag">Endüstriyel Teknik Servis</div>
       </div>
     </div>

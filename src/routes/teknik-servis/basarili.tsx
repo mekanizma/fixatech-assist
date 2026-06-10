@@ -11,7 +11,7 @@ export type TalepSuccessState = {
 };
 
 export const Route = createFileRoute("/teknik-servis/basarili")({
-  head: () => buildNoIndexHead("Talebiniz Alındı | FİXATECH"),
+  head: () => buildNoIndexHead("Talebiniz Alındı"),
   component: TalepBasarili,
 });
 

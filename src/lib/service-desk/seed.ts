@@ -7,28 +7,28 @@ export const SEED_DATA: ServiceDeskData = {
   users: [
     {
       id: "u-admin",
-      email: "admin@fixatech.com",
+      email: "admin@pragmatechnical.com",
       name: "Sistem Yöneticisi",
       role: "admin",
       phone: "+90 533 821 61 72",
     },
     {
       id: "u-tech-1",
-      email: "teknik@fixatech.com",
+      email: "teknik@pragmatechnical.com",
       name: "Ahmet Yılmaz",
       role: "technician",
       phone: "+90 532 100 20 30",
     },
     {
       id: "u-tech-2",
-      email: "mehmet@fixatech.com",
+      email: "mehmet@pragmatechnical.com",
       name: "Mehmet Kaya",
       role: "technician",
       phone: "+90 532 200 30 40",
     },
     {
       id: "u-customer-1",
-      email: "musteri@fixatech.com",
+      email: "musteri@pragmatechnical.com",
       name: "Mehmet Yıldırım",
       role: "customer",
       phone: "+90 212 555 01 01",
@@ -65,7 +65,7 @@ export const SEED_DATA: ServiceDeskData = {
       userId: "u-tech-1",
       name: "Ahmet Yılmaz",
       phone: "+90 532 100 20 30",
-      email: "teknik@fixatech.com",
+      email: "teknik@pragmatechnical.com",
       specialties: ["Endüstriyel Mutfak", "Soğutma"],
       active: true,
       location: { lat: 41.04, lng: 28.98, label: "Şişli — Saha" },
@@ -75,7 +75,7 @@ export const SEED_DATA: ServiceDeskData = {
       userId: "u-tech-2",
       name: "Mehmet Kaya",
       phone: "+90 532 200 30 40",
-      email: "mehmet@fixatech.com",
+      email: "mehmet@pragmatechnical.com",
       specialties: ["Elektrik", "Su Tesisatı"],
       active: true,
       location: { lat: 41.01, lng: 29.02, label: "Kadıköy — Saha" },
@@ -84,7 +84,7 @@ export const SEED_DATA: ServiceDeskData = {
   tickets: [
     {
       id: "tk-1",
-      code: "FIX-2026-0001",
+      code: "PRAGMA-2026-0001",
       companyId: "c-1",
       createdByUserId: "u-customer-1",
       assignedTechnicianId: "t-1",
@@ -121,7 +121,7 @@ export const SEED_DATA: ServiceDeskData = {
     },
     {
       id: "tk-2",
-      code: "FIX-2026-0002",
+      code: "PRAGMA-2026-0002",
       companyId: "c-2",
       createdByUserId: "u-admin",
       assignedTechnicianId: "t-2",
@@ -155,7 +155,7 @@ export const SEED_DATA: ServiceDeskData = {
     },
     {
       id: "tk-3",
-      code: "FIX-2026-0003",
+      code: "PRAGMA-2026-0003",
       companyId: "c-1",
       createdByUserId: "u-customer-1",
       status: "pending",

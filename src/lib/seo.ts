@@ -1,12 +1,12 @@
 import { ADDRESS_REGION, ADDRESS_STREET, COMPANY, EMAIL, PHONE_TEL } from "@/lib/site";
 
-export const SITE_URL = (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, "") || "https://fixatech.com.tr";
+export const SITE_URL = (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, "") || "https://pragmatechnical.com.tr";
 
 export const OG_IMAGE =
   "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/88f3bdf4-db66-4eb7-bde3-122840072f36/id-preview-78933056--1e8218dc-4c87-4ecd-9914-4c3d3b2aa4e6.lovable.app-1778829939425.png";
 
 export const SEO_KEYWORDS =
-  "fixatech, girne teknik servis, kktc teknik servis, girne endüstriyel mutfak tamiri, otel teknik servis girne, restoran bakım onarım kktc, elektrik tesisat girne, su tesisatı tamir, acil teknik servis 7/24, profesyonel teknik çözüm, endüstriyel teknik servis";
+  "pragmatechnical, girne teknik servis, kktc teknik servis, girne endüstriyel mutfak tamiri, otel teknik servis girne, restoran bakım onarım kktc, elektrik tesisat girne, su tesisatı tamir, acil teknik servis 7/24, profesyonel teknik çözüm, endüstriyel teknik servis";
 
 export type PageSeoConfig = {
   title: string;
@@ -67,7 +67,7 @@ export function buildNoIndexHead(title: string) {
 export const SEO_PAGES = {
   home: {
     path: "/",
-    title: "FİXATECH | Girne Teknik Servis — Profesyonel ve Kalıcı Çözümler",
+    title: "PRAGMATECHNICAL | Girne Teknik Servis — Profesyonel ve Kalıcı Çözümler",
     description:
       "Teknik sorunlarınıza profesyonel ve kalıcı çözümler. KKTC Girne'de otel, restoran ve işletmeler için 7/24 endüstriyel mutfak, elektrik, su tesisatı ve tadilat.",
     keywords:
@@ -75,25 +75,25 @@ export const SEO_PAGES = {
   },
   about: {
     path: "/hakkimizda",
-    title: "Hakkımızda | FİXATECH — Girne Endüstriyel Teknik Servis",
+    title: "Hakkımızda | PRAGMATECHNICAL — Girne Endüstriyel Teknik Servis",
     description:
-      "FİXATECH: KKTC Girne merkezli, otel ve restoranlara profesyonel teknik servis. Deneyimli ekip, şeffaf fiyat, garantili işçilik.",
+      "PRAGMATECHNICAL: KKTC Girne merkezli, otel ve restoranlara profesyonel teknik servis. Deneyimli ekip, şeffaf fiyat, garantili işçilik.",
   },
   services: {
     path: "/hizmetler",
-    title: "Hizmetler | Endüstriyel Mutfak, Elektrik, Su Tesisatı — FİXATECH Girne",
+    title: "Hizmetler | Endüstriyel Mutfak, Elektrik, Su Tesisatı — PRAGMATECHNICAL Girne",
     description:
       "Girne ve KKTC'de endüstriyel mutfak ekipmanı, elektrik, su tesisatı, tadilat ve 7/24 acil teknik servis hizmetleri.",
   },
   contact: {
     path: "/iletisim",
-    title: "İletişim | FİXATECH Girne — 7/24 Teknik Servis",
+    title: "İletişim | PRAGMATECHNICAL Girne — 7/24 Teknik Servis",
     description:
-      "FİXATECH ile iletişime geçin: telefon, WhatsApp, e-posta. Türk Mahallesi No: 10, KKTC/Girne. Hızlı teklif ve acil müdahale.",
+      "PRAGMATECHNICAL ile iletişime geçin: telefon, WhatsApp, e-posta. Türk Mahallesi No: 10, KKTC/Girne. Hızlı teklif ve acil müdahale.",
   },
   techService: {
     path: "/teknik-servis",
-    title: "Teknik Servis Talebi | Online Kayıt — FİXATECH",
+    title: "Teknik Servis Talebi | Online Kayıt — PRAGMATECHNICAL",
     description:
       "Ürün bilgisi ve adresinizle online teknik servis talebi oluşturun. Girne ve KKTC genelinde hızlı randevu ve WhatsApp onayı.",
   },

@@ -14,6 +14,7 @@ import {
   Search,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { COMPANY } from "@/lib/site";
 import { useAuth } from "@/lib/service-desk/auth";
 import { useTheme } from "@/components/service-desk/ThemeProvider";
 import { roleHome } from "@/lib/service-desk/utils";
@@ -82,7 +83,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <aside className="hidden lg:flex w-64 flex-col border-r border-border/60 bg-card/50 backdrop-blur-xl">
         <div className="flex flex-col items-center border-b border-border/60 p-5 text-center">
           <Link to={roleHome(user.role)} className="inline-flex justify-center">
-            <img src={logo} alt="FİXATECH" className="h-20 w-auto max-w-full object-contain" />
+            <img src={logo} alt={COMPANY} className="h-24 w-auto max-w-full object-contain" />
           </Link>
           <p className="mt-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
             Servis Kontrol Paneli
@@ -123,7 +124,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </SheetTrigger>
             <SheetContent side="left" className="w-72 p-0">
               <div className="flex flex-col items-center border-b p-5 text-center">
-                <img src={logo} alt="FİXATECH" className="h-16 w-auto max-w-full object-contain" />
+                <img src={logo} alt={COMPANY} className="h-20 w-auto max-w-full object-contain" />
               </div>
               <div className="py-4">
                 <NavLinks mobile />

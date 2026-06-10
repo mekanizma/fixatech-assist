@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Wrench, Shield, User, HardHat, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { COMPANY } from "@/lib/site";
 import { useAuth } from "@/lib/service-desk/auth";
 import { DEMO_ACCOUNTS } from "@/lib/service-desk/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -37,7 +38,7 @@ function LoginHero() {
       <div className="relative flex flex-1 flex-col items-center justify-center px-10 py-14 xl:px-14">
         <div className="w-full max-w-lg space-y-8 text-center">
           <div className="mx-auto inline-flex rounded-2xl bg-white/95 p-4 shadow-[0_20px_50px_-12px_oklch(0_0_0/0.35)] ring-1 ring-white/20">
-            <img src={logo} alt="FİXATECH" className="h-24 w-auto object-contain sm:h-28" />
+            <img src={logo} alt={COMPANY} className="h-28 w-auto object-contain sm:h-32" />
           </div>
 
           <div className="space-y-4">
@@ -75,7 +76,7 @@ function LoginHero() {
       </div>
 
       <p className="relative pb-8 text-center text-[11px] tracking-wide text-primary-foreground/40">
-        © {new Date().getFullYear()} FİXATECH — Tüm hakları saklıdır
+        © {new Date().getFullYear()} {COMPANY} — Tüm hakları saklıdır
       </p>
     </div>
   );
@@ -84,7 +85,7 @@ function LoginHero() {
 function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@fixatech.com");
+  const [email, setEmail] = useState("admin@pragmatechnical.com");
   const [password, setPassword] = useState("admin123");
   const [submitting, setSubmitting] = useState(false);
 
@@ -118,9 +119,9 @@ function LoginPage() {
         <div className="relative w-full max-w-md space-y-6">
           <div className="flex flex-col items-center text-center lg:hidden">
             <div className="mb-4 inline-flex rounded-2xl bg-card p-3 shadow-md ring-1 ring-border/60">
-              <img src={logo} alt="FİXATECH" className="h-16 w-auto object-contain" />
+              <img src={logo} alt={COMPANY} className="h-20 w-auto object-contain" />
             </div>
-            <p className="text-sm text-muted-foreground">FİXATECH Servis Kontrol Paneli</p>
+            <p className="text-sm text-muted-foreground">{COMPANY} Servis Kontrol Paneli</p>
           </div>
 
           <Card className="border-border/60 shadow-xl shadow-primary/5">

@@ -1,7 +1,10 @@
 import type { BusinessType, ServiceMode, ServiceStatus, Urgency } from "./types";
 
-export const STORAGE_KEY = "fixatech-service-desk-v1";
-export const SESSION_KEY = "fixatech-session-v1";
+export const STORAGE_KEY = "pragmatechnical-service-desk-v1";
+export const SESSION_KEY = "pragmatechnical-session-v1";
+
+/** Servis kayıt no öneki — PRAGMATECHNICAL (eski: FIX-) */
+export const TICKET_CODE_PREFIX = "PRAGMA";
 
 export const PRODUCT_TYPES = [
   "Endüstriyel Fırın",
@@ -61,9 +64,9 @@ export const SERVICE_MODE_LABELS: Record<ServiceMode, string> = {
 };
 
 export const DEMO_ACCOUNTS = [
-  { email: "admin@fixatech.com", password: "admin123", hint: "Yönetici" },
-  { email: "teknik@fixatech.com", password: "teknik123", hint: "Teknisyen" },
-  { email: "musteri@fixatech.com", password: "musteri123", hint: "Müşteri (Otel)" },
+  { email: "admin@pragmatechnical.com", password: "admin123", hint: "Yönetici" },
+  { email: "teknik@pragmatechnical.com", password: "teknik123", hint: "Teknisyen" },
+  { email: "musteri@pragmatechnical.com", password: "musteri123", hint: "Müşteri (Otel)" },
 ] as const;
 
 export const MAX_FILE_SIZE = 2_500_000;

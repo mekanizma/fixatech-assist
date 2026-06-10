@@ -2,7 +2,7 @@
 # Dashboard: New > Blueprint > bu repo
 services:
   - type: web
-    name: fixatech-assist
+    name: pragmatechnical-assist
     runtime: node
     plan: free
     region: frankfurt

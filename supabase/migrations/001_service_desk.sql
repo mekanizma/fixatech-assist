@@ -1,5 +1,5 @@
 -- =============================================================================
--- FİXATECH — Teknik Servis Kontrol Paneli (Supabase)
+-- PRAGMATECHNICAL — Teknik Servis Kontrol Paneli (Supabase)
 -- Supabase Dashboard → SQL Editor → bu dosyanın tamamını çalıştırın.
 -- Ardından supabase/seed_reference_data.sql ve Auth kullanıcılarını oluşturun.
 -- =============================================================================
@@ -249,14 +249,15 @@ declare
   n int;
 begin
   select coalesce(
-    max((regexp_match(code, 'FIX-' || y::text || '-(\d+)'))[1]::int),
+    max((regexp_match(code, '(?:PRAGMA|FIX)-' || y::text || '-(\d+)'))[1]::int),
     0
   ) + 1
   into n
   from public.service_tickets
-  where code like 'FIX-' || y::text || '-%';
+  where code like 'PRAGMA-' || y::text || '-%'
+     or code like 'FIX-' || y::text || '-%';
 
-  return 'FIX-' || y::text || '-' || lpad(n::text, 4, '0');
+  return 'PRAGMA-' || y::text || '-' || lpad(n::text, 4, '0');
 end;
 $$;
 

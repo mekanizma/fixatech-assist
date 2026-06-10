@@ -3,4 +3,4 @@ Allow: /
 Disallow: /app/
 Disallow: /takip/
 
-Sitemap: https://fixatech.com.tr/sitemap.xml
+Sitemap: https://pragmatechnical.com.tr/sitemap.xml

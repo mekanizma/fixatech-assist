@@ -142,7 +142,7 @@ export function TechnicianCreateForm({ onCreated }: Props) {
                 type="email"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
-                placeholder="teknisyen@fixatech.com"
+                placeholder="teknisyen@pragmatechnical.com"
                 required
               />
             </div>

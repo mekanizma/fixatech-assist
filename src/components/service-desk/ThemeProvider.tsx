@@ -12,7 +12,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("fixatech-theme") as Theme | null;
+      const saved = localStorage.getItem("pragmatechnical-theme") as Theme | null;
       if (saved === "dark" || saved === "light") setTheme(saved);
     } catch {}
   }, []);
@@ -21,7 +21,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
     try {
-      localStorage.setItem("fixatech-theme", theme);
+      localStorage.setItem("pragmatechnical-theme", theme);
     } catch {}
   }, [theme]);
 

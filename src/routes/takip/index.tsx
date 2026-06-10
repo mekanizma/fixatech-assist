@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { ClientOnly } from "@/components/service-desk/ClientOnly";
 import logo from "@/assets/logo.png";
+import { COMPANY } from "@/lib/site";
+import { TICKET_CODE_PREFIX } from "@/lib/service-desk/constants";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,8 +24,8 @@ function TrackIndex() {
           <CardHeader className="text-center">
             <img
               src={logo}
-              alt="FİXATECH"
-              className="h-14 w-auto max-w-full mx-auto origin-center object-contain scale-[1.6] sm:scale-[1.75] mb-4"
+              alt={COMPANY}
+              className="h-16 w-auto max-w-full mx-auto origin-center object-contain scale-[1.75] sm:scale-[1.9] mb-4"
             />
             <CardTitle className="font-display text-2xl">Servis Takip</CardTitle>
             <CardDescription>Kayıt numaranız ile canlı servis durumunu görüntüleyin</CardDescription>
@@ -33,7 +35,7 @@ function TrackIndex() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 className="pl-9"
-                placeholder="Örn. FIX-2026-0001"
+                placeholder={`Örn. ${TICKET_CODE_PREFIX}-2026-0001`}
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
               />
