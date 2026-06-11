@@ -27,6 +27,10 @@ export const SEO_KEYWORDS = [
   "periyodik bakım sözleşmesi kktc",
   "soğutma sistemi onarım girne",
   "konveksiyonlu fırın servisi kktc",
+  "kktc klima servisi",
+  "girne klima bakım onarım",
+  "kktc beyaz eşya tamiri",
+  "split klima gaz dolumu girne",
 ].join(", ");
 
 /** Hizmet verilen KKTC bölgeleri — yerel SEO */
@@ -74,6 +78,12 @@ export const SEO_FAQS: SeoFaq[] = [
 ];
 
 export const SERVICE_CATALOG = [
+  {
+    slug: "klima-beyaz-esya",
+    name: "Klima ve Beyaz Eşya Bakım & Onarım",
+    description:
+      "KKTC'de split klima, VRF, buzdolabı, çamaşır makinesi ve ankastre cihaz tamir; gaz dolumu ve periyodik bakım.",
+  },
   {
     slug: "endustriyel-mutfak",
     name: "Endüstriyel Mutfak Tamir ve Bakım",
@@ -189,7 +199,7 @@ export const SEO_PAGES = {
     path: "/hizmetler",
     title: "Hizmetler | KKTC Tamir, Bakım ve Onarım — PRAGMATECHNICAL Girne",
     description:
-      "Girne ve KKTC'de endüstriyel mutfak ekipmanı tamiri, elektrik tesisatı, su tesisatı onarımı, tadilat ve 7/24 acil teknik servis. Otel ve restoranlara özel çözümler.",
+      "Girne ve KKTC'de klima ve beyaz eşya bakım onarım, endüstriyel mutfak, elektrik ve su tesisatı, tadilat ile 7/24 acil teknik servis. Otel ve restoranlara özel çözümler.",
     keywords:
       "kktc endüstriyel mutfak servisi, girne elektrik tamiri, kktc su tesisatı onarım, otel bakım hizmeti girne, restoran tamirat kktc",
   },
@@ -243,6 +253,7 @@ export function getLocalBusinessJsonLd() {
       containedInPlace: { "@type": "AdministrativeArea", name: "KKTC" },
     })),
     serviceType: [
+      "Klima ve beyaz eşya bakım onarım",
       "Endüstriyel mutfak tamiri",
       "Elektrik tesisatı onarımı",
       "Su tesisatı tamiratı",

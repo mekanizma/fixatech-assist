@@ -48,6 +48,7 @@ const dict: Record<Lang, Dict> = {
       servicesSub:
         "Endüstriyel mutfaktan elektrik ve su tesisatına kadar işletmenizin tüm teknik altyapı ihtiyaçlarını tek çatı altında karşılıyoruz.",
       serviceBullets: [
+        "Klima, VRF ve beyaz eşya tamir, gaz dolumu ve periyodik bakım",
         "Endüstriyel mutfak ekipmanı tamiri ve periyodik bakımı",
         "Elektrik pano, aydınlatma ve acil arıza müdahalesi",
         "Su kaçağı tespiti, tıkanıklık açma ve pompa servisi",
@@ -381,12 +382,26 @@ const dict: Record<Lang, Dict> = {
       services: "Hizmetler",
       corp: "Kurumsal",
       contact: "İletişim",
-      sLinks: ["Endüstriyel Mutfak", "Elektrik Tesisatı", "Su Tesisatı", "Tadilat & Tamirat", "Acil Teknik Servis"],
+      sLinks: ["Klima & Beyaz Eşya", "Endüstriyel Mutfak", "Elektrik Tesisatı", "Su Tesisatı", "Tadilat & Tamirat", "Acil Teknik Servis"],
       copyR: "Tüm hakları saklıdır.",
       tagline: "Girne · KKTC · Endüstriyel Teknik Servis",
       hours247: "7/24 Acil Servis",
     },
     services_data: [
+      {
+        title: "Klima ve Beyaz Eşya Bakım & Onarım",
+        short: "Split klima, VRF, buzdolabı, çamaşır ve bulaşık makinesi tamir ile periyodik bakım.",
+        description:
+          "KKTC'de otel, restoran ve işletmelerde klima montajı, gaz dolumu, filtre ve periyodik bakım; buzdolabı, çamaşır makinesi, kurutma makinesi ve ankastre cihazlarda arıza tespiti, onarım ve garantili servis sunuyoruz.",
+        features: [
+          "Split & VRF klima servisi",
+          "Gaz dolumu ve periyodik bakım",
+          "Buzdolabı & derin dondurucu",
+          "Çamaşır & kurutma makinesi",
+          "Ankastre ve bulaşık makinesi",
+        ],
+        response: "1-2 saat içinde",
+      },
       {
         title: "Endüstriyel Mutfak Ekipmanları",
         short: "Fırın, ocak, bulaşık makinesi ve soğutma sistemlerinde uzman tamir ve bakım hizmeti.",
@@ -467,6 +482,7 @@ const dict: Record<Lang, Dict> = {
       servicesSub:
         "From industrial kitchens to electrical and plumbing — we cover your entire technical infrastructure under one roof.",
       serviceBullets: [
+        "AC, VRF and white goods repair, gas refill and preventive maintenance",
         "Industrial kitchen equipment repair and preventive maintenance",
         "Electrical panels, lighting and emergency fault response",
         "Leak detection, drain clearing and pump service",
@@ -799,12 +815,26 @@ const dict: Record<Lang, Dict> = {
       services: "Services",
       corp: "Company",
       contact: "Contact",
-      sLinks: ["Industrial Kitchen", "Electrical", "Plumbing", "Renovation & Repair", "Emergency Service"],
+      sLinks: ["AC & White Goods", "Industrial Kitchen", "Electrical", "Plumbing", "Renovation & Repair", "Emergency Service"],
       copyR: "All rights reserved.",
       tagline: "Girne · Northern Cyprus · Industrial Technical Service",
       hours247: "24/7 Emergency Service",
     },
     services_data: [
+      {
+        title: "AC & White Goods Repair & Maintenance",
+        short: "Split AC, VRF, refrigerators, washing machines and dishwashers — repair and scheduled maintenance.",
+        description:
+          "Across Northern Cyprus we service hotels, restaurants and businesses with AC installation, gas refill, filter maintenance; refrigerator, washer, dryer and built-in appliance fault diagnosis, repair and warranty-backed service.",
+        features: [
+          "Split & VRF AC service",
+          "Gas refill and preventive maintenance",
+          "Refrigerator & freezer",
+          "Washer & dryer",
+          "Built-in and dishwasher",
+        ],
+        response: "Within 1-2 hours",
+      },
       {
         title: "Industrial Kitchen Equipment",
         short: "Expert repair and maintenance for ovens, ranges, dishwashers and refrigeration systems.",

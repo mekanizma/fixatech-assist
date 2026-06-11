@@ -1,11 +1,29 @@
 import { useT } from "@/lib/i18n";
 
+import acImg from "@/assets/service-ac.png";
 import kitchenImg from "@/assets/service-kitchen.jpg";
 import electricImg from "@/assets/service-electric.jpg";
 import plumbingImg from "@/assets/service-plumbing.jpg";
 import renovationImg from "@/assets/service-renovation.jpg";
 
 export const services = [
+  {
+    slug: "klima-beyaz-esya",
+    title: "Klima ve Beyaz Eşya Bakım & Onarım",
+    icon: "AirVent",
+    image: acImg,
+    short: "Split klima, VRF, buzdolabı, çamaşır ve bulaşık makinesi tamir ile periyodik bakım.",
+    description:
+      "KKTC'de otel, restoran ve işletmelerde klima montajı, gaz dolumu, filtre ve periyodik bakım; buzdolabı, çamaşır makinesi, kurutma makinesi ve ankastre cihazlarda arıza tespiti, onarım ve garantili servis sunuyoruz.",
+    features: [
+      "Split & VRF klima servisi",
+      "Gaz dolumu ve periyodik bakım",
+      "Buzdolabı & derin dondurucu",
+      "Çamaşır & kurutma makinesi",
+      "Ankastre ve bulaşık makinesi",
+    ],
+    response: "1-2 saat içinde",
+  },
   {
     slug: "endustriyel-mutfak",
     title: "Endüstriyel Mutfak Ekipmanları",
