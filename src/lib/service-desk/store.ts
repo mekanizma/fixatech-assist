@@ -10,6 +10,7 @@ export {
   upsertCompany,
   upsertTechnician,
   createTicket,
+  deleteTicket,
   updateTicketStatus,
   assignTechnician,
   addTicketNote,

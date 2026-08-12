@@ -388,6 +388,12 @@ export async function createTicket(
   return ticket;
 }
 
+export async function deleteTicket(ticketId: string): Promise<void> {
+  const sb = getSupabase();
+  const { error } = await sb.from("service_tickets").delete().eq("id", ticketId);
+  assertNoError(error);
+}
+
 export async function updateTicketStatus(
   ticketId: string,
   status: ServiceStatus,

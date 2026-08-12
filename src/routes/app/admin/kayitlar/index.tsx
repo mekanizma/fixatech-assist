@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useDeskData } from "@/hooks/use-desk-data";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/service-desk/TicketStatusBadge";
+import { DeleteTicketButton } from "@/components/service-desk/DeleteTicketButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -42,9 +43,9 @@ function AdminTickets() {
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <Input placeholder="Ara..." value={q} onChange={(e) => setQ(e.target.value)} className="max-w-xs" />
+        <Input placeholder="Ara..." value={q} onChange={(e) => setQ(e.target.value)} className="max-w-xs w-full sm:w-auto" />
         <select
-          className="rounded-lg border border-input bg-background px-3 text-sm h-10"
+          className="rounded-lg border border-input bg-background px-3 text-sm h-10 w-full sm:w-auto"
           value={status}
           onChange={(e) => setStatus(e.target.value as ServiceStatus | "all")}
         >
@@ -57,32 +58,46 @@ function AdminTickets() {
         </select>
       </div>
 
-      <div className="rounded-xl border border-border/60 overflow-hidden bg-card">
+      <div className="rounded-xl border border-border/60 overflow-x-auto bg-card">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Kod</TableHead>
               <TableHead>Müşteri</TableHead>
-              <TableHead>Ürün</TableHead>
+              <TableHead className="hidden sm:table-cell">Ürün</TableHead>
               <TableHead>Öncelik</TableHead>
               <TableHead>Durum</TableHead>
+              <TableHead className="w-12 text-right">
+                <span className="sr-only">İşlem</span>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filtered.map((t) => (
-              <TableRow key={t.id} className="cursor-pointer hover:bg-muted/50">
+              <TableRow key={t.id} className="hover:bg-muted/50">
                 <TableCell>
-                  <Link to="/app/admin/kayitlar/$ticketId" params={{ ticketId: t.id }} className="font-semibold text-primary">
+                  <Link
+                    to="/app/admin/kayitlar/$ticketId"
+                    params={{ ticketId: t.id }}
+                    className="font-semibold text-primary"
+                  >
                     {t.code}
                   </Link>
                 </TableCell>
-                <TableCell>{t.companyName}</TableCell>
-                <TableCell className="max-w-[200px] truncate">{t.productName}</TableCell>
+                <TableCell className="max-w-[140px] truncate sm:max-w-none">{t.companyName}</TableCell>
+                <TableCell className="hidden sm:table-cell max-w-[200px] truncate">{t.productName}</TableCell>
                 <TableCell>
                   <UrgencyBadge urgency={t.urgency} />
                 </TableCell>
                 <TableCell>
                   <TicketStatusBadge status={t.status} />
+                </TableCell>
+                <TableCell className="text-right p-2">
+                  <DeleteTicketButton
+                    ticketId={t.id}
+                    ticketCode={t.code}
+                    variant="icon"
+                  />
                 </TableCell>
               </TableRow>
             ))}
