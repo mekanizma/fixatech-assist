@@ -41,7 +41,7 @@ export function CustomerCreateForm({ onCreated }: Props) {
     password: "",
     address: "",
     district: "",
-    city: "İstanbul",
+    city: "",
     type: "hotel",
   });
 
@@ -71,7 +71,7 @@ export function CustomerCreateForm({ onCreated }: Props) {
         password: "",
         address: "",
         district: "",
-        city: "İstanbul",
+        city: "",
         type: "hotel",
       });
       onCreated();
@@ -110,7 +110,7 @@ export function CustomerCreateForm({ onCreated }: Props) {
                 required
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label>İşletme tipi</Label>
                 <Select value={form.type} onValueChange={(v) => set("type", v as BusinessType)}>
@@ -127,17 +127,13 @@ export function CustomerCreateForm({ onCreated }: Props) {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>İl</Label>
-                <Input value={form.city} onChange={(e) => set("city", e.target.value)} required />
+                <Label>İlçe</Label>
+                <Input
+                  value={form.district}
+                  onChange={(e) => set("district", e.target.value)}
+                  required
+                />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label>İlçe</Label>
-              <Input
-                value={form.district}
-                onChange={(e) => set("district", e.target.value)}
-                required
-              />
             </div>
             <div className="space-y-2">
               <Label>Açık adres</Label>

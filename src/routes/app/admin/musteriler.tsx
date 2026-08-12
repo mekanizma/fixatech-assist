@@ -53,7 +53,7 @@ function AdminCustomers() {
                   </p>
                 ) : null}
                 <p>
-                  {c.address}, {c.district} / {c.city}
+                  {c.address}, {c.district}
                 </p>
                 <p className="text-foreground font-medium pt-1">{count} servis kaydı</p>
                 {portalUsers.length > 0 ? (

@@ -220,7 +220,6 @@ export function FormSubmissionDetail({ submission, onStatusChange, onNotesSave, 
           <SectionCard title="Adres Bilgileri">
             <FieldRow icon={MapPin} label="Açık Adres" value={payloadDisplay(p, "address")} />
             <FieldRow icon={MapPin} label="İlçe" value={payloadDisplay(p, "district")} />
-            <FieldRow icon={MapPin} label="Bölge" value={payloadDisplay(p, "city")} />
           </SectionCard>
 
           <SectionCard title="Servis Planlama">

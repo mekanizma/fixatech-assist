@@ -105,7 +105,7 @@ function emptyForm(kind: CustomerKind = "kurumsal"): ServiceFormValues {
     email: "",
     address: "",
     district: "",
-    city: isIndividual ? "" : "İstanbul",
+    city: "",
     businessType: isIndividual ? "individual" : "hotel",
     productType: isIndividual ? INDIVIDUAL_PRODUCT_TYPES[0] : PRODUCT_TYPES[0],
     productName: "",
@@ -237,7 +237,7 @@ export function ServiceRequestForm({
                 <ReadonlyField label="Ad Soyad" value={form.contactPerson || form.companyName} />
                 <ReadonlyField label="Telefon" value={form.phone} />
                 <ReadonlyField label="E-posta" value={form.email || "—"} />
-                <ReadonlyField label="İl / İlçe" value={`${form.district} / ${form.city}`} />
+                <ReadonlyField label="İlçe" value={form.district || "—"} />
                 <ReadonlyField label="Adres" value={form.address} className="sm:col-span-2" />
               </div>
               <div className="flex flex-wrap gap-2">
@@ -280,11 +280,8 @@ export function ServiceRequestForm({
                   autoComplete="email"
                 />
               </Field>
-              <Field label="İlçe *">
+              <Field label="İlçe *" className="sm:col-span-2">
                 <Input required value={form.district} onChange={(e) => set("district", e.target.value)} />
-              </Field>
-              <Field label="İl *">
-                <Input required value={form.city} onChange={(e) => set("city", e.target.value)} />
               </Field>
               <Field label="Adres *" className="sm:col-span-2">
                 <Textarea
@@ -326,7 +323,7 @@ export function ServiceRequestForm({
               <ReadonlyField label="Telefon" value={form.phone} />
               <ReadonlyField label="E-posta" value={form.email || "—"} />
               <ReadonlyField label="İşletme türü" value={BUSINESS_LABELS[form.businessType]} />
-              <ReadonlyField label="İl / İlçe" value={`${form.district} / ${form.city}`} />
+              <ReadonlyField label="İlçe" value={form.district || "—"} />
               <ReadonlyField label="Adres" value={form.address} className="sm:col-span-2" />
             </div>
             <div className="flex flex-wrap gap-2">
@@ -370,9 +367,6 @@ export function ServiceRequestForm({
           </Field>
           <Field label="İlçe *">
             <Input required value={form.district} onChange={(e) => set("district", e.target.value)} />
-          </Field>
-          <Field label="İl *" className="sm:col-span-2">
-            <Input required value={form.city} onChange={(e) => set("city", e.target.value)} />
           </Field>
           <Field label="Adres *" className="sm:col-span-2">
             <Textarea required rows={2} value={form.address} onChange={(e) => set("address", e.target.value)} />

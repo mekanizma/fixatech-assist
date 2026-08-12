@@ -68,7 +68,7 @@ export function TicketDetailView({
           <CardContent className="space-y-3 text-sm">
             <Row icon={User} label={ticket.companyName} sub={`${BUSINESS_LABELS[ticket.businessType]} · ${ticket.contactPerson}`} />
             <Row icon={Phone} label={ticket.phone} sub={ticket.email} />
-            <Row icon={MapPin} label={`${ticket.address}, ${ticket.district}`} sub={ticket.city} />
+            <Row icon={MapPin} label={`${ticket.address}, ${ticket.district}`} />
             {ticket.location && (
               <a
                 className="text-primary text-xs hover:underline"

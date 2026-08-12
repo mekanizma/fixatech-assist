@@ -344,22 +344,13 @@ function TechService() {
                     placeholder={ts.f.addressPh}
                   />
                 </Field>
-                <Field icon={MapPin} label={ts.f.district} required>
+                <Field icon={MapPin} label={ts.f.district} required className="sm:col-span-2">
                   <input
                     value={form.district}
                     onChange={(e) => set("district", e.target.value)}
                     required
                     className="input"
                     placeholder={ts.f.districtPh}
-                  />
-                </Field>
-                <Field icon={MapPin} label={ts.f.city} required>
-                  <input
-                    value={form.city}
-                    onChange={(e) => set("city", e.target.value)}
-                    required
-                    className="input"
-                    placeholder={ts.f.cityPh}
                   />
                 </Field>
               </div>
