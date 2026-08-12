@@ -163,7 +163,7 @@ export function FormSubmissionDetail({ submission, onStatusChange, onNotesSave, 
         )}
         {isTech && (
           <Button size="sm" variant="outline" className="rounded-full" asChild>
-            <Link to="/app/admin/kayitlar/yeni" search={{ from: submission.id }}>
+            <Link to="/app/admin/kayitlar/yeni" search={{ from: submission.id, tur: "kurumsal" }}>
               <ClipboardList className="h-4 w-4 mr-1" /> Servis kaydı aç
             </Link>
           </Button>

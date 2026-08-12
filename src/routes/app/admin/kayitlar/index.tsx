@@ -62,7 +62,7 @@ function AdminTickets() {
           <TableHeader>
             <TableRow>
               <TableHead>Kod</TableHead>
-              <TableHead>Firma</TableHead>
+              <TableHead>Müşteri</TableHead>
               <TableHead>Ürün</TableHead>
               <TableHead>Öncelik</TableHead>
               <TableHead>Durum</TableHead>

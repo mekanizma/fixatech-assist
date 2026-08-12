@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Building2, Package, AlertCircle, Calendar, Camera, Video, MapPin } from "lucide-react";
+import { Building2, Package, AlertCircle, Calendar, Camera, Video, MapPin, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,11 +7,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { PRODUCT_TYPES, TIME_SLOTS, BUSINESS_LABELS, MAX_FILE_SIZE } from "@/lib/service-desk/constants";
+import {
+  PRODUCT_TYPES,
+  INDIVIDUAL_PRODUCT_TYPES,
+  TIME_SLOTS,
+  BUSINESS_LABELS,
+  CORPORATE_BUSINESS_TYPES,
+  MAX_FILE_SIZE,
+} from "@/lib/service-desk/constants";
 import { fileToDataUrl } from "@/lib/service-desk/utils";
 import type {
   BusinessType,
   Company,
+  CustomerKind,
   ServiceMode,
   ServiceTicket,
   TicketInput,
@@ -88,35 +96,40 @@ export function ticketToFormDefaults(
   };
 }
 
-const empty: ServiceFormValues = {
-  companyName: "",
-  contactPerson: "",
-  phone: "",
-  email: "",
-  address: "",
-  district: "",
-  city: "İstanbul",
-  businessType: "hotel",
-  productType: PRODUCT_TYPES[0],
-  productName: "",
-  brand: "",
-  model: "",
-  serialNo: "",
-  quantity: 1,
-  issueDescription: "",
-  photos: [],
-  videos: [],
-  urgency: "normal",
-  serviceDate: new Date().toISOString().split("T")[0],
-  serviceTime: TIME_SLOTS[1],
-  serviceMode: "onsite",
-  warrantyStatus: "unknown",
-  previousService: false,
-  notes: "",
-};
+function emptyForm(kind: CustomerKind = "kurumsal"): ServiceFormValues {
+  const isIndividual = kind === "bireysel";
+  return {
+    companyName: "",
+    contactPerson: "",
+    phone: "",
+    email: "",
+    address: "",
+    district: "",
+    city: isIndividual ? "" : "İstanbul",
+    businessType: isIndividual ? "individual" : "hotel",
+    productType: isIndividual ? INDIVIDUAL_PRODUCT_TYPES[0] : PRODUCT_TYPES[0],
+    productName: "",
+    brand: "",
+    model: "",
+    serialNo: "",
+    quantity: 1,
+    issueDescription: "",
+    photos: [],
+    videos: [],
+    urgency: "normal",
+    serviceDate: new Date().toISOString().split("T")[0],
+    serviceTime: TIME_SLOTS[1],
+    serviceMode: "onsite",
+    warrantyStatus: "unknown",
+    previousService: false,
+    notes: "",
+  };
+}
 
 type Props = {
   initial?: Partial<ServiceFormValues>;
+  /** bireysel: kişi bilgileri; kurumsal: firma bilgileri */
+  customerKind?: CustomerKind;
   /** Kayıtlı firma bilgileri gösterilir; müşteri tekrar girmek zorunda kalmaz */
   lockCompanyFields?: boolean;
   onSubmit: (values: ServiceFormValues) => void;
@@ -130,39 +143,23 @@ function mergeFormInitial(
   initial?: Partial<ServiceFormValues>,
 ): ServiceFormValues {
   if (!initial) return prev;
-  const next = { ...prev };
-  for (const key of Object.keys(initial) as (keyof ServiceFormValues)[]) {
-    const value = initial[key];
-    if (value !== undefined) {
-      next[key] = value as ServiceFormValues[typeof key];
-    }
-  }
-  return next;
-}
-
-function applyCompanyDefaults(
-  prev: ServiceFormValues,
-  initial?: Partial<ServiceFormValues>,
-): ServiceFormValues {
-  if (!initial) return prev;
-  const patch: Partial<ServiceFormValues> = {};
-  for (const key of COMPANY_FIELDS) {
-    const value = initial[key];
-    if (value !== undefined && value !== "") {
-      patch[key] = value as ServiceFormValues[typeof key];
-    }
-  }
-  return mergeFormInitial(prev, patch);
+  return { ...prev, ...initial };
 }
 
 export function ServiceRequestForm({
   initial,
+  customerKind = "kurumsal",
   lockCompanyFields = false,
   onSubmit,
   submitLabel = "Servis Talebi Oluştur",
   showWhatsApp = true,
 }: Props) {
-  const [form, setForm] = useState<ServiceFormValues>(() => mergeFormInitial({ ...empty }, initial));
+  const isIndividual = customerKind === "bireysel";
+  const productOptions = isIndividual ? INDIVIDUAL_PRODUCT_TYPES : PRODUCT_TYPES;
+
+  const [form, setForm] = useState<ServiceFormValues>(() =>
+    mergeFormInitial(emptyForm(customerKind), initial),
+  );
 
   useEffect(() => {
     setForm((prev) => mergeFormInitial(prev, initial));
@@ -192,6 +189,10 @@ export function ServiceRequestForm({
   const set = <K extends keyof ServiceFormValues>(k: K, v: ServiceFormValues[K]) =>
     setForm((p) => ({ ...p, [k]: v }));
 
+  const setFullName = (name: string) => {
+    setForm((p) => ({ ...p, contactPerson: name, companyName: name, businessType: "individual" }));
+  };
+
   const handleFiles = async (files: FileList | null, kind: "photos" | "videos") => {
     if (!files) return;
     const list = [...files].slice(0, 4);
@@ -209,43 +210,105 @@ export function ServiceRequestForm({
     });
   };
 
-  const buildTicketInput = (): TicketInput => ({
-    companyId: "",
-    companyName: form.companyName,
-    contactPerson: form.contactPerson,
-    phone: form.phone,
-    email: form.email,
-    address: form.address,
-    district: form.district,
-    city: form.city,
-    businessType: form.businessType,
-    productType: form.productType,
-    productName: form.productName,
-    brand: form.brand,
-    model: form.model,
-    serialNo: form.serialNo,
-    quantity: form.quantity,
-    issueDescription: form.issueDescription,
-    photos: form.photos,
-    videos: form.videos,
-    urgency: form.urgency,
-    serviceDate: form.serviceDate,
-    serviceTime: form.serviceTime,
-    serviceMode: form.serviceMode,
-    warrantyStatus: form.warrantyStatus,
-    previousService: form.previousService,
-    notes: form.notes,
-    location: form.location,
-  });
+  const prepareSubmit = (values: ServiceFormValues): ServiceFormValues => {
+    if (!isIndividual) return values;
+    const name = values.contactPerson.trim();
+    return {
+      ...values,
+      contactPerson: name,
+      companyName: name || values.companyName,
+      businessType: "individual",
+    };
+  };
 
   return (
     <form
       className="space-y-6"
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit(form);
+        onSubmit(prepareSubmit(form));
       }}
     >
+      {isIndividual ? (
+        <Section icon={User} title="Müşteri Bilgileri" desc="Bireysel müşteri iletişim ve adres bilgileri">
+          {lockCompanyFields ? (
+            <div className="space-y-4">
+              <div className="rounded-xl border border-border/60 bg-muted/40 p-4 grid sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                <ReadonlyField label="Ad Soyad" value={form.contactPerson || form.companyName} />
+                <ReadonlyField label="Telefon" value={form.phone} />
+                <ReadonlyField label="E-posta" value={form.email || "—"} />
+                <ReadonlyField label="İl / İlçe" value={`${form.district} / ${form.city}`} />
+                <ReadonlyField label="Adres" value={form.address} className="sm:col-span-2" />
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" variant="outline" size="sm" onClick={shareLocation}>
+                  <MapPin className="h-4 w-4 mr-2" /> Konum Paylaş
+                </Button>
+                {form.location && (
+                  <span className="text-xs text-muted-foreground self-center">
+                    Konum alındı ({form.location.lat.toFixed(4)}, {form.location.lng.toFixed(4)})
+                  </span>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 gap-4">
+              <Field label="Ad Soyad *" className="sm:col-span-2">
+                <Input
+                  required
+                  value={form.contactPerson}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Örn. Ayşe Yılmaz"
+                  autoComplete="name"
+                />
+              </Field>
+              <Field label="Telefon *">
+                <Input
+                  required
+                  type="tel"
+                  inputMode="tel"
+                  value={form.phone}
+                  onChange={(e) => set("phone", e.target.value)}
+                  autoComplete="tel"
+                />
+              </Field>
+              <Field label="E-posta">
+                <Input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => set("email", e.target.value)}
+                  autoComplete="email"
+                />
+              </Field>
+              <Field label="İlçe *">
+                <Input required value={form.district} onChange={(e) => set("district", e.target.value)} />
+              </Field>
+              <Field label="İl *">
+                <Input required value={form.city} onChange={(e) => set("city", e.target.value)} />
+              </Field>
+              <Field label="Adres *" className="sm:col-span-2">
+                <Textarea
+                  required
+                  rows={2}
+                  value={form.address}
+                  onChange={(e) => set("address", e.target.value)}
+                  placeholder="Mahalle, sokak, bina no..."
+                />
+              </Field>
+              <div className="sm:col-span-2 flex flex-wrap gap-2">
+                <Button type="button" variant="outline" size="sm" onClick={shareLocation}>
+                  <MapPin className="h-4 w-4 mr-2" /> Konum Paylaş
+                </Button>
+                {form.location && (
+                  <span className="text-xs text-muted-foreground self-center">
+                    Konum alındı ({form.location.lat.toFixed(4)}, {form.location.lng.toFixed(4)})
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+        </Section>
+      ) : (
       <Section
         icon={Building2}
         title="Firma Bilgileri"
@@ -297,7 +360,7 @@ export function ServiceRequestForm({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {(Object.keys(BUSINESS_LABELS) as BusinessType[]).map((k) => (
+                {CORPORATE_BUSINESS_TYPES.map((k) => (
                   <SelectItem key={k} value={k}>
                     {BUSINESS_LABELS[k]}
                   </SelectItem>
@@ -327,8 +390,13 @@ export function ServiceRequestForm({
         </div>
         )}
       </Section>
+      )}
 
-      <Section icon={Package} title="Ürün Bilgileri" desc="Arızalı ekipman detayları">
+      <Section
+        icon={Package}
+        title="Ürün Bilgileri"
+        desc={isIndividual ? "Arızalı cihaz detayları" : "Arızalı ekipman detayları"}
+      >
         <div className="grid sm:grid-cols-2 gap-4">
           <Field label="Ürün Türü *">
             <Select value={form.productType} onValueChange={(v) => set("productType", v)}>
@@ -336,7 +404,7 @@ export function ServiceRequestForm({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {PRODUCT_TYPES.map((p) => (
+                {productOptions.map((p) => (
                   <SelectItem key={p} value={p}>
                     {p}
                   </SelectItem>
@@ -460,8 +528,16 @@ export function ServiceRequestForm({
             <div className="grid sm:grid-cols-2 gap-2">
               {(
                 [
-                  { v: "onsite" as ServiceMode, l: "Yerinde Servis", d: "Teknisyen işletmenize gelir" },
-                  { v: "workshop" as ServiceMode, l: "Atölye Servisi", d: "Ürün atölyeye alınır" },
+                  {
+                    v: "onsite" as ServiceMode,
+                    l: "Yerinde Servis",
+                    d: isIndividual ? "Teknisyen adresinize gelir" : "Teknisyen işletmenize gelir",
+                  },
+                  {
+                    v: "workshop" as ServiceMode,
+                    l: "Atölye Servisi",
+                    d: "Ürün atölyeye alınır",
+                  },
                 ] as const
               ).map((o) => (
                 <button
@@ -469,7 +545,7 @@ export function ServiceRequestForm({
                   type="button"
                   onClick={() => set("serviceMode", o.v)}
                   className={cn(
-                    "rounded-xl border-2 p-4 text-left transition",
+                    "rounded-xl border-2 p-4 text-left transition touch-manipulation",
                     form.serviceMode === o.v ? "border-primary bg-primary/5" : "border-border",
                   )}
                 >

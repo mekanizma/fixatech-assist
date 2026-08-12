@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BUSINESS_LABELS } from "@/lib/service-desk/constants";
+import { BUSINESS_LABELS, CORPORATE_BUSINESS_TYPES } from "@/lib/service-desk/constants";
 import { createCustomerAccount, type CreateCustomerInput } from "@/lib/service-desk/api";
 import type { BusinessType } from "@/lib/service-desk/types";
 import { toast } from "sonner";
@@ -27,7 +27,7 @@ type Props = {
   onCreated: () => void;
 };
 
-const businessTypes = Object.keys(BUSINESS_LABELS) as BusinessType[];
+const businessTypes = CORPORATE_BUSINESS_TYPES;
 
 export function CustomerCreateForm({ onCreated }: Props) {
   const [open, setOpen] = useState(false);

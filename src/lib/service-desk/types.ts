@@ -11,7 +11,16 @@ export type ServiceStatus =
 export type Urgency = "normal" | "urgent" | "critical";
 export type ServiceMode = "onsite" | "workshop";
 export type WarrantyStatus = "yes" | "no" | "unknown";
-export type BusinessType = "hotel" | "restaurant" | "cafe" | "industrial_kitchen" | "corporate";
+export type BusinessType =
+  | "individual"
+  | "hotel"
+  | "restaurant"
+  | "cafe"
+  | "industrial_kitchen"
+  | "corporate";
+
+/** Servis kaydı müşteri türü (admin yeni kayıt) */
+export type CustomerKind = "bireysel" | "kurumsal";
 
 export interface User {
   id: string;

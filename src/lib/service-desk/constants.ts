@@ -17,6 +17,20 @@ export const PRODUCT_TYPES = [
   "Diğer",
 ] as const;
 
+/** Bireysel müşteri ürün türleri */
+export const INDIVIDUAL_PRODUCT_TYPES = [
+  "Buzdolabı",
+  "Çamaşır Makinesi",
+  "Bulaşık Makinesi",
+  "Klima",
+  "Fırın / Ocak",
+  "Televizyon",
+  "Kahve Makinesi",
+  "Elektrik",
+  "Su Tesisatı",
+  "Diğer",
+] as const;
+
 export const TIME_SLOTS = [
   "08:00 – 10:00",
   "10:00 – 12:00",
@@ -51,12 +65,22 @@ export const URGENCY_LABELS: Record<Urgency, string> = {
 };
 
 export const BUSINESS_LABELS: Record<BusinessType, string> = {
+  individual: "Bireysel",
   hotel: "Otel",
   restaurant: "Restoran",
   cafe: "Kafe",
   industrial_kitchen: "Endüstriyel Mutfak",
   corporate: "Kurumsal",
 };
+
+/** Kurumsal / işletme türleri (bireysel hariç) */
+export const CORPORATE_BUSINESS_TYPES: BusinessType[] = [
+  "hotel",
+  "restaurant",
+  "cafe",
+  "industrial_kitchen",
+  "corporate",
+];
 
 export const SERVICE_MODE_LABELS: Record<ServiceMode, string> = {
   onsite: "Yerinde Servis",
