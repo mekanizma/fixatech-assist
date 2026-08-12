@@ -93,8 +93,8 @@ function TechService() {
       contactPhone: form.phone,
       contactEmail: form.email,
       companyName: form.company,
-      summary: `${form.productName}${form.company ? ` — ${form.company}` : form.name ? ` — ${form.name}` : ""}`,
-      payload: { ...form },
+      summary: `${form.category || "Teknik servis"}${form.company ? ` — ${form.company}` : form.name ? ` — ${form.name}` : ""}`,
+      payload: { ...form, productName: form.productName || form.category },
       whatsappMessage: msg,
     });
   };
@@ -112,7 +112,7 @@ function TechService() {
         state: {
           contactName: form.name,
           phone: form.phone,
-          productName: form.productName,
+          productName: form.category || form.productName,
         },
         replace: true,
       });
@@ -260,15 +260,6 @@ function TechService() {
 
             <FormSection icon={Package} title={ts.sections.product} subtitle={ts.sections.productSub}>
               <div className="grid sm:grid-cols-2 gap-4">
-                <Field icon={Package} label={ts.f.productName} required className="sm:col-span-2">
-                  <input
-                    value={form.productName}
-                    onChange={(e) => set("productName", e.target.value)}
-                    required
-                    className="input"
-                    placeholder={ts.f.productNamePh}
-                  />
-                </Field>
                 <Field icon={Wrench} label={ts.f.category} required>
                   <select
                     value={form.category}

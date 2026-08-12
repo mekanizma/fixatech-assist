@@ -211,13 +211,17 @@ export function ServiceRequestForm({
   };
 
   const prepareSubmit = (values: ServiceFormValues): ServiceFormValues => {
-    if (!isIndividual) return values;
+    const productName = values.productName.trim() || values.productType;
+    if (!isIndividual) {
+      return { ...values, productName };
+    }
     const name = values.contactPerson.trim();
     return {
       ...values,
       contactPerson: name,
       companyName: name || values.companyName,
       businessType: "individual",
+      productName,
     };
   };
 
@@ -405,9 +409,6 @@ export function ServiceRequestForm({
                 ))}
               </SelectContent>
             </Select>
-          </Field>
-          <Field label="Ürün Adı *">
-            <Input required value={form.productName} onChange={(e) => set("productName", e.target.value)} />
           </Field>
           <Field label="Marka">
             <Input value={form.brand} onChange={(e) => set("brand", e.target.value)} />
@@ -602,7 +603,7 @@ export function formToTicketInput(form: ServiceFormValues, companyId = ""): Tick
     city: form.city,
     businessType: form.businessType,
     productType: form.productType,
-    productName: form.productName,
+    productName: form.productName.trim() || form.productType,
     brand: form.brand,
     model: form.model,
     serialNo: form.serialNo,

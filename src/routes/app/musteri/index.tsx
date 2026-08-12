@@ -57,7 +57,7 @@ function CustomerHome() {
             >
               <div>
                 <p className="font-semibold text-sm">{t.code}</p>
-                <p className="text-xs text-muted-foreground">{t.productName}</p>
+                <p className="text-xs text-muted-foreground">{t.productType || t.productName}</p>
               </div>
               <TicketStatusBadge status={t.status} />
             </Link>

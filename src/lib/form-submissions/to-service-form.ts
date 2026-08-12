@@ -64,7 +64,10 @@ export function submissionToServiceForm(submission: FormSubmission): Partial<Ser
     city: payloadStr(submission.payload, "city"),
     businessType: "corporate",
     productType: mapProductType(payloadStr(submission.payload, "category")),
-    productName: payloadStr(submission.payload, "productName"),
+    productName:
+      payloadStr(submission.payload, "productName") ||
+      payloadStr(submission.payload, "category") ||
+      mapProductType(payloadStr(submission.payload, "category")),
     brand: payloadStr(submission.payload, "brand"),
     model: payloadStr(submission.payload, "model"),
     serialNo: payloadStr(submission.payload, "serialNo"),

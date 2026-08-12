@@ -44,7 +44,7 @@ function ticketContext(ticket: ServiceTicket) {
 
   const productLine = [
     ticket.productType,
-    ticket.productName,
+    ticket.productName && ticket.productName !== ticket.productType ? ticket.productName : "",
     [ticket.brand, ticket.model].filter(Boolean).join(" "),
   ]
     .filter(Boolean)

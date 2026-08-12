@@ -85,7 +85,9 @@ function AdminTickets() {
                   </Link>
                 </TableCell>
                 <TableCell className="max-w-[140px] truncate sm:max-w-none">{t.companyName}</TableCell>
-                <TableCell className="hidden sm:table-cell max-w-[200px] truncate">{t.productName}</TableCell>
+                <TableCell className="hidden sm:table-cell max-w-[200px] truncate">
+                  {t.productType || t.productName}
+                </TableCell>
                 <TableCell>
                   <UrgencyBadge urgency={t.urgency} />
                 </TableCell>

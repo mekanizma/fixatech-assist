@@ -74,7 +74,7 @@ function TechHome() {
                 <div className="flex justify-between gap-2">
                   <div>
                     <p className="font-semibold">{t.companyName}</p>
-                    <p className="text-sm text-muted-foreground">{t.productName}</p>
+                    <p className="text-sm text-muted-foreground">{t.productType || t.productName}</p>
                     <p className="text-xs text-muted-foreground">{t.serviceTime}</p>
                   </div>
                   <TicketStatusBadge status={t.status} />

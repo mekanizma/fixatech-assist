@@ -88,7 +88,7 @@ export function TicketDetailView({
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <p>
-              <span className="text-muted-foreground">Ürün:</span> {ticket.productName} ({ticket.productType})
+              <span className="text-muted-foreground">Ürün:</span> {ticket.productType || ticket.productName}
             </p>
             <p>
               <span className="text-muted-foreground">Marka/Model:</span> {ticket.brand} {ticket.model}

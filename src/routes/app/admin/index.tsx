@@ -76,7 +76,7 @@ function AdminDashboard() {
                   className="block rounded-xl border border-destructive/20 bg-destructive/5 p-3 hover:bg-destructive/10"
                 >
                   <p className="font-semibold text-sm">{t.companyName}</p>
-                  <p className="text-xs text-muted-foreground">{t.productName}</p>
+                  <p className="text-xs text-muted-foreground">{t.productType || t.productName}</p>
                   <p className="text-xs mt-1">{formatDateTime(t.updatedAt)}</p>
                 </Link>
               ))

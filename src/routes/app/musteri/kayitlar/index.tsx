@@ -37,7 +37,7 @@ function CustomerTickets() {
               >
                 {t.code}
               </Link>
-              <p className="text-sm text-muted-foreground">{t.productName}</p>
+              <p className="text-sm text-muted-foreground">{t.productType || t.productName}</p>
               <p className="text-xs text-muted-foreground">{formatDate(t.serviceDate)}</p>
             </div>
             <div className="flex items-center gap-2">

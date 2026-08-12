@@ -201,8 +201,7 @@ export function FormSubmissionDetail({ submission, onStatusChange, onNotesSave, 
           </SectionCard>
 
           <SectionCard title="Ürün Bilgileri">
-            <FieldRow icon={Package} label="Ürün Adı" value={payloadDisplay(p, "productName")} highlight />
-            <FieldRow icon={Wrench} label="Kategori" value={payloadDisplay(p, "category")} />
+            <FieldRow icon={Wrench} label="Kategori" value={payloadDisplay(p, "category")} highlight />
             <FieldRow icon={Package} label="Adet" value={payloadDisplay(p, "quantity")} />
             <FieldRow icon={Building2} label="Marka" value={payloadDisplay(p, "brand")} />
             <FieldRow icon={Package} label="Model" value={payloadDisplay(p, "model")} />
