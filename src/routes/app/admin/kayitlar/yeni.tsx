@@ -8,7 +8,7 @@ import {
   type ServiceFormValues,
 } from "@/components/service-desk/ServiceRequestForm";
 import { useAuth } from "@/lib/service-desk/auth";
-import { createTicket, upsertCompany } from "@/lib/service-desk/api";
+import { createTicket, upsertCompany, emptyDeskData } from "@/lib/service-desk/api";
 import { deskKeys } from "@/lib/service-desk/query-keys";
 import { fetchFormSubmissionById, updateFormSubmissionStatus } from "@/lib/form-submissions/api";
 import { formSubmissionKeys } from "@/lib/form-submissions/query-keys";
@@ -16,7 +16,7 @@ import { submissionToServiceForm } from "@/lib/form-submissions/to-service-form"
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import type { CustomerKind } from "@/lib/service-desk/types";
+import type { CustomerKind, ServiceDeskData } from "@/lib/service-desk/types";
 import { cn } from "@/lib/utils";
 
 type Search = {
@@ -173,6 +173,13 @@ function AdminTicketForm({
         await qc.invalidateQueries({ queryKey: formSubmissionKeys.all });
       }
 
+      qc.setQueryData<ServiceDeskData>(deskKeys.all, (old) => {
+        const base = old ?? emptyDeskData;
+        return {
+          ...base,
+          tickets: [ticket, ...base.tickets.filter((t) => t.id !== ticket.id)],
+        };
+      });
       await qc.invalidateQueries({ queryKey: deskKeys.all });
       toast.success("Servis kaydı oluşturuldu", { description: ticket.code });
       navigate({ to: "/app/admin/kayitlar/$ticketId", params: { ticketId: ticket.id } });

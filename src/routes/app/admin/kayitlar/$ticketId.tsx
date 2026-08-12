@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import { TicketDetailView } from "@/components/service-desk/TicketDetailView";
 import { TicketPricingPanel } from "@/components/service-desk/TicketPricingPanel";
 import { DeleteTicketButton } from "@/components/service-desk/DeleteTicketButton";
@@ -25,10 +26,18 @@ function AdminTicketDetail() {
   const data = useDeskData();
   const qc = useQueryClient();
   const { user } = useAuth();
-  const ticket = useTicket(ticketId);
+  const { ticket, isLoading } = useTicket(ticketId);
   const [note, setNote] = useState("");
 
-  if (!ticket || !user) throw notFound();
+  if (!user) throw notFound();
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+  if (!ticket) throw notFound();
 
   const techs = data.technicians.filter((t) => t.active);
   const actor = { id: user.id, name: user.name };

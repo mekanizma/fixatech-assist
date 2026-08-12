@@ -1,14 +1,32 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useDeskData } from "@/hooks/use-desk-data";
-import { fetchPublicTicketByCode } from "@/lib/service-desk/api";
+import { useDeskData, useDeskQuery } from "@/hooks/use-desk-data";
+import { fetchPublicTicketByCode, getTicket } from "@/lib/service-desk/api";
 import { deskKeys } from "@/lib/service-desk/query-keys";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import type { ServiceTicket, TicketEvent, Technician } from "@/lib/service-desk/types";
 
+/** Cache + tekil fetch; yüklenirken notFound atılmasın diye isLoading döner. */
 export function useTicket(id: string | undefined) {
-  const data = useDeskData();
-  return useMemo(() => data.tickets.find((t) => t.id === id), [data.tickets, id]);
+  const desk = useDeskQuery();
+  const fromDesk = useMemo(
+    () => desk.data?.tickets.find((t) => t.id === id),
+    [desk.data?.tickets, id],
+  );
+
+  const single = useQuery({
+    queryKey: [...deskKeys.all, "ticket", id ?? ""] as const,
+    queryFn: () => getTicket(id!),
+    enabled: isSupabaseConfigured() && Boolean(id) && !fromDesk,
+  });
+
+  const ticket = fromDesk ?? single.data ?? undefined;
+  const isLoading =
+    Boolean(id) &&
+    !ticket &&
+    (desk.isPending || desk.isFetching || single.isPending || single.isFetching);
+
+  return { ticket, isLoading };
 }
 
 export function useTicketByCode(code: string | undefined) {

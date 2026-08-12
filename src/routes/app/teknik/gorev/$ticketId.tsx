@@ -1,13 +1,12 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Camera } from "lucide-react";
+import { Camera, Loader2 } from "lucide-react";
 import { TicketDetailView } from "@/components/service-desk/TicketDetailView";
 import { TicketPricingPanel } from "@/components/service-desk/TicketPricingPanel";
 import { useAuth } from "@/lib/service-desk/auth";
 import { addTicketPhoto, updateTicketStatus } from "@/lib/service-desk/api";
 import { deskKeys } from "@/lib/service-desk/query-keys";
-import { useDeskData } from "@/hooks/use-desk-data";
 import { useTicket } from "@/hooks/use-service-desk";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,13 +22,21 @@ export const Route = createFileRoute("/app/teknik/gorev/$ticketId")({
 
 function TechJobDetail() {
   const { ticketId } = Route.useParams();
-  useDeskData();
   const qc = useQueryClient();
   const { user } = useAuth();
-  const ticket = useTicket(ticketId);
+  const { ticket, isLoading } = useTicket(ticketId);
   const [signature, setSignature] = useState("");
 
-  if (!ticket || !user) throw notFound();
+  if (!user) throw notFound();
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+  if (!ticket) throw notFound();
+
   const actor = { id: user.id, name: user.name };
 
   return (

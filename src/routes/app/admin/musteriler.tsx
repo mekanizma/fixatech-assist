@@ -5,6 +5,7 @@ import { useDeskData } from "@/hooks/use-desk-data";
 import { BUSINESS_LABELS } from "@/lib/service-desk/constants";
 import { deskKeys } from "@/lib/service-desk/query-keys";
 import { CustomerCreateForm } from "@/components/service-desk/CustomerCreateForm";
+import { DeleteCustomerButton } from "@/components/service-desk/DeleteCustomerButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -28,16 +29,18 @@ function AdminCustomers() {
         <CustomerCreateForm onCreated={() => void qc.invalidateQueries({ queryKey: deskKeys.all })} />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-4">
         {companies.map((c) => {
           const count = tickets.filter((t) => t.companyId === c.id).length;
           const portalUsers = users.filter((u) => u.role === "customer" && u.companyId === c.id);
           return (
             <Card key={c.id}>
               <CardHeader>
-                <CardTitle className="text-lg flex items-center justify-between gap-2">
-                  {c.name}
-                  <Badge variant="secondary">{BUSINESS_LABELS[c.type]}</Badge>
+                <CardTitle className="text-lg flex items-start justify-between gap-2">
+                  <span className="min-w-0 break-words">{c.name}</span>
+                  <Badge variant="secondary" className="shrink-0">
+                    {BUSINESS_LABELS[c.type]}
+                  </Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm space-y-2 text-muted-foreground">
@@ -46,7 +49,7 @@ function AdminCustomers() {
                 {c.email ? (
                   <p className="flex items-center gap-1.5">
                     <Mail className="h-3.5 w-3.5 shrink-0" />
-                    {c.email}
+                    <span className="break-all">{c.email}</span>
                   </p>
                 ) : null}
                 <p>
@@ -59,7 +62,7 @@ function AdminCustomers() {
                       <KeyRound className="h-3.5 w-3.5" /> Portal girişi
                     </p>
                     {portalUsers.map((u) => (
-                      <p key={u.id} className="font-mono text-foreground">
+                      <p key={u.id} className="font-mono text-foreground break-all">
                         {u.email}
                       </p>
                     ))}
@@ -67,6 +70,14 @@ function AdminCustomers() {
                 ) : (
                   <p className="text-xs text-amber-600 dark:text-amber-500">Portal hesabı yok</p>
                 )}
+                <div className="pt-2">
+                  <DeleteCustomerButton
+                    companyId={c.id}
+                    companyName={c.name}
+                    ticketCount={count}
+                    className="w-full sm:w-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
           );

@@ -187,6 +187,13 @@ export async function getCompany(id: string): Promise<Company | undefined> {
   return data ? mapCompany(data as DbCompany) : undefined;
 }
 
+export async function getTicket(id: string): Promise<ServiceTicket | undefined> {
+  const sb = getSupabase();
+  const { data, error } = await sb.from("service_tickets").select("*").eq("id", id).maybeSingle();
+  assertNoError(error);
+  return data ? mapTicket(data as DbTicket) : undefined;
+}
+
 export async function getTechnician(id: string): Promise<Technician | undefined> {
   const sb = getSupabase();
   const { data, error } = await sb.from("technicians").select("*").eq("id", id).maybeSingle();
@@ -224,6 +231,15 @@ async function insertEvent(
 export async function upsertCompany(company: Company) {
   const sb = getSupabase();
   const { error } = await sb.from("companies").upsert(companyToRow(company));
+  assertNoError(error);
+}
+
+/** Firma + bağlı servis kayıtlarını siler (ticket_events cascade). */
+export async function deleteCompany(companyId: string): Promise<void> {
+  const sb = getSupabase();
+  const { error: ticketsError } = await sb.from("service_tickets").delete().eq("company_id", companyId);
+  assertNoError(ticketsError);
+  const { error } = await sb.from("companies").delete().eq("id", companyId);
   assertNoError(error);
 }
 

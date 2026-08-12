@@ -8,11 +8,12 @@ import {
   ticketToFormDefaults,
 } from "@/components/service-desk/ServiceRequestForm";
 import { useAuth } from "@/lib/service-desk/auth";
-import { createTicket, getCompany, linkProfileToCompany, upsertCompany } from "@/lib/service-desk/api";
+import { createTicket, getCompany, linkProfileToCompany, upsertCompany, emptyDeskData } from "@/lib/service-desk/api";
 import { deskKeys } from "@/lib/service-desk/query-keys";
 import { useDeskData } from "@/hooks/use-desk-data";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import type { ServiceDeskData } from "@/lib/service-desk/types";
 
 export const Route = createFileRoute("/app/musteri/yeni")({
   component: NewTicketPage,
@@ -94,6 +95,13 @@ function NewTicketPage() {
               { ...formToTicketInput(form, companyId), createdByUserId: user.id },
               { id: user.id, name: user.name },
             );
+            qc.setQueryData<ServiceDeskData>(deskKeys.all, (old) => {
+              const base = old ?? emptyDeskData;
+              return {
+                ...base,
+                tickets: [ticket, ...base.tickets.filter((t) => t.id !== ticket.id)],
+              };
+            });
             await qc.invalidateQueries({ queryKey: deskKeys.all });
             toast.success("Servis kaydı oluşturuldu", { description: ticket.code });
             navigate({ to: "/app/musteri/kayitlar/$ticketId", params: { ticketId: ticket.id } });
