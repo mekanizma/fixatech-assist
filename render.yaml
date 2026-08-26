@@ -1,17 +1,21 @@
 # Render Blueprint — https://render.com/docs/blueprint-spec
 # Dashboard: New > Blueprint > bu repo
+# Mevcut serviste Build Command dashboard'dan da güncellenmeli:
+#   bun install && bun run build
 services:
   - type: web
     name: pragmatechnical-assist
     runtime: node
     plan: free
     region: frankfurt
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start
+    buildCommand: bun install && bun run build
+    startCommand: bun run start
     healthCheckPath: /
     envVars:
       - key: NODE_VERSION
         value: "22"
+      - key: BUN_VERSION
+        value: "1.3.14"
       - key: NODE_ENV
         value: production
       - key: HOST
