@@ -16,6 +16,7 @@ import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { Toaster } from "@/components/ui/sonner";
 import { LangProvider } from "@/lib/i18n";
+import { GOOGLE_ADS_ID } from "@/lib/google-ads";
 import { buildDefaultSiteHead } from "@/lib/seo";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
 
@@ -101,13 +102,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-const GOOGLE_ADS_ID = "AW-18394616928";
-
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
       <head>
         <HeadContent />
+        {/* Google tag (gtag.js) — AW-18394616928 */}
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`} />
         <script
           dangerouslySetInnerHTML={{

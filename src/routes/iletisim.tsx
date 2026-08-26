@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { PHONE, PHONE_TEL, EMAIL, ADDRESS, MAP_EMBED_URL, MAP_LINK, waLink } from "@/lib/site";
 import { createFormSubmission } from "@/lib/form-submissions/api";
+import { trackGoogleAdsContactConversion } from "@/lib/google-ads";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { useLocalizedServices } from "@/lib/services";
 import { useT } from "@/lib/i18n";
@@ -37,6 +38,7 @@ function Contact() {
       }
     }
     window.open(waLink(msg), "_blank");
+    trackGoogleAdsContactConversion();
     toast.success(t.contact.toastTitle, { description: t.contact.toastDesc });
   };
 

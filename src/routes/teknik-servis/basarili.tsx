@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { createFileRoute, Link, useRouterState } from "@tanstack/react-router";
 import { CheckCircle2, Home, ClipboardList, Phone, MessageCircle, ArrowRight } from "lucide-react";
+import { trackGoogleAdsContactConversion } from "@/lib/google-ads";
 import { useT } from "@/lib/i18n";
 import { buildNoIndexHead } from "@/lib/seo";
 import { PHONE, PHONE_TEL, waLink } from "@/lib/site";
@@ -21,6 +23,10 @@ function TalepBasarili() {
   const state = useRouterState({
     select: (r) => (r.location.state ?? {}) as TalepSuccessState,
   });
+
+  useEffect(() => {
+    trackGoogleAdsContactConversion();
+  }, []);
 
   const hasDetail = Boolean(state.productName || state.contactName || state.phone);
 
