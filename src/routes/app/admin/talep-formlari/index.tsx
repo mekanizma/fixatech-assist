@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { FileText, Eye, Plus, Download, FileDown } from "lucide-react";
 import { useFormSubmissions, useUpdateFormSubmissionStatus } from "@/hooks/use-form-submissions";
 import { FormSubmissionDetail } from "@/components/service-desk/FormSubmissionDetail";
+import { DeleteFormSubmissionButton } from "@/components/service-desk/DeleteFormSubmissionButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -171,7 +172,7 @@ function AdminFormSubmissions() {
               <TableHead>Özet</TableHead>
               <TableHead>İletişim</TableHead>
               <TableHead>Durum</TableHead>
-              <TableHead className="w-[110px]" />
+              <TableHead className="w-[148px]" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -206,7 +207,7 @@ function AdminFormSubmissions() {
                     <Badge variant={s.status === "new" ? "default" : "secondary"}>{STATUS_LABELS[s.status]}</Badge>
                   </TableCell>
                   <TableCell>
-                    <div className="flex justify-end gap-0.5">
+                    <div className="flex justify-end gap-0.5" onClick={(e) => e.stopPropagation()}>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -231,6 +232,11 @@ function AdminFormSubmissions() {
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
+                      <DeleteFormSubmissionButton
+                        variant="icon"
+                        submissionId={s.id}
+                        summary={s.summary || s.contactName}
+                      />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -255,6 +261,7 @@ function AdminFormSubmissions() {
                   submission={selected}
                   onStatusChange={handleStatusChange}
                   onNotesSave={handleNotesSave}
+                  onDeleted={() => setSelected(null)}
                   isUpdating={updateStatus.isPending}
                 />
               </div>

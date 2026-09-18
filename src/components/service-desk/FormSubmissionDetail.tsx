@@ -37,6 +37,7 @@ import {
 import type { FormSubmission, FormSubmissionStatus, FormSubmissionType } from "@/lib/form-submissions/types";
 import { submissionToTalepPdf } from "@/lib/form-submissions/talep-form";
 import { openTalepFormPdf } from "@/lib/service-desk/pdf";
+import { DeleteFormSubmissionButton } from "@/components/service-desk/DeleteFormSubmissionButton";
 import { toast } from "sonner";
 
 const TYPE_LABELS: Record<FormSubmissionType, string> = {
@@ -106,10 +107,17 @@ type Props = {
   submission: FormSubmission;
   onStatusChange: (status: FormSubmissionStatus, notes?: string) => void;
   onNotesSave: (notes: string) => void;
+  onDeleted?: () => void;
   isUpdating?: boolean;
 };
 
-export function FormSubmissionDetail({ submission, onStatusChange, onNotesSave, isUpdating }: Props) {
+export function FormSubmissionDetail({
+  submission,
+  onStatusChange,
+  onNotesSave,
+  onDeleted,
+  isUpdating,
+}: Props) {
   const [notes, setNotes] = useState(submission.notes);
   const [status, setStatus] = useState(submission.status);
 
@@ -322,6 +330,11 @@ export function FormSubmissionDetail({ submission, onStatusChange, onNotesSave, 
         >
           <Archive className="h-4 w-4 mr-1" /> Arşivle
         </Button>
+        <DeleteFormSubmissionButton
+          submissionId={submission.id}
+          summary={submission.summary || submission.contactName}
+          onDeleted={onDeleted}
+        />
       </div>
 
       <details className="rounded-lg border border-border/40 bg-muted/10 text-xs">

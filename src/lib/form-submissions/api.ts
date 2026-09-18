@@ -96,3 +96,9 @@ export async function updateFormSubmissionStatus(
   const { error } = await sb.from("form_submissions").update(patch).eq("id", id);
   assertNoError(error);
 }
+
+export async function deleteFormSubmission(id: string): Promise<void> {
+  const sb = getSupabase();
+  const { error } = await sb.from("form_submissions").delete().eq("id", id);
+  assertNoError(error);
+}

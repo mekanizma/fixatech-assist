@@ -39,21 +39,16 @@ export type TalepFormPdfData = {
   kind?: "tech" | "contact";
 };
 
-/** Popup engelleyicisini aşmak için kaydetmeden önce boş pencere açın */
-export function preparePrintWindow(): Window | null {
-  return window.open("", "_blank");
-}
-
 /** Kayıt açılışı / başvuru — müşteri, adres, ürün, talep */
 export function openServiceApplicationPdf(ticket: ServiceTicket, opts?: ServicePdfOpts) {
   openPrintWindow(buildApplicationHtml(ticket, opts?.technician ?? null));
 }
 
-export function openTalepFormPdf(data: TalepFormPdfData, win?: Window | null) {
-  openPrintWindow(buildTalepFormHtml(data), win);
+export function openTalepFormPdf(data: TalepFormPdfData) {
+  openPrintWindow(buildTalepFormHtml(data));
 }
 
-export function openBlankTalepFormPdf(win?: Window | null) {
+export function openBlankTalepFormPdf() {
   openTalepFormPdf(
     {
       code: "TF-________",
@@ -77,7 +72,6 @@ export function openBlankTalepFormPdf(win?: Window | null) {
       notes: "",
       blank: true,
     },
-    win,
   );
 }
 
@@ -91,11 +85,51 @@ export function openServiceReportPdf(ticket: ServiceTicket, opts?: ServicePdfOpt
   openServiceApplicationPdf(ticket, opts);
 }
 
-function openPrintWindow(html: string, existing?: Window | null) {
-  const w = existing ?? window.open("", "_blank");
-  if (!w) return;
-  w.document.write(html);
-  w.document.close();
+function openPrintWindow(html: string) {
+  const htmlWithoutAutoPrint = html.replace(
+    /<script>window\.onload = \(\) => \{ window\.print\(\); \}<\/script>/g,
+    "",
+  );
+
+  const iframe = document.createElement("iframe");
+  iframe.setAttribute("aria-hidden", "true");
+  iframe.setAttribute("title", "Yazdır");
+  iframe.style.cssText =
+    "position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0;pointer-events:none;";
+  document.body.appendChild(iframe);
+
+  const win = iframe.contentWindow;
+  const doc = iframe.contentDocument;
+  if (!win || !doc) {
+    iframe.remove();
+    return;
+  }
+
+  const cleanup = () => {
+    iframe.remove();
+  };
+
+  win.addEventListener("afterprint", cleanup);
+  window.setTimeout(cleanup, 120_000);
+
+  doc.open();
+  doc.write(htmlWithoutAutoPrint);
+  doc.close();
+
+  const triggerPrint = () => {
+    try {
+      win.focus();
+      win.print();
+    } catch {
+      cleanup();
+    }
+  };
+
+  if (doc.readyState === "complete") {
+    window.setTimeout(triggerPrint, 50);
+  } else {
+    iframe.onload = () => window.setTimeout(triggerPrint, 50);
+  }
 }
 
 function ticketContext(ticket: ServiceTicket) {

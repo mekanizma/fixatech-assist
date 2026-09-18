@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createFormSubmission,
+  deleteFormSubmission,
   fetchFormSubmissions,
   updateFormSubmissionStatus,
 } from "@/lib/form-submissions/api";
@@ -22,6 +23,14 @@ export function useCreateFormSubmission() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: CreateFormSubmissionInput) => createFormSubmission(input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: formSubmissionKeys.all }),
+  });
+}
+
+export function useDeleteFormSubmission() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteFormSubmission(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: formSubmissionKeys.all }),
   });
 }
