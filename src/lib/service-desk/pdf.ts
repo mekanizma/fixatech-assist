@@ -14,9 +14,71 @@ export type ServicePdfOpts = {
   technician?: Technician | null;
 };
 
+export type TalepFormPdfData = {
+  code: string;
+  createdAt?: string;
+  contactName: string;
+  companyName: string;
+  phone: string;
+  email: string;
+  address: string;
+  district: string;
+  city?: string;
+  category: string;
+  brand: string;
+  model: string;
+  serialNo: string;
+  quantity: string;
+  issue: string;
+  delivery: string;
+  pickupDate: string;
+  pickupTime: string;
+  urgency: string;
+  notes: string;
+  blank?: boolean;
+  kind?: "tech" | "contact";
+};
+
+/** Popup engelleyicisini aşmak için kaydetmeden önce boş pencere açın */
+export function preparePrintWindow(): Window | null {
+  return window.open("", "_blank");
+}
+
 /** Kayıt açılışı / başvuru — müşteri, adres, ürün, talep */
 export function openServiceApplicationPdf(ticket: ServiceTicket, opts?: ServicePdfOpts) {
   openPrintWindow(buildApplicationHtml(ticket, opts?.technician ?? null));
+}
+
+export function openTalepFormPdf(data: TalepFormPdfData, win?: Window | null) {
+  openPrintWindow(buildTalepFormHtml(data), win);
+}
+
+export function openBlankTalepFormPdf(win?: Window | null) {
+  openTalepFormPdf(
+    {
+      code: "TF-________",
+      contactName: "",
+      companyName: "",
+      phone: "",
+      email: "",
+      address: "",
+      district: "",
+      city: "",
+      category: "",
+      brand: "",
+      model: "",
+      serialNo: "",
+      quantity: "",
+      issue: "",
+      delivery: "",
+      pickupDate: "",
+      pickupTime: "",
+      urgency: "",
+      notes: "",
+      blank: true,
+    },
+    win,
+  );
 }
 
 /** İş bitimi — teslim özeti, yapılan iş, imza */
@@ -29,8 +91,8 @@ export function openServiceReportPdf(ticket: ServiceTicket, opts?: ServicePdfOpt
   openServiceApplicationPdf(ticket, opts);
 }
 
-function openPrintWindow(html: string) {
-  const w = window.open("", "_blank");
+function openPrintWindow(html: string, existing?: Window | null) {
+  const w = existing ?? window.open("", "_blank");
   if (!w) return;
   w.document.write(html);
   w.document.close();
@@ -118,6 +180,112 @@ function buildApplicationHtml(ticket: ServiceTicket, tech: Technician | null) {
   <script>window.onload = () => { window.print(); }</script>
 </body>
 </html>`;
+}
+
+function buildTalepFormHtml(data: TalepFormPdfData) {
+  const theme = PDF_THEMES.application;
+  const isContact = data.kind === "contact";
+  const dash = data.blank ? pdfBlankLine() : "—";
+  const val = (s?: string) => (s?.trim() ? esc(s.trim()) : dash);
+  const addressLine = [data.address, data.district, data.city]
+    .map((s) => s?.trim())
+    .filter(Boolean)
+    .join(" · ");
+  const productLine = [data.category, [data.brand, data.model].filter(Boolean).join(" ")]
+    .filter(Boolean)
+    .join(" — ");
+  const serialLine = data.serialNo
+    ? `Seri: ${data.serialNo}${data.quantity ? ` · ${data.quantity} adet` : ""}`
+    : data.quantity
+      ? `${data.quantity} adet`
+      : "";
+  const created = data.createdAt
+    ? new Date(data.createdAt).toLocaleString("tr-TR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : new Date().toLocaleDateString("tr-TR");
+
+  return `<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"/>
+  <title>Talep Formu — ${esc(data.code)}</title>
+  <style>${applicationStyles(theme)}
+    .blank-line {
+      display: block;
+      border-bottom: 1px solid #94a3b8;
+      height: 16px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body class="pdf-body application">
+  <div class="page">
+    ${pdfDocHeader(theme, {
+      docTitle: isContact ? "İletişim Talep Formu" : "Teknik Servis Talep Formu",
+      code: data.code,
+      status: data.blank ? "Elle doldurulacak" : "Talep",
+      chip: created,
+    })}
+
+    <div class="section-label">Talep bilgileri</div>
+    <div class="cards">
+      ${infoCard("Müşteri", [
+        `<p class="lead">${val(data.companyName || data.contactName)}</p>`,
+        data.companyName && data.contactName
+          ? `<p class="muted">${esc(data.contactName)}</p>`
+          : data.blank
+            ? `<p class="muted">${pdfBlankLine()}</p>`
+            : "",
+        `<p class="muted">${val(data.phone)}${data.email ? ` · ${esc(data.email)}` : ""}</p>`,
+      ])}
+      ${infoCard("Adres", [
+        `<p>${addressLine ? esc(addressLine) : data.blank ? `${pdfBlankLine()}${pdfBlankLine()}` : "—"}</p>`,
+      ])}
+      ${infoCard(isContact ? "Konu" : "Ürün", [
+        `<p class="lead">${productLine ? esc(productLine) : dash}</p>`,
+        serialLine ? `<p class="muted">${esc(serialLine)}</p>` : data.blank ? `<p class="muted">${pdfBlankLine()}</p>` : "",
+      ])}
+      ${infoCard(isContact ? "Mesaj" : "Müşteri talepleri", [
+        `<p>${data.issue?.trim() ? esc(data.issue) : data.blank ? `${pdfBlankLine()}${pdfBlankLine()}${pdfBlankLine()}` : "—"}</p>`,
+        data.notes ? `<p class="muted">Not: ${esc(shorten(data.notes, 130))}</p>` : "",
+      ])}
+    </div>
+
+    ${
+      isContact
+        ? ""
+        : `<div class="meta-bar">
+      <span><b>Öncelik</b> ${val(data.urgency)}</span>
+      <span><b>Servis</b> ${val(data.delivery)}</span>
+      <span><b>Tarih</b> ${val(data.pickupDate)}</span>
+      <span><b>Saat</b> ${val(data.pickupTime)}</span>
+    </div>`
+    }
+
+    ${blankWorkSection(theme)}
+    <p class="legal">Bu form teknik servis talebi ve ürün kabul kaydı içindir. İmza ile onaylanır.</p>
+    <div class="signatures">
+      ${signatureCard("Kabul", "Teknisyen")}
+      ${signatureCard("Onay", "Müşteri / yetkili")}
+    </div>
+
+    <footer class="page-foot">
+      <strong>${COMPANY}</strong> Endüstriyel Teknik Servis · ${ADDRESS_INLINE}
+      <span class="dot">·</span> ${new Date().toLocaleDateString("tr-TR")}
+    </footer>
+  </div>
+  <script>window.onload = () => { window.print(); }</script>
+</body>
+</html>`;
+}
+
+function pdfBlankLine() {
+  return `<span class="blank-line"></span>`;
 }
 
 function buildDeliveryHtml(ticket: ServiceTicket, _tech: Technician | null) {

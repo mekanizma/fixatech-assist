@@ -18,6 +18,7 @@ import {
   Archive,
   ClipboardList,
   Copy,
+  Download,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,8 @@ import {
   urgencyLabel,
 } from "@/lib/form-submissions/display";
 import type { FormSubmission, FormSubmissionStatus, FormSubmissionType } from "@/lib/form-submissions/types";
+import { submissionToTalepPdf } from "@/lib/form-submissions/talep-form";
+import { openTalepFormPdf } from "@/lib/service-desk/pdf";
 import { toast } from "sonner";
 
 const TYPE_LABELS: Record<FormSubmissionType, string> = {
@@ -140,6 +143,7 @@ export function FormSubmissionDetail({ submission, onStatusChange, onNotesSave, 
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant={STATUS_VARIANT[status]}>{STATUS_LABELS[status]}</Badge>
         <Badge variant="outline">{TYPE_LABELS[submission.type]}</Badge>
+        {submission.payload?.source === "admin" && <Badge variant="secondary">Panel</Badge>}
         <span className="text-xs text-muted-foreground ml-auto">{formatDate(submission.createdAt)}</span>
       </div>
 
@@ -161,6 +165,15 @@ export function FormSubmissionDetail({ submission, onStatusChange, onNotesSave, 
             <Copy className="h-4 w-4 mr-1" /> Kopyala
           </Button>
         )}
+        <Button
+          size="sm"
+          variant="outline"
+          className="rounded-full"
+          type="button"
+          onClick={() => openTalepFormPdf(submissionToTalepPdf(submission))}
+        >
+          <Download className="h-4 w-4 mr-1" /> Formu indir
+        </Button>
         {isTech && (
           <Button size="sm" variant="outline" className="rounded-full" asChild>
             <Link to="/app/admin/kayitlar/yeni" search={{ from: submission.id, tur: "kurumsal" }}>

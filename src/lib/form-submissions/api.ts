@@ -54,6 +54,9 @@ export async function createFormSubmission(input: CreateFormSubmissionInput): Pr
       summary: input.summary,
       payload: input.payload,
       whatsapp_message: input.whatsappMessage,
+      notes: input.notes ?? "",
+      status: input.status ?? "new",
+      ...(input.status === "read" ? { read_at: new Date().toISOString() } : {}),
     })
     .select("*")
     .single();

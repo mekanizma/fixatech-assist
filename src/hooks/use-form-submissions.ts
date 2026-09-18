@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  createFormSubmission,
   fetchFormSubmissions,
   updateFormSubmissionStatus,
 } from "@/lib/form-submissions/api";
 import { formSubmissionKeys } from "@/lib/form-submissions/query-keys";
-import type { FormSubmissionStatus } from "@/lib/form-submissions/types";
+import type { CreateFormSubmissionInput, FormSubmissionStatus } from "@/lib/form-submissions/types";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 export function useFormSubmissions() {
@@ -14,6 +15,14 @@ export function useFormSubmissions() {
     enabled: isSupabaseConfigured(),
     staleTime: 10_000,
     refetchInterval: 30_000,
+  });
+}
+
+export function useCreateFormSubmission() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CreateFormSubmissionInput) => createFormSubmission(input),
+    onSuccess: () => qc.invalidateQueries({ queryKey: formSubmissionKeys.all }),
   });
 }
 

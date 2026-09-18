@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { FileText, Eye } from "lucide-react";
+import { FileText, Eye, Plus, Download, FileDown } from "lucide-react";
 import { useFormSubmissions, useUpdateFormSubmissionStatus } from "@/hooks/use-form-submissions";
 import { FormSubmissionDetail } from "@/components/service-desk/FormSubmissionDetail";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import type { FormSubmission, FormSubmissionStatus, FormSubmissionType } from "@/lib/form-submissions/types";
 import { toast } from "sonner";
+import { openBlankTalepFormPdf, openTalepFormPdf } from "@/lib/service-desk/pdf";
+import { submissionToTalepPdf } from "@/lib/form-submissions/talep-form";
 
 export const Route = createFileRoute("/app/admin/talep-formlari/")({
   component: AdminFormSubmissions,
@@ -107,38 +109,31 @@ function AdminFormSubmissions() {
 
   if (!isSupabaseConfigured()) {
     return (
-      <div className="rounded-xl border border-border/60 bg-card p-8 text-center">
-        <p className="font-semibold">Supabase yapılandırılmamış</p>
-        <p className="text-sm text-muted-foreground mt-2">
-          Talep formlarını kaydetmek için .env dosyasında VITE_SUPABASE_URL ve VITE_SUPABASE_ANON_KEY tanımlayın.
-        </p>
+      <div className="space-y-6">
+        <TalepFormlariHeader newCount={0} />
+        <div className="rounded-xl border border-border/60 bg-card p-8 text-center">
+          <p className="font-semibold">Supabase yapılandırılmamış</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Form kaydı için .env içinde VITE_SUPABASE_URL ve VITE_SUPABASE_ANON_KEY gerekir. Boş formu yine indirebilirsiniz.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-display font-bold flex items-center gap-2">
-            <FileText className="h-7 w-7 text-primary" />
-            Talep Formları
-          </h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Gelen talepleri inceleyin, arayın ve durum güncelleyin
-            {newCount > 0 && (
-              <Badge variant="default" className="ml-2">
-                {newCount} yeni
-              </Badge>
-            )}
-          </p>
-        </div>
-      </div>
+      <TalepFormlariHeader newCount={newCount} />
 
       <div className="flex flex-wrap gap-3">
-        <Input placeholder="İsim, firma, telefon ara..." value={q} onChange={(e) => setQ(e.target.value)} className="max-w-xs" />
+        <Input
+          placeholder="İsim, firma, telefon ara..."
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          className="max-w-xs w-full sm:w-auto"
+        />
         <select
-          className="rounded-lg border border-input bg-background px-3 text-sm h-10"
+          className="rounded-lg border border-input bg-background px-3 text-sm h-10 w-full sm:w-auto"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value as FormSubmissionType | "all")}
         >
@@ -147,7 +142,7 @@ function AdminFormSubmissions() {
           <option value="contact">İletişim</option>
         </select>
         <select
-          className="rounded-lg border border-input bg-background px-3 text-sm h-10"
+          className="rounded-lg border border-input bg-background px-3 text-sm h-10 w-full sm:w-auto"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as FormSubmissionStatus | "all")}
         >
@@ -167,7 +162,7 @@ function AdminFormSubmissions() {
         </p>
       )}
 
-      <div className="rounded-xl border border-border/60 overflow-hidden bg-card">
+      <div className="rounded-xl border border-border/60 overflow-x-auto bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -176,7 +171,7 @@ function AdminFormSubmissions() {
               <TableHead>Özet</TableHead>
               <TableHead>İletişim</TableHead>
               <TableHead>Durum</TableHead>
-              <TableHead className="w-[80px]" />
+              <TableHead className="w-[110px]" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -195,7 +190,12 @@ function AdminFormSubmissions() {
                 >
                   <TableCell className="text-xs whitespace-nowrap">{formatDate(s.createdAt)}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{TYPE_LABELS[s.type]}</Badge>
+                    <div className="flex flex-wrap items-center gap-1">
+                      <Badge variant="outline">{TYPE_LABELS[s.type]}</Badge>
+                      {s.payload?.source === "admin" && (
+                        <Badge variant="secondary">Panel</Badge>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell className="max-w-[220px] truncate font-medium">{s.summary}</TableCell>
                   <TableCell className="text-sm">
@@ -206,17 +206,32 @@ function AdminFormSubmissions() {
                     <Badge variant={s.status === "new" ? "default" : "secondary"}>{STATUS_LABELS[s.status]}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openDetail(s);
-                      }}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
+                    <div className="flex justify-end gap-0.5">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        type="button"
+                        title="PDF indir"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openTalepFormPdf(submissionToTalepPdf(s));
+                        }}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        type="button"
+                        title="Detay"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openDetail(s);
+                        }}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -247,6 +262,43 @@ function AdminFormSubmissions() {
           )}
         </SheetContent>
       </Sheet>
+    </div>
+  );
+}
+
+function TalepFormlariHeader({ newCount }: { newCount: number }) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 className="text-2xl font-display font-bold flex items-center gap-2">
+          <FileText className="h-7 w-7 text-primary" />
+          Talep Formları
+        </h1>
+        <p className="text-muted-foreground text-sm mt-1">
+          Gelen talepleri inceleyin, form oluşturun ve indirin
+          {newCount > 0 && (
+            <Badge variant="default" className="ml-2">
+              {newCount} yeni
+            </Badge>
+          )}
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+        <Button
+          type="button"
+          variant="outline"
+          className="rounded-full flex-1 sm:flex-none min-h-11"
+          onClick={() => openBlankTalepFormPdf()}
+        >
+          <FileDown className="h-4 w-4 mr-2" />
+          Boş form
+        </Button>
+        <Button asChild className="rounded-full flex-1 sm:flex-none min-h-11">
+          <Link to="/app/admin/talep-formlari/yeni">
+            <Plus className="h-4 w-4 mr-2" /> Yeni Form
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }

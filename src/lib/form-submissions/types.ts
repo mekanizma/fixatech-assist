@@ -27,4 +27,6 @@ export type CreateFormSubmissionInput = {
   summary: string;
   payload: Record<string, unknown>;
   whatsappMessage: string;
+  notes?: string;
+  status?: FormSubmissionStatus;
 };
