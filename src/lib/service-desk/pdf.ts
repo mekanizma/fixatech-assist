@@ -39,6 +39,32 @@ export type TalepFormPdfData = {
   kind?: "tech" | "contact";
 };
 
+export type TeklifLineItemPdf = {
+  description: string;
+  quantity: string;
+  unitPrice: number;
+  amount: number;
+};
+
+export type TeklifFormPdfData = {
+  code: string;
+  createdAt?: string;
+  contactName: string;
+  companyName: string;
+  phone: string;
+  email: string;
+  address: string;
+  district: string;
+  city?: string;
+  title: string;
+  validUntil: string;
+  notes: string;
+  terms: string;
+  items: TeklifLineItemPdf[];
+  grandTotal: number;
+  blank?: boolean;
+};
+
 /** Kayıt açılışı / başvuru — müşteri, adres, ürün, talep */
 export function openServiceApplicationPdf(ticket: ServiceTicket, opts?: ServicePdfOpts) {
   openPrintWindow(buildApplicationHtml(ticket, opts?.technician ?? null));
@@ -73,6 +99,30 @@ export function openBlankTalepFormPdf() {
       blank: true,
     },
   );
+}
+
+export function openTeklifFormPdf(data: TeklifFormPdfData) {
+  openPrintWindow(buildTeklifFormHtml(data));
+}
+
+export function openBlankTeklifFormPdf() {
+  openTeklifFormPdf({
+    code: "TK-________",
+    contactName: "",
+    companyName: "",
+    phone: "",
+    email: "",
+    address: "",
+    district: "",
+    city: "",
+    title: "",
+    validUntil: "",
+    notes: "",
+    terms: "",
+    items: [],
+    grandTotal: 0,
+    blank: true,
+  });
 }
 
 /** İş bitimi — teslim özeti, yapılan iş, imza */
@@ -322,6 +372,189 @@ function pdfBlankLine() {
   return `<span class="blank-line"></span>`;
 }
 
+function buildTeklifFormHtml(data: TeklifFormPdfData) {
+  const theme = PDF_THEMES.quote;
+  const dash = data.blank ? pdfBlankLine() : "—";
+  const val = (s?: string) => (s?.trim() ? esc(s.trim()) : dash);
+  const addressLine = [data.address, data.district, data.city]
+    .map((s) => s?.trim())
+    .filter(Boolean)
+    .join(" · ");
+  const created = data.createdAt
+    ? new Date(data.createdAt).toLocaleString("tr-TR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : new Date().toLocaleDateString("tr-TR");
+
+  const itemRows = data.blank
+    ? Array.from({ length: 6 }, (_, i) => {
+        const no = i + 1;
+        return `<tr>
+          <td class="col-no">${no}</td>
+          <td>${pdfBlankLine()}</td>
+          <td class="col-qty">${pdfBlankLine()}</td>
+          <td class="amt">${pdfBlankLine()}</td>
+          <td class="amt">${pdfBlankLine()}</td>
+        </tr>`;
+      }).join("")
+    : data.items.length
+      ? data.items
+          .map(
+            (item, i) => `<tr>
+          <td class="col-no">${i + 1}</td>
+          <td>${esc(item.description)}</td>
+          <td class="col-qty">${esc(item.quantity || "—")}</td>
+          <td class="amt">${esc(formatTry(item.unitPrice))}</td>
+          <td class="amt">${esc(formatTry(item.amount))}</td>
+        </tr>`,
+          )
+          .join("")
+      : `<tr><td colspan="5" class="empty">Kalem girilmedi</td></tr>`;
+
+  return `<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"/>
+  <title>Teklif Formu — ${esc(data.code)}</title>
+  <style>${applicationStyles(theme)}
+    .blank-line {
+      display: block;
+      border-bottom: 1px solid #94a3b8;
+      height: 16px;
+      margin-top: 4px;
+    }
+    .quote-table-wrap {
+      margin: 0 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    table.quote-items {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+    }
+    table.quote-items thead th {
+      background: ${theme.accentLight};
+      color: ${theme.accentDark};
+      font-size: 7pt;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid ${theme.accentSoft};
+    }
+    table.quote-items tbody td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+      color: #334155;
+    }
+    table.quote-items tbody tr:nth-child(even) td { background: #f8fafc; }
+    table.quote-items .col-no { width: 36px; color: #94a3b8; font-weight: 600; }
+    table.quote-items .col-qty { width: 64px; text-align: center; }
+    table.quote-items .amt { text-align: right; font-weight: 700; white-space: nowrap; width: 18%; }
+    table.quote-items .empty { color: #94a3b8; font-style: italic; text-align: center; }
+    .quote-total {
+      margin: 0 16px;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 0 4px;
+    }
+    .terms-box {
+      margin: 0 16px;
+      padding: 10px 12px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      font-size: 8pt;
+      color: #64748b;
+      background: #fafafa;
+    }
+    .terms-box strong { color: ${theme.accentDark}; display: block; margin-bottom: 4px; font-size: 7pt; text-transform: uppercase; letter-spacing: 0.06em; }
+  </style>
+</head>
+<body class="pdf-body application">
+  <div class="page">
+    ${pdfDocHeader(theme, {
+      docTitle: "Teklif Formu",
+      code: data.code,
+      status: data.blank ? "Elle doldurulacak" : "Teklif",
+      chip: created,
+    })}
+
+    <div class="section-label">Müşteri ve teklif bilgileri</div>
+    <div class="cards">
+      ${infoCard("Müşteri", [
+        `<p class="lead">${val(data.companyName || data.contactName)}</p>`,
+        data.companyName && data.contactName
+          ? `<p class="muted">${esc(data.contactName)}</p>`
+          : data.blank
+            ? `<p class="muted">${pdfBlankLine()}</p>`
+            : "",
+        `<p class="muted">${val(data.phone)}${data.email ? ` · ${esc(data.email)}` : ""}</p>`,
+      ])}
+      ${infoCard("Adres", [
+        `<p>${addressLine ? esc(addressLine) : data.blank ? `${pdfBlankLine()}${pdfBlankLine()}` : "—"}</p>`,
+      ])}
+      ${infoCard("Teklif konusu", [
+        `<p class="lead">${val(data.title)}</p>`,
+        data.validUntil || data.blank
+          ? `<p class="highlight"><b>Geçerlilik</b> ${val(data.validUntil)}</p>`
+          : "",
+      ])}
+      ${infoCard("Notlar", [
+        `<p>${data.notes?.trim() ? esc(data.notes) : data.blank ? `${pdfBlankLine()}${pdfBlankLine()}` : "—"}</p>`,
+      ])}
+    </div>
+
+    <div class="section-label">Teklif kalemleri</div>
+    <div class="quote-table-wrap">
+      <table class="quote-items">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Açıklama</th>
+            <th>Adet</th>
+            <th>Birim fiyat</th>
+            <th>Tutar</th>
+          </tr>
+        </thead>
+        <tbody>${itemRows}</tbody>
+      </table>
+    </div>
+
+    <div class="quote-total">
+      <span class="grand-total">
+        ${data.blank ? "Genel toplam ________ ₺" : `Genel toplam ${esc(formatTry(data.grandTotal))}`}
+      </span>
+    </div>
+
+    ${
+      data.terms?.trim() || data.blank
+        ? `<div class="terms-box"><strong>Koşullar</strong>${data.terms?.trim() ? esc(data.terms) : `${pdfBlankLine()}${pdfBlankLine()}`}</div>`
+        : ""
+    }
+
+    <p class="legal">Bu belge fiyat teklifidir; sipariş / onay sonrası iş emrine dönüştürülür. İmza ile teyit edilir.</p>
+    <div class="signatures">
+      ${signatureCard("Hazırlayan", "Firma yetkilisi")}
+      ${signatureCard("Onay", "Müşteri / yetkili")}
+    </div>
+
+    <footer class="page-foot">
+      <strong>${COMPANY}</strong> Endüstriyel Teknik Servis · ${ADDRESS_INLINE}
+      <span class="dot">·</span> ${new Date().toLocaleDateString("tr-TR")}
+    </footer>
+  </div>
+  <script>window.onload = () => { window.print(); }</script>
+</body>
+</html>`;
+}
+
 function buildDeliveryHtml(ticket: ServiceTicket, _tech: Technician | null) {
   const theme = PDF_THEMES.delivery;
   const { addressLine, productLine, serialLine } = ticketContext(ticket);
@@ -400,6 +633,12 @@ const PDF_THEMES = {
     accentDark: "#065f46",
     accentLight: "#ecfdf5",
     accentSoft: "#d1fae5",
+  },
+  quote: {
+    accent: "#b45309",
+    accentDark: "#92400e",
+    accentLight: "#fffbeb",
+    accentSoft: "#fde68a",
   },
 } as const;
 

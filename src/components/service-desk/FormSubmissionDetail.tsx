@@ -36,13 +36,16 @@ import {
 } from "@/lib/form-submissions/display";
 import type { FormSubmission, FormSubmissionStatus, FormSubmissionType } from "@/lib/form-submissions/types";
 import { submissionToTalepPdf } from "@/lib/form-submissions/talep-form";
-import { openTalepFormPdf } from "@/lib/service-desk/pdf";
+import { submissionToTeklifPdf } from "@/lib/form-submissions/teklif-form";
+import { formatTry } from "@/lib/service-desk/pricing";
+import { openTalepFormPdf, openTeklifFormPdf } from "@/lib/service-desk/pdf";
 import { DeleteFormSubmissionButton } from "@/components/service-desk/DeleteFormSubmissionButton";
 import { toast } from "sonner";
 
 const TYPE_LABELS: Record<FormSubmissionType, string> = {
   tech_service: "Teknik Servis",
   contact: "İletişim",
+  quote: "Teklif",
 };
 
 const STATUS_LABELS: Record<FormSubmissionStatus, string> = {
@@ -142,8 +145,13 @@ export function FormSubmissionDetail({
 
   const p = submission.payload;
   const isTech = submission.type === "tech_service";
+  const isQuote = submission.type === "quote";
   const tech = asTechPayload(p);
   const contact = asContactPayload(p);
+  const quoteItems = Array.isArray(p.items)
+    ? (p.items as { description?: string; quantity?: string; unitPrice?: string }[])
+    : [];
+  const quoteTotal = typeof p.grandTotal === "number" ? p.grandTotal : 0;
 
   return (
     <div className="space-y-5 pb-6">
@@ -178,7 +186,10 @@ export function FormSubmissionDetail({
           variant="outline"
           className="rounded-full"
           type="button"
-          onClick={() => openTalepFormPdf(submissionToTalepPdf(submission))}
+          onClick={() => {
+            if (isQuote) openTeklifFormPdf(submissionToTeklifPdf(submission));
+            else openTalepFormPdf(submissionToTalepPdf(submission));
+          }}
         >
           <Download className="h-4 w-4 mr-1" /> Formu indir
         </Button>
@@ -193,7 +204,7 @@ export function FormSubmissionDetail({
 
       <div className="space-y-2">
         <Label htmlFor="submission-status" className="text-xs font-semibold">
-          Talep durumu
+          {isQuote ? "Teklif durumu" : "Talep durumu"}
         </Label>
         <select
           id="submission-status"
@@ -212,7 +223,65 @@ export function FormSubmissionDetail({
 
       <Separator />
 
-      {isTech ? (
+      {isQuote ? (
+        <>
+          <SectionCard title="Müşteri">
+            <FieldRow icon={User} label="Ad Soyad" value={payloadDisplay(p, "name") || submission.contactName} highlight />
+            <FieldRow icon={Building2} label="Firma" value={payloadDisplay(p, "company") || submission.companyName} />
+            <FieldRow icon={Phone} label="Telefon" value={payloadDisplay(p, "phone") || submission.contactPhone} highlight />
+            <FieldRow icon={Mail} label="E-posta" value={payloadDisplay(p, "email") || submission.contactEmail} />
+          </SectionCard>
+          <SectionCard title="Teklif">
+            <FieldRow icon={Wrench} label="Konu" value={payloadDisplay(p, "title")} highlight />
+            <FieldRow icon={Calendar} label="Geçerlilik" value={payloadDisplay(p, "validUntil")} />
+            <FieldRow icon={MapPin} label="Adres" value={payloadDisplay(p, "address")} />
+          </SectionCard>
+          <SectionCard title="Kalemler">
+            <div className="py-2 space-y-2">
+              {quoteItems.filter((i) => i.description?.trim()).length === 0 ? (
+                <p className="text-sm text-muted-foreground">—</p>
+              ) : (
+                quoteItems
+                  .filter((i) => i.description?.trim())
+                  .map((item, idx) => {
+                    const qty = Number(item.quantity) || 0;
+                    const price = Number(String(item.unitPrice ?? "").replace(",", ".")) || 0;
+                    const amount = Math.round(qty * price * 100) / 100;
+                    return (
+                      <div key={idx} className="flex justify-between gap-3 text-sm border-b border-border/40 pb-2 last:border-0">
+                        <div className="min-w-0">
+                          <p className="font-medium">{item.description}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {item.quantity || "0"} × {formatTry(price)}
+                          </p>
+                        </div>
+                        <p className="font-semibold shrink-0">{formatTry(amount)}</p>
+                      </div>
+                    );
+                  })
+              )}
+              <div className="flex justify-between pt-2 text-sm font-bold">
+                <span>Toplam</span>
+                <span>{formatTry(quoteTotal)}</span>
+              </div>
+            </div>
+          </SectionCard>
+          {payloadStr(p, "notes") && (
+            <SectionCard title="Notlar">
+              <div className="py-3">
+                <p className="text-sm whitespace-pre-wrap text-muted-foreground">{String(p.notes)}</p>
+              </div>
+            </SectionCard>
+          )}
+          {payloadStr(p, "terms") && (
+            <SectionCard title="Koşullar">
+              <div className="py-3">
+                <p className="text-sm whitespace-pre-wrap text-muted-foreground">{String(p.terms)}</p>
+              </div>
+            </SectionCard>
+          )}
+        </>
+      ) : isTech ? (
         <>
           <SectionCard title="İletişim Bilgileri">
             <FieldRow icon={User} label="Ad Soyad" value={payloadDisplay(p, "name")} highlight />

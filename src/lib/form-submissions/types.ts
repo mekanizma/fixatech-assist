@@ -1,4 +1,4 @@
-export type FormSubmissionType = "tech_service" | "contact";
+export type FormSubmissionType = "tech_service" | "contact" | "quote";
 
 export type FormSubmissionStatus = "new" | "read" | "converted" | "archived";
 

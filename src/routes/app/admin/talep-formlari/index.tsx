@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { FileText, Eye, Plus, Download, FileDown } from "lucide-react";
+import { FileText, Eye, Plus, Download, FileDown, FileSpreadsheet } from "lucide-react";
 import { useFormSubmissions, useUpdateFormSubmissionStatus } from "@/hooks/use-form-submissions";
 import { FormSubmissionDetail } from "@/components/service-desk/FormSubmissionDetail";
 import { DeleteFormSubmissionButton } from "@/components/service-desk/DeleteFormSubmissionButton";
@@ -12,8 +12,14 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import type { FormSubmission, FormSubmissionStatus, FormSubmissionType } from "@/lib/form-submissions/types";
 import { toast } from "sonner";
-import { openBlankTalepFormPdf, openTalepFormPdf } from "@/lib/service-desk/pdf";
+import {
+  openBlankTalepFormPdf,
+  openBlankTeklifFormPdf,
+  openTalepFormPdf,
+  openTeklifFormPdf,
+} from "@/lib/service-desk/pdf";
 import { submissionToTalepPdf } from "@/lib/form-submissions/talep-form";
+import { submissionToTeklifPdf } from "@/lib/form-submissions/teklif-form";
 
 export const Route = createFileRoute("/app/admin/talep-formlari/")({
   component: AdminFormSubmissions,
@@ -22,6 +28,7 @@ export const Route = createFileRoute("/app/admin/talep-formlari/")({
 const TYPE_LABELS: Record<FormSubmissionType, string> = {
   tech_service: "Teknik Servis",
   contact: "İletişim",
+  quote: "Teklif",
 };
 
 const STATUS_LABELS: Record<FormSubmissionStatus, string> = {
@@ -39,6 +46,14 @@ function formatDate(iso: string) {
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+function downloadSubmissionPdf(s: FormSubmission) {
+  if (s.type === "quote") {
+    openTeklifFormPdf(submissionToTeklifPdf(s));
+    return;
+  }
+  openTalepFormPdf(submissionToTalepPdf(s));
 }
 
 function AdminFormSubmissions() {
@@ -112,6 +127,7 @@ function AdminFormSubmissions() {
     return (
       <div className="space-y-6">
         <TalepFormlariHeader newCount={0} />
+        <TeklifFormuSection />
         <div className="rounded-xl border border-border/60 bg-card p-8 text-center">
           <p className="font-semibold">Supabase yapılandırılmamış</p>
           <p className="text-sm text-muted-foreground mt-2">
@@ -125,6 +141,7 @@ function AdminFormSubmissions() {
   return (
     <div className="space-y-6">
       <TalepFormlariHeader newCount={newCount} />
+      <TeklifFormuSection />
 
       <div className="flex flex-wrap gap-3">
         <Input
@@ -141,6 +158,7 @@ function AdminFormSubmissions() {
           <option value="all">Tüm türler</option>
           <option value="tech_service">Teknik Servis</option>
           <option value="contact">İletişim</option>
+          <option value="quote">Teklif</option>
         </select>
         <select
           className="rounded-lg border border-input bg-background px-3 text-sm h-10 w-full sm:w-auto"
@@ -215,7 +233,7 @@ function AdminFormSubmissions() {
                         title="PDF indir"
                         onClick={(e) => {
                           e.stopPropagation();
-                          openTalepFormPdf(submissionToTalepPdf(s));
+                          downloadSubmissionPdf(s);
                         }}
                       >
                         <Download className="h-4 w-4" />
@@ -253,7 +271,7 @@ function AdminFormSubmissions() {
               <SheetHeader className="px-6 pt-6 pb-4 border-b border-border/60 sticky top-0 bg-background z-10">
                 <SheetTitle className="font-display text-left text-xl pr-8">{selected.summary}</SheetTitle>
                 <p className="text-sm text-muted-foreground text-left">
-                  Talep detayı — işlem yapın
+                  {selected.type === "quote" ? "Teklif detayı — işlem yapın" : "Talep detayı — işlem yapın"}
                 </p>
               </SheetHeader>
               <div className="px-6">
@@ -307,5 +325,41 @@ function TalepFormlariHeader({ newCount }: { newCount: number }) {
         </Button>
       </div>
     </div>
+  );
+}
+
+function TeklifFormuSection() {
+  return (
+    <section className="rounded-xl border border-border/60 bg-card p-4 sm:p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0 flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10">
+            <FileSpreadsheet className="h-5 w-5 text-amber-700" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="font-display font-bold text-lg">Teklif Formu</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              Boş teklif indirin veya kalemleri doldurup PDF olarak kaydedin.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <Button
+            type="button"
+            variant="outline"
+            className="rounded-full flex-1 sm:flex-none min-h-11"
+            onClick={() => openBlankTeklifFormPdf()}
+          >
+            <FileDown className="h-4 w-4 mr-2" />
+            Boş teklif
+          </Button>
+          <Button asChild className="rounded-full flex-1 sm:flex-none min-h-11">
+            <Link to="/app/admin/talep-formlari/teklif">
+              <Plus className="h-4 w-4 mr-2" /> Yeni teklif
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </section>
   );
 }

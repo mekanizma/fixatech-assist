@@ -33,6 +33,7 @@ import { Route as AppAdminKayitlarIndexRouteImport } from './routes/app/admin/ka
 import { Route as AppTeknikGorevTicketIdRouteImport } from './routes/app/teknik/gorev/$ticketId'
 import { Route as AppMusteriKayitlarTicketIdRouteImport } from './routes/app/musteri/kayitlar/$ticketId'
 import { Route as AppAdminTalepFormlariYeniRouteImport } from './routes/app/admin/talep-formlari/yeni'
+import { Route as AppAdminTalepFormlariTeklifRouteImport } from './routes/app/admin/talep-formlari/teklif'
 import { Route as AppAdminKayitlarYeniRouteImport } from './routes/app/admin/kayitlar/yeni'
 import { Route as AppAdminKayitlarTicketIdRouteImport } from './routes/app/admin/kayitlar/$ticketId'
 
@@ -159,6 +160,12 @@ const AppAdminTalepFormlariYeniRoute =
     path: '/admin/talep-formlari/yeni',
     getParentRoute: () => AppRouteRoute,
   } as any)
+const AppAdminTalepFormlariTeklifRoute =
+  AppAdminTalepFormlariTeklifRouteImport.update({
+    id: '/admin/talep-formlari/teklif',
+    path: '/admin/talep-formlari/teklif',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 const AppAdminKayitlarYeniRoute = AppAdminKayitlarYeniRouteImport.update({
   id: '/admin/kayitlar/yeni',
   path: '/admin/kayitlar/yeni',
@@ -192,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/app/teknik/': typeof AppTeknikIndexRoute
   '/app/admin/kayitlar/$ticketId': typeof AppAdminKayitlarTicketIdRoute
   '/app/admin/kayitlar/yeni': typeof AppAdminKayitlarYeniRoute
+  '/app/admin/talep-formlari/teklif': typeof AppAdminTalepFormlariTeklifRoute
   '/app/admin/talep-formlari/yeni': typeof AppAdminTalepFormlariYeniRoute
   '/app/musteri/kayitlar/$ticketId': typeof AppMusteriKayitlarTicketIdRoute
   '/app/teknik/gorev/$ticketId': typeof AppTeknikGorevTicketIdRoute
@@ -220,6 +228,7 @@ export interface FileRoutesByTo {
   '/app/teknik': typeof AppTeknikIndexRoute
   '/app/admin/kayitlar/$ticketId': typeof AppAdminKayitlarTicketIdRoute
   '/app/admin/kayitlar/yeni': typeof AppAdminKayitlarYeniRoute
+  '/app/admin/talep-formlari/teklif': typeof AppAdminTalepFormlariTeklifRoute
   '/app/admin/talep-formlari/yeni': typeof AppAdminTalepFormlariYeniRoute
   '/app/musteri/kayitlar/$ticketId': typeof AppMusteriKayitlarTicketIdRoute
   '/app/teknik/gorev/$ticketId': typeof AppTeknikGorevTicketIdRoute
@@ -249,6 +258,7 @@ export interface FileRoutesById {
   '/app/teknik/': typeof AppTeknikIndexRoute
   '/app/admin/kayitlar/$ticketId': typeof AppAdminKayitlarTicketIdRoute
   '/app/admin/kayitlar/yeni': typeof AppAdminKayitlarYeniRoute
+  '/app/admin/talep-formlari/teklif': typeof AppAdminTalepFormlariTeklifRoute
   '/app/admin/talep-formlari/yeni': typeof AppAdminTalepFormlariYeniRoute
   '/app/musteri/kayitlar/$ticketId': typeof AppMusteriKayitlarTicketIdRoute
   '/app/teknik/gorev/$ticketId': typeof AppTeknikGorevTicketIdRoute
@@ -279,6 +289,7 @@ export interface FileRouteTypes {
     | '/app/teknik/'
     | '/app/admin/kayitlar/$ticketId'
     | '/app/admin/kayitlar/yeni'
+    | '/app/admin/talep-formlari/teklif'
     | '/app/admin/talep-formlari/yeni'
     | '/app/musteri/kayitlar/$ticketId'
     | '/app/teknik/gorev/$ticketId'
@@ -307,6 +318,7 @@ export interface FileRouteTypes {
     | '/app/teknik'
     | '/app/admin/kayitlar/$ticketId'
     | '/app/admin/kayitlar/yeni'
+    | '/app/admin/talep-formlari/teklif'
     | '/app/admin/talep-formlari/yeni'
     | '/app/musteri/kayitlar/$ticketId'
     | '/app/teknik/gorev/$ticketId'
@@ -335,6 +347,7 @@ export interface FileRouteTypes {
     | '/app/teknik/'
     | '/app/admin/kayitlar/$ticketId'
     | '/app/admin/kayitlar/yeni'
+    | '/app/admin/talep-formlari/teklif'
     | '/app/admin/talep-formlari/yeni'
     | '/app/musteri/kayitlar/$ticketId'
     | '/app/teknik/gorev/$ticketId'
@@ -525,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminTalepFormlariYeniRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/admin/talep-formlari/teklif': {
+      id: '/app/admin/talep-formlari/teklif'
+      path: '/admin/talep-formlari/teklif'
+      fullPath: '/app/admin/talep-formlari/teklif'
+      preLoaderRoute: typeof AppAdminTalepFormlariTeklifRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/admin/kayitlar/yeni': {
       id: '/app/admin/kayitlar/yeni'
       path: '/admin/kayitlar/yeni'
@@ -553,6 +573,7 @@ interface AppRouteRouteChildren {
   AppTeknikIndexRoute: typeof AppTeknikIndexRoute
   AppAdminKayitlarTicketIdRoute: typeof AppAdminKayitlarTicketIdRoute
   AppAdminKayitlarYeniRoute: typeof AppAdminKayitlarYeniRoute
+  AppAdminTalepFormlariTeklifRoute: typeof AppAdminTalepFormlariTeklifRoute
   AppAdminTalepFormlariYeniRoute: typeof AppAdminTalepFormlariYeniRoute
   AppMusteriKayitlarTicketIdRoute: typeof AppMusteriKayitlarTicketIdRoute
   AppTeknikGorevTicketIdRoute: typeof AppTeknikGorevTicketIdRoute
@@ -572,6 +593,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppTeknikIndexRoute: AppTeknikIndexRoute,
   AppAdminKayitlarTicketIdRoute: AppAdminKayitlarTicketIdRoute,
   AppAdminKayitlarYeniRoute: AppAdminKayitlarYeniRoute,
+  AppAdminTalepFormlariTeklifRoute: AppAdminTalepFormlariTeklifRoute,
   AppAdminTalepFormlariYeniRoute: AppAdminTalepFormlariYeniRoute,
   AppMusteriKayitlarTicketIdRoute: AppMusteriKayitlarTicketIdRoute,
   AppTeknikGorevTicketIdRoute: AppTeknikGorevTicketIdRoute,
