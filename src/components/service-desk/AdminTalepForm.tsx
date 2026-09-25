@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   User,
   Package,
@@ -23,6 +22,10 @@ import {
   emptyTechServiceForm,
   type TechServiceFormState,
 } from "@/lib/form-submissions/talep-form";
+import {
+  ADMIN_TALEP_DRAFT_KEY,
+  usePersistedFormState,
+} from "@/hooks/use-persisted-form-state";
 
 const selectClass =
   "flex h-10 w-full rounded-md border border-input bg-background px-3 text-base md:text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
@@ -34,7 +37,10 @@ type Props = {
 };
 
 export function AdminTalepForm({ saving, onSaveAndDownload, onDownloadOnly }: Props) {
-  const [form, setForm] = useState<TechServiceFormState>(emptyTechServiceForm);
+  const [form, setForm] = usePersistedFormState(
+    ADMIN_TALEP_DRAFT_KEY,
+    emptyTechServiceForm,
+  );
   const set = <K extends keyof TechServiceFormState>(key: K, value: TechServiceFormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 

@@ -5,6 +5,10 @@ import { AdminTalepForm } from "@/components/service-desk/AdminTalepForm";
 import { Button } from "@/components/ui/button";
 import { useCreateFormSubmission } from "@/hooks/use-form-submissions";
 import {
+  ADMIN_TALEP_DRAFT_KEY,
+  clearPersistedFormDraft,
+} from "@/hooks/use-persisted-form-state";
+import {
   talepFormCode,
   techFormToCreateInput,
   techFormToTalepPdf,
@@ -25,7 +29,8 @@ function AdminNewTalepFormPage() {
     openTalepFormPdf(techFormToTalepPdf(form, code));
   };
 
-  const goToList = () => {
+  const finish = () => {
+    clearPersistedFormDraft(ADMIN_TALEP_DRAFT_KEY);
     navigate({ to: "/app/admin/talep-formlari" });
   };
 
@@ -33,7 +38,7 @@ function AdminNewTalepFormPage() {
     if (!isSupabaseConfigured()) {
       toast.error("Supabase yapılandırılmamış — form indirildi, kaydedilemedi.");
       downloadForm(form);
-      goToList();
+      finish();
       return;
     }
 
@@ -47,7 +52,7 @@ function AdminNewTalepFormPage() {
         onSuccess: (saved) => {
           downloadForm(form, saved ? talepFormCode(saved.id) : undefined);
           toast.success("Talep formu kaydedildi");
-          goToList();
+          finish();
         },
         onError: () => {
           toast.error("Form kaydedilemedi. Sadece indir ile PDF alabilirsiniz.");
@@ -69,6 +74,7 @@ function AdminNewTalepFormPage() {
           <h1 className="text-2xl font-display font-bold">Yeni Talep Formu</h1>
           <p className="text-muted-foreground text-sm mt-1">
             Formu doldurup kaydedin. Yazdırma penceresinden PDF alıp Talep Formları listesine dönersiniz.
+            Yazdığınız bilgiler otomatik saklanır.
           </p>
         </div>
         <Button
@@ -89,7 +95,7 @@ function AdminNewTalepFormPage() {
         onDownloadOnly={(form) => {
           downloadForm(form);
           toast.success("Yazdırma penceresi açıldı");
-          goToList();
+          finish();
         }}
       />
     </div>

@@ -5,6 +5,10 @@ import { AdminTeklifForm } from "@/components/service-desk/AdminTeklifForm";
 import { Button } from "@/components/ui/button";
 import { useCreateFormSubmission } from "@/hooks/use-form-submissions";
 import {
+  ADMIN_TEKLIF_DRAFT_KEY,
+  clearPersistedFormDraft,
+} from "@/hooks/use-persisted-form-state";
+import {
   teklifFormCode,
   teklifFormToCreateInput,
   teklifFormToPdf,
@@ -25,7 +29,8 @@ function AdminTeklifFormPage() {
     openTeklifFormPdf(teklifFormToPdf(form, code));
   };
 
-  const goToList = () => {
+  const finish = () => {
+    clearPersistedFormDraft(ADMIN_TEKLIF_DRAFT_KEY);
     navigate({ to: "/app/admin/talep-formlari" });
   };
 
@@ -33,7 +38,7 @@ function AdminTeklifFormPage() {
     if (!isSupabaseConfigured()) {
       toast.error("Supabase yapılandırılmamış — teklif indirildi, kaydedilemedi.");
       downloadForm(form);
-      goToList();
+      finish();
       return;
     }
 
@@ -47,7 +52,7 @@ function AdminTeklifFormPage() {
         onSuccess: (saved) => {
           downloadForm(form, saved ? teklifFormCode(saved.id) : undefined);
           toast.success("Teklif formu kaydedildi");
-          goToList();
+          finish();
         },
         onError: () => {
           toast.error("Teklif kaydedilemedi. Sadece indir ile PDF alabilirsiniz.");
@@ -69,6 +74,7 @@ function AdminTeklifFormPage() {
           <h1 className="text-2xl font-display font-bold">Teklif Formu</h1>
           <p className="text-muted-foreground text-sm mt-1">
             Kalemleri doldurup kaydedin veya yazdırma penceresinden PDF indirin.
+            Yazdığınız bilgiler otomatik saklanır.
           </p>
         </div>
         <Button
@@ -89,7 +95,7 @@ function AdminTeklifFormPage() {
         onDownloadOnly={(form) => {
           downloadForm(form);
           toast.success("Yazdırma penceresi açıldı");
-          goToList();
+          finish();
         }}
       />
     </div>

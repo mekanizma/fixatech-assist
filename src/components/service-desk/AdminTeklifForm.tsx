@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   User,
   MapPin,
@@ -24,6 +23,10 @@ import {
   type TeklifFormState,
   type TeklifLineItem,
 } from "@/lib/form-submissions/teklif-form";
+import {
+  ADMIN_TEKLIF_DRAFT_KEY,
+  usePersistedFormState,
+} from "@/hooks/use-persisted-form-state";
 
 type Props = {
   saving?: boolean;
@@ -32,7 +35,10 @@ type Props = {
 };
 
 export function AdminTeklifForm({ saving, onSaveAndDownload, onDownloadOnly }: Props) {
-  const [form, setForm] = useState<TeklifFormState>(emptyTeklifForm);
+  const [form, setForm] = usePersistedFormState(
+    ADMIN_TEKLIF_DRAFT_KEY,
+    emptyTeklifForm,
+  );
   const set = <K extends keyof TeklifFormState>(key: K, value: TeklifFormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
