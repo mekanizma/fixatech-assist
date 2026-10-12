@@ -106,6 +106,12 @@ export const SERVICE_CATALOG = [
     description: "Otel ve restoran renovasyonu, mutfak yenileme, alçıpan, boya ve fayans işleri.",
   },
   {
+    slug: "it-hizmetleri",
+    name: "Profesyonel IT Hizmetleri",
+    description:
+      "Sunucu yönetimi, network altyapısı, güvenlik sistemleri ve web tasarımı — KKTC'de kurumsal IT çözümleri.",
+  },
+  {
     slug: "acil-servis",
     name: "Acil Teknik Servis 7/24",
     description: "KKTC'de kritik arızalarda hızlı saha müdahalesi ve mobil servis desteği.",

@@ -2,12 +2,13 @@
 import { ArrowRight, Phone, MessageCircle, Clock, Zap, Users, Building2, ShieldCheck, Star, CheckCircle2, Siren } from "lucide-react";
 import heroImg from "@/assets/hero-technician.jpg";
 import { useLocalizedServices } from "@/lib/services";
-import { ServiceIcon } from "@/components/ServiceIcon";
 import { PHONE_TEL, waLink } from "@/lib/site";
 import { useEffect } from "react";
 import { useT } from "@/lib/i18n";
 import { HeroHeadline, type HeroTitleSegment } from "@/components/HeroHeadline";
+import { HeroTechBackdrop } from "@/components/HeroTechBackdrop";
 import { HeroTrustCards } from "@/components/HeroTrustCards";
+import { ServicePreviewCard } from "@/components/ServicePreviewCard";
 import { buildPageHead, SEO_PAGES } from "@/lib/seo";
 import { SeoLocalSection } from "@/components/SeoLocalSection";
 
@@ -36,16 +37,19 @@ function Home() {
       {/* HERO */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden -mt-20 pt-20">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Endüstriyel teknik servis ustası" className="w-full h-full object-cover" width={1920} height={1280} />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
-          <div className="absolute inset-0 bg-gradient-mesh opacity-60" />
+          <img
+            src={heroImg}
+            alt="Profesyonel endüstriyel teknik servis atölyesi"
+            className="w-full h-full object-cover object-[70%_center] scale-105"
+            width={1920}
+            height={1080}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/88 to-background/25" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-background/20" />
+          <HeroTechBackdrop />
         </div>
 
-        {/* floating decorative */}
-        <div className="absolute top-32 right-20 w-72 h-72 bg-primary-glow/20 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-32 left-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
-
-        <div className="relative container mx-auto px-4 py-20 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 container mx-auto px-4 py-20 grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-7">
             <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full text-sm font-medium animate-glow">
               <span className="relative flex h-2 w-2">
@@ -107,30 +111,19 @@ function Home() {
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">{t.home.servicesSub}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.slice(0, 6).map((s: { slug: string; image: string; title: string; icon: string; response: string; short: string }, i: number) => (
-            <Link
+        <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((s, i) => (
+            <ServicePreviewCard
               key={s.slug}
-              to="/hizmetler"
-              className="group relative bg-gradient-card rounded-2xl overflow-hidden border border-border card-3d reveal"
-              style={{ transitionDelay: `${i * 80}ms` }}
-            >
-              <div className="aspect-[16/10] overflow-hidden relative">
-                <img src={s.image} alt={s.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/30 to-transparent" />
-                <div className="absolute top-4 left-4 bg-gradient-primary p-3 rounded-xl shadow-glow group-hover:scale-110 transition">
-                  <ServiceIcon name={s.icon} className="w-6 h-6 text-primary-foreground" />
-                </div>
-                <div className="absolute top-4 right-4 glass-dark text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-full">{s.response}</div>
-              </div>
-              <div className="p-6">
-                <h3 className="font-display text-xl font-bold mb-2 group-hover:text-primary transition">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.short}</p>
-                <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                  {t.common.detail} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
-                </div>
-              </div>
-            </Link>
+              slug={s.slug}
+              image={s.image}
+              title={s.title}
+              icon={s.icon}
+              response={s.response}
+              short={s.short}
+              detailLabel={t.common.detail}
+              index={i}
+            />
           ))}
         </div>
       </section>

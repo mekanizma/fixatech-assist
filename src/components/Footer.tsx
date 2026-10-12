@@ -138,10 +138,23 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-4 text-[10px] text-primary-foreground/45 sm:flex-row">
-          <p>
-            © {new Date().getFullYear()} {COMPANY}. {t.footer.copyR}
-          </p>
+        <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-4 text-[10px] text-primary-foreground/45 sm:flex-row">
+          <div className="flex flex-col items-center gap-1 text-center sm:items-start sm:text-left">
+            <p>
+              © 2025 {COMPANY}. {t.footer.copyR}
+            </p>
+            <p>
+              © 2025 Created by{" "}
+              <a
+                href="https://www.mekanizma.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-primary-foreground/70 underline-offset-2 hover:text-primary-glow hover:underline"
+              >
+                Mekanizma
+              </a>
+            </p>
+          </div>
           <p className="flex items-center gap-1.5">
             <span className="h-1 w-1 rounded-full bg-success" />
             {t.footer.tagline}

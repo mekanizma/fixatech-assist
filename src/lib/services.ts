@@ -5,6 +5,7 @@ import kitchenImg from "@/assets/service-kitchen.jpg";
 import electricImg from "@/assets/service-electric.jpg";
 import plumbingImg from "@/assets/service-plumbing.jpg";
 import renovationImg from "@/assets/service-renovation.jpg";
+import itImg from "@/assets/service-it.jpg";
 
 export const services = [
   {
@@ -67,6 +68,23 @@ export const services = [
       "Mutfak yenileme, salon tadilatı, alçıpan, boya, fayans, ahşap işleri ve özel mobilya projelerinde tasarımdan teslime kadar süreç yönetimi.",
     features: ["Mutfak renovasyon", "Salon tadilat", "Alçıpan & boya", "Fayans & seramik", "Özel mobilya"],
     response: "Proje bazlı",
+  },
+  {
+    slug: "it-hizmetleri",
+    title: "Profesyonel IT Hizmetleri",
+    icon: "Server",
+    image: itImg,
+    short: "Sunucu, network, güvenlik ve web — tüm teknoloji ihtiyaçlarınız için güvenilir çözüm ortağı.",
+    description:
+      "Sunucu yönetiminden network altyapısına, güvenlik sistemlerinden web tasarımına kadar tüm teknoloji ihtiyaçlarınız için güvenilir çözüm ortağınız.",
+    features: [
+      "Sunucu kurulum & yönetim",
+      "Network altyapısı",
+      "Güvenlik sistemleri",
+      "Web tasarım & yazılım",
+      "Uzaktan teknik destek",
+    ],
+    response: "Aynı gün",
   },
   {
     slug: "acil-servis",
